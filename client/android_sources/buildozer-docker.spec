@@ -40,10 +40,7 @@ p4a.bootstrap = badservice
 #android.add_src =
 #android.add_aars =
 
-#android.add_libs_armeabi = libs/android/*.so
-#android.add_libs_armeabi_v7a = libs/android-v7/*.so
-#android.add_libs_x86 = libs/android-x86/*.so
-#android.add_libs_mips = libs/android-mips/*.so
+#android.add_libs_arm64_v8a = libs/android-arm64/*.so
 
 #android.wakelock = False
 #android.meta_data =
@@ -51,7 +48,7 @@ p4a.bootstrap = badservice
 #android.logcat_filters = *:S python:D
 #android.copy_libs = 1
 
-android.arch = arm64-v8a
+android.archs = arm64-v8a
 
 [buildozer]
 log_level = 1
