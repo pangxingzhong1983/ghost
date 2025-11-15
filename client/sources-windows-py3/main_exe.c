@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <shellapi.h>
-#include "pupy_load.h"
+#include "ghost_load.h"
 #include "debug.h"
 
 #ifdef HAVE_WINDOW

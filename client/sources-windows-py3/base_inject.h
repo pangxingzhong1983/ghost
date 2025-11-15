@@ -1,5 +1,5 @@
 /*
- This code has been taken from meterpreter and modified to be integrated into pupy.
+ This code has been taken from meterpreter and modified to be integrated into ghost.
  original code :https://github.com/rapid7/metasploit-payloads/blob/master/c/meterpreter/source/common/arch/win/i386/
 
 Meterpreter is available for use under the following license, commonly known as the

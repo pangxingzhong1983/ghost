@@ -94,7 +94,7 @@ func generateKeys() {
 	ca := &x509.Certificate{
 		SerialNumber: big.NewInt(1),
 		Subject: pkix.Name{
-			Organization: []string{"Pupy CA"},
+			Organization: []string{"Ghost CA"},
 			Country:      []string{"ZZ"},
 		},
 		NotBefore: time.Now(),
@@ -144,7 +144,7 @@ func generateKeys() {
 	proxyCert := &x509.Certificate{
 		SerialNumber: big.NewInt(1658),
 		Subject: pkix.Name{
-			Organization: []string{"Pupy"},
+			Organization: []string{"Ghost"},
 			Country:      []string{"ZZ"},
 			CommonName:   getCN(),
 		},
@@ -188,7 +188,7 @@ func generateKeys() {
 	clientCert := &x509.Certificate{
 		SerialNumber: big.NewInt(1658),
 		Subject: pkix.Name{
-			Organization: []string{"Pupy"},
+			Organization: []string{"Ghost"},
 			Country:      []string{"ZZ"},
 		},
 		NotBefore:    time.Now(),

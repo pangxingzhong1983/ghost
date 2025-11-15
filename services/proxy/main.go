@@ -44,16 +44,16 @@ func init() {
 	loglevel := "ERROR"
 	portmap := ""
 
-	flag.StringVar(&ProxyBindHost, "listen-proxy", ProxyBindHost, "IP address to bind pupysh listener side")
+	flag.StringVar(&ProxyBindHost, "listen-proxy", ProxyBindHost, "IP address to bind ghostsh listener side")
 	flag.StringVar(&ExternalBindHost, "listen", ExternalBindHost, "IP address to bind services listener side")
 	flag.UintVar(&DnsBindPort, "dns-port", DnsBindPort, "Port to bind DNS listeners (if any)")
 	flag.UintVar(&UDPSize, "udp-mtu-size", UDPSize, "MTU Size for DNS and KCP UDP Packets")
-	flag.StringVar(&ListenerCA, "ca", ListenerCA, "Path to CA certificate (pupysh side)")
-	flag.StringVar(&ListenerKey, "key", ListenerKey, "Path to TLS key (pupysh side)")
-	flag.StringVar(&ListenerCert, "cert", ListenerCert, "Path to TLS cert (pupysh side)")
+	flag.StringVar(&ListenerCA, "ca", ListenerCA, "Path to CA certificate (ghostsh side)")
+	flag.StringVar(&ListenerKey, "key", ListenerKey, "Path to TLS key (ghostsh side)")
+	flag.StringVar(&ListenerCert, "cert", ListenerCert, "Path to TLS cert (ghostsh side)")
 	flag.StringVar(&portmap, "port-map", portmap, "Automatically substitute ports (example: \"443:1443 80:8080\")")
 	flag.StringVar(&ProxyHostname, "hostname-proxy", ProxyHostname,
-		"Hostname for pupysh listener side (used with generate)")
+		"Hostname for ghostsh listener side (used with generate)")
 	flag.StringVar(&loglevel, "loglevel", loglevel, "Set log level")
 	flag.StringVar(&OnListenerEnabledURL, "on-enabled-url", OnListenerEnabledURL,
 		"Send GET request when at least one client connected")

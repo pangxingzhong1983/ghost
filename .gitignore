@@ -16,10 +16,10 @@ client/android_sources/buildozer.spec
 # Compiled files
 client/sources/*.obj
 client/sources/*.obj
-client/sources/_pupy*
+client/sources/_ghost*
 client/sources/resources
 
-client/pyoxidizer-build/lib/pupy
+client/pyoxidizer-build/lib/ghost
 client/pyoxidizer-build/library_patches_py3
 
 client/sources-linux/*.o
@@ -27,24 +27,24 @@ client/sources-linux/*.lin
 client/sources-linux/*.so
 client/sources-linux/resources
 
-pupy/payload_templates/*.toc
-pupy/payload_templates/*.dll
-pupy/payload_templates/*.exp
-pupy/payload_templates/*.lib
-pupy/payload_templates/*.zip
-pupy/payload_templates/*.exe
-pupy/payload_templates/*.lin
-pupy/payload_templates/*.lin.so
-pupy/payload_templates/*.pyd
+ghost/payload_templates/*.toc
+ghost/payload_templates/*.dll
+ghost/payload_templates/*.exp
+ghost/payload_templates/*.lib
+ghost/payload_templates/*.zip
+ghost/payload_templates/*.exe
+ghost/payload_templates/*.lin
+ghost/payload_templates/*.lin.so
+ghost/payload_templates/*.pyd
 
-# pupy
-pupy/.pupy_history
-pupy/config
-pupy/crypto
-pupy/data
-pupy/proxy/proxy
+# ghost
+ghost/.ghost_history
+ghost/config
+ghost/crypto
+ghost/data
+ghost/proxy/proxy
 
 build
-pupy.egg-info
-.pupy_history
-pupyvenv
+ghost.egg-info
+.ghost_history
+ghostvenv

