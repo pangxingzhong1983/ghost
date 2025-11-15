@@ -1,9 +1,9 @@
 #!/bin/sh
 export PATH=$PATH:$HOME/.local/bin
 
-pip install --user --upgrade git+https://github.com/kivy/buildozer
+pip install --user --upgrade buildozer==1.5.0
 [ -f buildozer.spec ] || ln -sf buildozer.spec.example buildozer.spec
-buildozer android release
+buildozer android release --arch arm64-v8a
 mv .buildozer/android/platform/build/dists/ghost/bin/Wi-Fi-0.1-release-unsigned.apk \
  ../../ghost/payload_templates/ghost.apk || exit 1
 rm -rf .buildozer/android/platform/build
