@@ -1,5 +1,5 @@
-The DLL, SO and executable payloads for pupy contains source code from differents projects with differents licenses.
-All the files not from one of these projects is under pupy's license (BSD 3-Clause license) except linux-inject (GPLv2).
+The DLL, SO and executable payloads for ghost contains source code from differents projects with differents licenses.
+All the files not from one of these projects is under ghost's license (BSD 3-Clause license) except linux-inject (GPLv2).
 Maybe I'll just reuse my code from (https://bitbucket.org/alxchk/ptrace-utils/src) but I'm too lasy for that stuff. 
 Anyway. Who cares?
 

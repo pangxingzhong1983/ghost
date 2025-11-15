@@ -15,12 +15,12 @@ RUN echo '#!/bin/bash' >> /init.sh \
 COPY docker /tmp/docker
 RUN pyenv install 3.10.6 --patch < /tmp/docker/pyenv-setup-build.patch
 RUN pyenv global 3.10.6 \
-    && pyenv virtualenv 3.10.6 pupy
+    && pyenv virtualenv 3.10.6 ghost
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 # Add .cargo/bin to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN echo 'pyenv activate pupy' >> /init.sh
+RUN echo 'pyenv activate ghost' >> /init.sh
 
 RUN chmod +x /init.sh
 RUN bash -c "source /init.sh;"

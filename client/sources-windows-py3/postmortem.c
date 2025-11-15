@@ -258,7 +258,7 @@ void SavePythonStackTrace(
 
 #ifdef _WIN64
 static
-PVOID WINAPI PupyFunctionTableAccess(HANDLE  hProcess, DWORD64 AddrBase) {
+PVOID WINAPI GhostFunctionTableAccess(HANDLE  hProcess, DWORD64 AddrBase) {
   // hProcess - Ignoree
   DWORD64 ImageBase;
   return RtlLookupFunctionEntry((PVOID) AddrBase, &ImageBase, NULL);
@@ -267,9 +267,9 @@ PVOID WINAPI PupyFunctionTableAccess(HANDLE  hProcess, DWORD64 AddrBase) {
 
 static
 #ifdef _WIN64
-DWORD64 WINAPI PupyGetModuleBase(HANDLE  hProcess, DWORD64 pvAddr)
+DWORD64 WINAPI GhostGetModuleBase(HANDLE  hProcess, DWORD64 pvAddr)
 #else
-DWORD WINAPI PupyGetModuleBase(HANDLE  hProcess, DWORD pvAddr)
+DWORD WINAPI GhostGetModuleBase(HANDLE  hProcess, DWORD pvAddr)
 #endif
 {
   // hProcess - Ignoree
@@ -397,8 +397,8 @@ VOID SaveContextStack(HMODULE hDbgHelp, HANDLE hExceptionInfoFile, PCONTEXT pCon
             &stack,
             pContext,
             NULL,
-            PupyFunctionTableAccess,
-            PupyGetModuleBase,
+            GhostFunctionTableAccess,
+            GhostGetModuleBase,
             NULL
         );
 
@@ -415,7 +415,7 @@ VOID SaveContextStack(HMODULE hDbgHelp, HANDLE hExceptionInfoFile, PCONTEXT pCon
             pContext,
             NULL,
             pSymFunctionTableAccess,
-            PupyGetModuleBase,
+            GhostGetModuleBase,
             NULL
         );
 

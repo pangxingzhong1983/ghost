@@ -100,10 +100,10 @@ int Py_RefCnt(const PyObject *object);
 extern struct py_imports py_sym_table[];
 
 BOOL initialize_python(int argc, char *argv[], BOOL is_shared_object);
-void run_pupy(void);
+void run_ghost(void);
 void deinitialize_python(void);
 
-#define VPATH_PREFIX "pupy://"
+#define VPATH_PREFIX "ghost://"
 #define VPATH_EXT ".pyo"
 #define VPATH_INIT_EXT "/__init__" VPATH_EXT
 

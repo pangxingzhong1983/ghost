@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SELF=`readlink -f "$0"`
-PUPY=`dirname "$SELF"`/../
-PUPY=`readlink -f "$PUPY"`
+GHOST=`dirname "$SELF"`/../
+GHOST=`readlink -f "$GHOST"`
 
 DOCKER_COMMAND=${DOCKER_COMMAND:-docker}
 DOCKER_REPO=${DOCKER_REPO:-"n1nj4sec"}
@@ -18,13 +18,13 @@ else
     REPO="${DOCKER_REPO}/"
 fi
 
-echo $PUPY
+echo $GHOST
 
 set -e
 
 start_container() {
     TOOLCHAIN="tc-$1"
-    CONTAINER_NAME="build-pupy-$1"
+    CONTAINER_NAME="build-ghost-$1"
     SOURCES="$2"
     SCRIPT="client/$SOURCES/build-docker.sh"
 
@@ -34,9 +34,9 @@ start_container() {
 	NEW=""
 	${DOCKER_COMMAND} container inspect ${CONTAINER_NAME} >/dev/null 2>/dev/null || NEW=1
 	if [ ! -z "$NEW" ]; then
-	    mkdir -p /tmp/pupy-build/${REPO}${TOOLCHAIN}
+	    mkdir -p /tmp/ghost-build/${REPO}${TOOLCHAIN}
 	    ${DOCKER_COMMAND} run --name ${CONTAINER_NAME} \
-		   -v ${PUPY}:/build/workspace/project ${REPO}${TOOLCHAIN} ${SCRIPT}
+		   -v ${GHOST}:/build/workspace/project ${REPO}${TOOLCHAIN} ${SCRIPT}
 	else
 	    ${DOCKER_COMMAND} start -ai ${CONTAINER_NAME}
 	fi
@@ -52,7 +52,7 @@ if [ ! -z "$1" ] && [ ! -z "$2" ]; then
 	start_container $1 $2
 else
     start_container windows-py3 sources-windows-py3
-    start_container pupy-linux-py3 sources-linux-py3
+    start_container ghost-linux-py3 sources-linux-py3
 
 	#start_container linux32 sources-linux
 	#start_container linux-amd64-py3 sources-linux-py3

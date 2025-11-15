@@ -6,12 +6,12 @@ SRC=${SELFPWD:-`pwd`}
 
 cd $SRC
 
-TEMPLATES=`readlink -f ../../pupy/payload_templates`
+TEMPLATES=`readlink -f ../../ghost/payload_templates`
 
-rm -f $TEMPLATES/pupy.apk
+rm -f $TEMPLATES/ghost.apk
 
 rm -f buildozer.spec
 sed -e "s@%BUILDOZER%@$BUILDOZER_CACHE@" buildozer-docker.spec  >buildozer.spec
 buildozer android release
 
-mv $SRC/bin/Wi-Fi-0.1-release-unsigned.apk $TEMPLATES/pupy.apk || exit 1
+mv $SRC/bin/Wi-Fi-0.1-release-unsigned.apk $TEMPLATES/ghost.apk || exit 1

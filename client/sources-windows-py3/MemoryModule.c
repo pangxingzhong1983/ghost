@@ -555,7 +555,7 @@ BuildImportTable(PMEMORYMODULE module)
         {NULL, NULL}
     };
 
-#ifdef _PUPY_PRIVATE_WS2_32
+#ifdef _GHOST_PRIVATE_WS2_32
     ImportHooks ntdllHooks[] = {
         {"EtwEventRegister", (FARPROC) module->callbacks->systemEtwRegister},
         {"EtwEventWrite", (FARPROC) module->callbacks->systemEtwEventWrite},
@@ -575,7 +575,7 @@ BuildImportTable(PMEMORYMODULE module)
 
     DllHooks dllHooks[] = {
         { "KERNEL32.DLL", kernel32Hooks },
-#ifdef _PUPY_PRIVATE_WS2_32
+#ifdef _GHOST_PRIVATE_WS2_32
         { "ADVAPI32.DLL", advapi32Hooks },
         { "NTDLL.DLL", ntdllHooks },
 #endif

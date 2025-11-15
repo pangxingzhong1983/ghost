@@ -4,17 +4,17 @@
 python3 -m pip install pyoxidizer
 
 # so let's copy important files necessary for the build
-cp -r ../../pupy/agent lib/pupy/
-cp -r ../../pupy/network lib/pupy/
-cp -r ../../pupy/library_patches_py3 .
+cp -r ../../ghost/agent lib/ghost/
+cp -r ../../ghost/network lib/ghost/
+cp -r ../../ghost/library_patches_py3 .
 
-docker run -ti -v $(pwd):/pupy --rm n1nj4sec/pyoxidizer-builder:linux-x86_64 /bin/bash -c 'export PATH="/build/python/bin:$PATH"; cd /pupy; python3 -m pip install pyoxidizer; pyoxidizer build --release'
+docker run -ti -v $(pwd):/ghost --rm n1nj4sec/pyoxidizer-builder:linux-x86_64 /bin/bash -c 'export PATH="/build/python/bin:$PATH"; cd /ghost; python3 -m pip install pyoxidizer; pyoxidizer build --release'
 
-strip -s build/x86_64-unknown-linux-gnu/release/install/pyoxydizer_pupy
-echo "saving built template to ~/.pupy/payload_templates/ ..."
-mkdir -p ~/.pupy/payload_templates
-cp ./build/x86_64-unknown-linux-gnu/release/install/pyoxydizer_pupy ~/.pupy/payload_templates/pupyx64-310.pyoxidizer.lin
+strip -s build/x86_64-unknown-linux-gnu/release/install/pyoxydizer_ghost
+echo "saving built template to ~/.ghost/payload_templates/ ..."
+mkdir -p ~/.ghost/payload_templates
+cp ./build/x86_64-unknown-linux-gnu/release/install/pyoxydizer_ghost ~/.ghost/payload_templates/ghostx64-310.pyoxidizer.lin
 
 
 # not working, missing msvc on windows
-#docker run --rm -v $(pwd):/opt/win/drive_c/tools/pupy -ti wine 'set PATH=%PATH%;C:\\Program Files\\PyOxidizer && C: && cd C:\\tools\\pupy && pyoxidizer build --release'
+#docker run --rm -v $(pwd):/opt/win/drive_c/tools/ghost -ti wine 'set PATH=%PATH%;C:\\Program Files\\PyOxidizer && C: && cd C:\\tools\\ghost && pyoxidizer build --release'

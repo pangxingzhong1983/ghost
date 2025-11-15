@@ -19,12 +19,12 @@ echo "Building with python version suffix: $SUFFIX"
 SELF=$(readlink -f "$0")
 SELFPWD=$(dirname "$SELF")
 SRC=${SELFPWD:-$(pwd)}
-PUPY=$(readlink -f ../../pupy)
+GHOST=$(readlink -f ../../ghost)
 
 cd $SRC
 
-EXTERNAL=$(readlink -f ../../pupy/external)
-TEMPLATES=$(readlink -f ../../pupy/payload_templates)
+EXTERNAL=$(readlink -f ../../ghost/external)
+TEMPLATES=$(readlink -f ../../ghost/payload_templates)
 WINPTY=$EXTERNAL/winpty
 PYKCP=$EXTERNAL/pykcp
 PYOPUS=$EXTERNAL/pyopus/src
@@ -134,10 +134,10 @@ done
 
 fi
 
-echo "[+] Build pupy"
+echo "[+] Build ghost"
 
-TARGETS="pupyx64d${SUFFIX}.dll pupyx64d${SUFFIX}.exe pupyx64${SUFFIX}.dll pupyx64${SUFFIX}.exe"
-TARGETS="$TARGETS pupyx86d${SUFFIX}.dll pupyx86d${SUFFIX}.exe pupyx86${SUFFIX}.dll pupyx86${SUFFIX}.exe"
+TARGETS="ghostx64d${SUFFIX}.dll ghostx64d${SUFFIX}.exe ghostx64${SUFFIX}.dll ghostx64${SUFFIX}.exe"
+TARGETS="$TARGETS ghostx86d${SUFFIX}.dll ghostx86d${SUFFIX}.exe ghostx86${SUFFIX}.dll ghostx86${SUFFIX}.exe"
 TARGETS="$TARGETS "
 
 cd ${SRC}

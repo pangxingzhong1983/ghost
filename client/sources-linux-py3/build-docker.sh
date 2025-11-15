@@ -6,10 +6,10 @@ SRC=${SELFPWD:-$(pwd)}
 
 cd $SRC
 
-PUPY=$(readlink -f ../../pupy/)
-TEMPLATES=$PUPY/payload_templates
+GHOST=$(readlink -f ../../ghost/)
+TEMPLATES=$GHOST/payload_templates
 
-EXTERNAL=../../pupy/external
+EXTERNAL=../../ghost/external
 PYKCP=$EXTERNAL/pykcp
 PYOPUS=$EXTERNAL/pyopus/src
 SUFFIX="-`python -c 'import sys;sys.stdout.write((chr.__call__(0)[0:0]).join([str(x) for x in sys.version_info[0:2]]));sys.stdout.flush()'`"
@@ -127,29 +127,29 @@ cp /usr/lib/x86_64-linux-gnu/libodbc.so.1 libodbc.so
 zip -9 ${TEMPLATES}/linux-${TOOLCHAIN_ARCH}${SUFFIX}.zip \
     libpq.so libodbc.so psqlodbcw.so libodbcinst.so libmaodbc.so
 
-echo "[+] Build pupy"
+echo "[+] Build ghost"
 
 case $TOOLCHAIN_ARCH in
 amd64)
     MAKEFLAGS="ARCH=64 MACH=x86_64"
-    TARGETS="pupyx64d${SUFFIX}.lin pupyx64d${SUFFIX}.lin"
-    TARGETS="$TARGETS pupyx64${SUFFIX}.lin pupyx64${SUFFIX}.lin.so"
+    TARGETS="ghostx64d${SUFFIX}.lin ghostx64d${SUFFIX}.lin"
+    TARGETS="$TARGETS ghostx64${SUFFIX}.lin ghostx64${SUFFIX}.lin.so"
     export LIBPYTHON=/root/.pyenv/versions/3.10.6/lib/libpython3.10.so
     export LIBPYTHON_INC="-I/root/.pyenv/versions/3.10.6/include/python3.10"
     ;;
 
 x86)
     MAKEFLAGS="ARCH=32 PIE= MACH=i686 $LIBS"
-    TARGETS="pupyx86d${SUFFIX}.lin pupyx86d${SUFFIX}.lin.so"
-    TARGETS="$TARGETS pupyx86${SUFFIX}.lin pupyx86${SUFFIX}.lin.so"
+    TARGETS="ghostx86d${SUFFIX}.lin ghostx86d${SUFFIX}.lin.so"
+    TARGETS="$TARGETS ghostx86${SUFFIX}.lin ghostx86${SUFFIX}.lin.so"
     ;;
 
 *)
     LIBS="LIBSSL=/usr/lib/libssl.so LIBCRYPTO=/usr/lib/libcrypto.so"
     LIBS="$LIBS LIBPYTHON=/usr/lib/libpython3.10.so"
     MAKEFLAGS="MACH=${TOOLCHAIN_ARCH} $LIBS"
-    TARGETS="pupy${TOOLCHAIN_ARCH}d.lin pupy${TOOLCHAIN_ARCH}d.lin.so"
-    TARGETS="$TARGETS pupy${TOOLCHAIN_ARCH}${SUFFIX}.lin pupy${TOOLCHAIN_ARCH}${SUFFIX}.lin.so"
+    TARGETS="ghost${TOOLCHAIN_ARCH}d.lin ghost${TOOLCHAIN_ARCH}d.lin.so"
+    TARGETS="$TARGETS ghost${TOOLCHAIN_ARCH}${SUFFIX}.lin ghost${TOOLCHAIN_ARCH}${SUFFIX}.lin.so"
     ;;
 esac
 

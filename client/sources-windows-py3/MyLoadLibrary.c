@@ -195,7 +195,7 @@ static PHCUSTOMLIBRARY _FindMemoryModuleW(LPCWSTR name)
     return hResult;
 }
 
-#ifdef _PUPY_PRIVATE_WS2_32
+#ifdef _GHOST_PRIVATE_WS2_32
 static
 NTSTATUS CALLBACK MyEtwRegister (
     LPCGUID            ProviderId,
@@ -272,7 +272,7 @@ static DL_CALLBACKS callbacks = {
 
     MyCreateThread,
 
-#ifdef _PUPY_PRIVATE_WS2_32
+#ifdef _GHOST_PRIVATE_WS2_32
     MyEtwRegister, MyEtwEventWrite,
     MyEtwEventWriteFull, MyEtwUnregister
 #endif

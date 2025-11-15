@@ -6,7 +6,7 @@ exec 2>buildenv-sunos.log
 
 BPWD=`pwd`
 BUILDENV=$BPWD/buildenv-sunos
-TEMPLATES=$BPWD/../../pupy/payload_templates
+TEMPLATES=$BPWD/../../ghost/payload_templates
 
 cat >gccwrap << '__EOF__'
 #!/usr/bin/bash

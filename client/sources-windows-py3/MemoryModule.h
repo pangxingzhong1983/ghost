@@ -73,7 +73,7 @@ typedef HANDLE (CALLBACK *CustomCreateThread)(
     LPDWORD                 lpThreadId
 );
 
-#ifdef _PUPY_PRIVATE_WS2_32
+#ifdef _GHOST_PRIVATE_WS2_32
 typedef NTSTATUS (CALLBACK *CustomEtwRegister) (
     LPCGUID            ProviderId,
     PVOID EnableCallback,
@@ -141,7 +141,7 @@ typedef struct {
 
     CustomCreateThread createThread;
 
-#ifdef _PUPY_PRIVATE_WS2_32
+#ifdef _GHOST_PRIVATE_WS2_32
     CustomEtwRegister systemEtwRegister;
     CustomEtwEventWrite systemEtwEventWrite;
     CustomEtwEventWriteFull systemEtwEventWriteFull;

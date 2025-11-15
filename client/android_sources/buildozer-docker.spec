@@ -1,8 +1,8 @@
 [app]
 
 title = Wi-Fi
-package.name = pupy
-package.domain = org.pupy
+package.name = ghost
+package.domain = org.ghost
 source.dir = .
 source.include_exts = py,pyc,pyo,png,jpg,kv,atlas
 #source.include_patterns = assets/*,images/*.png
@@ -51,7 +51,7 @@ p4a.bootstrap = badservice
 #android.logcat_filters = *:S python:D
 #android.copy_libs = 1
 
-android.arch = armeabi-v7a
+android.arch = arm64-v8a
 
 [buildozer]
 log_level = 1

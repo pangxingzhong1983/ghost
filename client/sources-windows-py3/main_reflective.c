@@ -1,10 +1,10 @@
 /*
 # Copyright (c) 2015, Nicolas VERDIER (contact@n1nj4.eu)
-# Pupy is under the BSD 3-Clause license. see the LICENSE file at the root of the project for the detailed licence terms
+# Ghost is under the BSD 3-Clause license. see the LICENSE file at the root of the project for the detailed licence terms
 */
 
 #include <windows.h>
-#include "pupy_load.h"
+#include "ghost_load.h"
 #include "debug.h"
 #include "ReflectiveLoader.h"
 
