@@ -68,7 +68,7 @@ jobs:
                 shutil.rmtree("http_parser")
             os.rename("http-parser-0.9.0/http_parser", "http_parser")
             shutil.rmtree("http-parser-0.9.0")
-PY
+          PY
 
       - name: Build binary
         shell: bash
