@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip "setuptools<70" wheel
           export SETUPTOOLS_USE_DISTUTILS=local
           # remove problematic C-exts and uninstall typing backport
           EXCLUDES='^http-parser|^pylzma'
