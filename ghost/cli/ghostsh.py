@@ -39,8 +39,20 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
+import sys
 import logging
 import argparse
+
+# Windows 环境下当前 CLI 不兼容，直接友好退出，避免缺少 termios 导致崩溃
+if os.name == 'nt':
+    def main():
+        print("Ghost shell暂不支持Windows环境（依赖termios等POSIX特性）")
+        return 0
+
+    if __name__ == "__main__":
+        sys.exit(main())
+    else:
+        sys.exit(0)
 
 args = None
 
