@@ -72,12 +72,18 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           export SETUPTOOLS_USE_DISTUTILS=local
           # drop http-parser (C-ext) and rely on vendored pure-python copy
-          grep -Ev '^http-parser' requirements.txt > /tmp/req.txt
-          grep -Ev '^http-parser|^pylzma' requirements.txt > /tmp/base_req.txt
+          EXCLUDES='^http-parser|^pylzma'
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            EXCLUDES='^http-parser|^pylzma|^xattr|^M2Crypto'
+          fi
+          grep -Evs "$EXCLUDES" requirements.txt > /tmp/base_req.txt
           python -m pip install -r /tmp/base_req.txt pyinstaller
           python -c "import os, tarfile, urllib.request, io, shutil; url='https://files.pythonhosted.org/packages/source/h/http-parser/http-parser-0.9.0.tar.gz'; data=urllib.request.urlopen(url, timeout=30).read(); tar=tarfile.open(fileobj=io.BytesIO(data)); members=['http-parser-0.9.0/http_parser/__init__.py','http-parser-0.9.0/http_parser/pyparser.py','http-parser-0.9.0/http_parser/util.py','http-parser-0.9.0/http_parser/reader.py','http-parser-0.9.0/http_parser/http.py','http-parser-0.9.0/http_parser/_socketio.py']; tar.extractall(path='.', members=[tar.getmember(m) for m in members]); shutil.rmtree('http_parser', ignore_errors=True); os.rename('http-parser-0.9.0/http_parser','http_parser'); shutil.rmtree('http-parser-0.9.0')"
           python -m pip install ./pylzma-0.5.0
-          python -m pip install M2Crypto==0.46.2
+          if [[ "${{ runner.os }}" != "Windows" ]]; then
+            python -m pip install M2Crypto==0.46.2
+          fi
+          python -m pip uninstall -y typing || true
 
       - name: Build binary
         shell: bash
