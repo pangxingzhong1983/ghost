@@ -34,7 +34,8 @@ p4a.source_dir = python-for-android
 #p4a.hook =
 
 android.whitelist = lib-dynload/termios.so,lib-dynload/mmap.so,lib-dynload/_json.so,lib-dynload/pyexpat.so
-android.skip_update = True
+# allow sdkmanager to fetch required tools on CI
+# android.skip_update = True
 p4a.bootstrap = badservice
 
 #android.add_src =
