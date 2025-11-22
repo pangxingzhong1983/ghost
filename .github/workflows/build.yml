@@ -19,12 +19,12 @@ jobs:
             os: macos-14
             python: "3.11"
             bin: ghost-macos-arm64
-            datasep: :
+            datasep: ":"
           - name: linux-x64
             os: ubuntu-latest
             python: "3.11"
             bin: ghost-linux-x64
-            datasep: :
+            datasep: ":"
           - name: windows-x64
             os: windows-latest
             python: "3.11"
