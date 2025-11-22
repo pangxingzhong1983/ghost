@@ -79,6 +79,9 @@ jobs:
           python -m pip install -r /tmp/base_req.txt pyinstaller
           # vendor pure-Python http_parser to avoid compiling C extension
           python -c "import os, tarfile, urllib.request, io, shutil; url='https://files.pythonhosted.org/packages/source/h/http-parser/http-parser-0.9.0.tar.gz'; data=urllib.request.urlopen(url, timeout=30).read(); tar=tarfile.open(fileobj=io.BytesIO(data)); members=['http-parser-0.9.0/http_parser/__init__.py','http-parser-0.9.0/http_parser/pyparser.py','http-parser-0.9.0/http_parser/util.py','http-parser-0.9.0/http_parser/reader.py','http-parser-0.9.0/http_parser/http.py','http-parser-0.9.0/http_parser/_socketio.py']; tar.extractall(path='.', members=[tar.getmember(m) for m in members]); shutil.rmtree('http_parser', ignore_errors=True); os.rename('http-parser-0.9.0/http_parser','http_parser'); shutil.rmtree('http-parser-0.9.0')"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            python -m pip install distutils || true
+          fi
           python -m pip install --no-build-isolation ./pylzma-0.5.0
           if [[ "${{ runner.os }}" != "Windows" ]]; then
             python -m pip install M2Crypto==0.46.2
