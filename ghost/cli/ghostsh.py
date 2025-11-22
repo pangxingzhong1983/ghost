@@ -43,17 +43,6 @@ import sys
 import logging
 import argparse
 
-# Windows 环境下当前 CLI 不兼容，直接友好退出，避免缺少 termios 导致崩溃
-if os.name == 'nt':
-    def main():
-        print("Ghost shell暂不支持Windows环境（依赖termios等POSIX特性）")
-        return 0
-
-    if __name__ == "__main__":
-        sys.exit(main())
-    else:
-        sys.exit(0)
-
 args = None
 
 def parse_args():
@@ -86,11 +75,18 @@ try:
 except ImportError:
     pass
 
-from ghost.ghostlib import (
-    GhostServer, GhostCmdLoop, GhostCredentials, GhostConfig
-)
+if os.name != 'nt':
+    from ghost.ghostlib import (
+        GhostServer, GhostCmdLoop, GhostCredentials, GhostConfig
+    )
+else:
+    GhostServer = GhostCmdLoop = GhostCredentials = GhostConfig = None
 
 def main():
+    if os.name == 'nt':
+        print("Ghost shell暂不支持Windows环境（依赖termios等POSIX特性）。请在 Linux/macOS/Android 使用。")
+        return 0
+
     parser = parse_args()
     args = parser.parse_args()
     if args.workdir:
