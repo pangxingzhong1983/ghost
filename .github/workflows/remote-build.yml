@@ -142,8 +142,11 @@ jobs:
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
           cp buildozer-docker.spec buildozer.spec
           export ANDROID_SDK_ROOT="$HOME/.buildozer/android/platform/android-sdk"
-          buildozer android sdk
-          SDKMANAGER=$(find "$ANDROID_SDK_ROOT" -name sdkmanager -type f | head -n1)
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+          curl -L "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip" -o /tmp/cmdline-tools.zip
+          mkdir -p /tmp/cmdline-tools && unzip -q /tmp/cmdline-tools.zip -d /tmp/cmdline-tools
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest" && cp -r /tmp/cmdline-tools/cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKMANAGER" --licenses
           yes | "$SDKMANAGER" "platform-tools" "build-tools;36.1.0" "platforms;android-35"
           buildozer -v android release
