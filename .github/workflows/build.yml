@@ -19,17 +19,17 @@ jobs:
             os: macos-14
             python: "3.11"
             bin: ghost-macos-arm64
-            data-sep: :
+            datasep: :
           - name: linux-x64
             os: ubuntu-latest
             python: "3.11"
             bin: ghost-linux-x64
-            data-sep: :
+            datasep: :
           - name: windows-x64
             os: windows-latest
             python: "3.11"
             bin: ghost-windows-x64
-            data-sep: ";"
+            datasep: ";"
 
     steps:
       - name: Checkout
@@ -52,9 +52,9 @@ jobs:
         shell: bash
         run: |
           pyinstaller --clean --onefile --name "${{ matrix.bin }}" ghost/cli/ghostsh.py \
-            --add-data "ghost/library_patches_py3${{ matrix.data-sep }}ghost/library_patches_py3" \
-            --add-data "ghost/packages/all${{ matrix.data-sep }}ghost/packages/all" \
-            --add-data "ghost/commands${{ matrix.data-sep }}ghost/commands" \
+            --add-data "ghost/library_patches_py3${{ matrix.datasep }}ghost/library_patches_py3" \
+            --add-data "ghost/packages/all${{ matrix.datasep }}ghost/packages/all" \
+            --add-data "ghost/commands${{ matrix.datasep }}ghost/commands" \
             --hidden-import ghost.ghostlib.GhostJob \
             --hidden-import ghost.cli \
             --hidden-import ghost.cli.ghostgen \
