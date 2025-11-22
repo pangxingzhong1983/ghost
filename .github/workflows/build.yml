@@ -1,0 +1,75 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-arm64
+            os: macos-14
+            python: "3.11"
+            bin: ghost-macos-arm64
+            data-sep: :
+          - name: linux-x64
+            os: ubuntu-latest
+            python: "3.11"
+            bin: ghost-linux-x64
+            data-sep: :
+          - name: windows-x64
+            os: windows-latest
+            python: "3.11"
+            bin: ghost-windows-x64
+            data-sep: ";"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyinstaller
+
+      - name: Build binary
+        shell: bash
+        run: |
+          pyinstaller --clean --onefile --name "${{ matrix.bin }}" ghost/cli/ghostsh.py \
+            --add-data "ghost/library_patches_py3${{ matrix.data-sep }}ghost/library_patches_py3" \
+            --add-data "ghost/packages/all${{ matrix.data-sep }}ghost/packages/all" \
+            --add-data "ghost/commands${{ matrix.data-sep }}ghost/commands" \
+            --hidden-import ghost.ghostlib.GhostJob \
+            --hidden-import ghost.cli \
+            --hidden-import ghost.cli.ghostgen \
+            --hidden-import ghost.ghostlib.utils.credentials \
+            --hidden-import ghost.ghostlib.PythonCompleter \
+            --hidden-import pylzma
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          "./dist/${{ matrix.bin }}" -h || exit 1
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: dist/${{ matrix.bin }}
+          overwrite: true
