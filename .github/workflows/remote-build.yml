@@ -140,7 +140,8 @@ jobs:
         working-directory: client/android_sources
         run: |
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-          buildozer -v --config=buildozer-docker.spec android release
+          cp buildozer-docker.spec buildozer.spec
+          buildozer -v android release
 
       - name: Upload Android artifact
         uses: actions/upload-artifact@v4
