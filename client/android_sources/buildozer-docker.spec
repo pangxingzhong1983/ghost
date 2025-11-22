@@ -38,7 +38,7 @@ android.whitelist = lib-dynload/termios.so,lib-dynload/mmap.so,lib-dynload/_json
 # android.skip_update = True
 p4a.bootstrap = badservice
 
-#android.add_src =
+p4a.bootstrap = service_only
 #android.add_aars =
 
 #android.add_libs_arm64_v8a = libs/android-arm64/*.so
