@@ -51,24 +51,24 @@ jobs:
           python -m pip uninstall -y typing || true
           # vendor pure-Python http_parser to avoid compiling C extension
           python - <<'PY'
-import os, tarfile, urllib.request, io, shutil
-url = "https://files.pythonhosted.org/packages/source/h/http-parser/http-parser-0.9.0.tar.gz"
-data = urllib.request.urlopen(url, timeout=30).read()
-with tarfile.open(fileobj=io.BytesIO(data)) as tar:
-    members = [
-        "http-parser-0.9.0/http_parser/__init__.py",
-        "http-parser-0.9.0/http_parser/pyparser.py",
-        "http-parser-0.9.0/http_parser/util.py",
-        "http-parser-0.9.0/http_parser/reader.py",
-        "http-parser-0.9.0/http_parser/http.py",
-        "http-parser-0.9.0/http_parser/_socketio.py",
-    ]
-    for m in members:
-        tar.extract(m, path=".")
-if os.path.exists("http_parser"):
-    shutil.rmtree("http_parser")
-os.rename("http-parser-0.9.0/http_parser", "http_parser")
-shutil.rmtree("http-parser-0.9.0")
+            import os, tarfile, urllib.request, io, shutil
+            url = "https://files.pythonhosted.org/packages/source/h/http-parser/http-parser-0.9.0.tar.gz"
+            data = urllib.request.urlopen(url, timeout=30).read()
+            with tarfile.open(fileobj=io.BytesIO(data)) as tar:
+                members = [
+                    "http-parser-0.9.0/http_parser/__init__.py",
+                    "http-parser-0.9.0/http_parser/pyparser.py",
+                    "http-parser-0.9.0/http_parser/util.py",
+                    "http-parser-0.9.0/http_parser/reader.py",
+                    "http-parser-0.9.0/http_parser/http.py",
+                    "http-parser-0.9.0/http_parser/_socketio.py",
+                ]
+                for m in members:
+                    tar.extract(m, path=".")
+            if os.path.exists("http_parser"):
+                shutil.rmtree("http_parser")
+            os.rename("http-parser-0.9.0/http_parser", "http_parser")
+            shutil.rmtree("http-parser-0.9.0")
 PY
 
       - name: Build binary
