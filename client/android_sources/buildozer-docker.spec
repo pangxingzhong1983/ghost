@@ -53,5 +53,6 @@ android.archs = arm64-v8a
 [buildozer]
 log_level = 1
 warn_on_root = 0
-build_dir = %BUILDOZER%
+# use default build dir to avoid ConfigParser interpolation issues on CI
+# build_dir = %BUILDOZER%
 # bin_dir = ./bin
