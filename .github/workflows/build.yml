@@ -17,17 +17,17 @@ jobs:
         include:
           - name: macos-arm64
             os: macos-14
-            python: "3.11"
+            python: "3.10"
             bin: ghost-macos-arm64
             datasep: ":"
           - name: linux-x64
             os: ubuntu-latest
-            python: "3.11"
+            python: "3.10"
             bin: ghost-linux-x64
             datasep: ":"
           - name: windows-x64
             os: windows-latest
-            python: "3.11"
+            python: "3.10"
             bin: ghost-windows-x64
             datasep: ";"
 
@@ -42,14 +42,42 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
+      - name: Install system build deps
+        shell: bash
+        run: |
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y build-essential libssl-dev swig libffi-dev
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew install openssl@3 swig || true
+            OPENSSL_PREFIX=$(brew --prefix openssl@3)
+            {
+              echo "CFLAGS=-I${OPENSSL_PREFIX}/include"
+              echo "CPPFLAGS=-I${OPENSSL_PREFIX}/include"
+              echo "LDFLAGS=-L${OPENSSL_PREFIX}/lib"
+              echo "PKG_CONFIG_PATH=${OPENSSL_PREFIX}/lib/pkgconfig"
+              echo "SWIG_FEATURES=-I${OPENSSL_PREFIX}/include"
+            } >> "$GITHUB_ENV"
+          else
+            choco install --no-progress openssl swig
+            {
+              echo 'CL=/I"C:\Program Files\OpenSSL-Win64\include"'
+              echo 'LIB=C:\Program Files\OpenSSL-Win64\lib;%LIB%'
+            } >> "$GITHUB_ENV"
+          fi
+
       - name: Install dependencies
         shell: bash
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
+          export SETUPTOOLS_USE_DISTUTILS=local
           # drop http-parser (C-ext) and rely on vendored pure-python copy
-          grep -v '^http-parser' requirements.txt > /tmp/req.txt
-          python -m pip install -r /tmp/req.txt pyinstaller
+          grep -Ev '^http-parser' requirements.txt > /tmp/req.txt
+          grep -Ev '^http-parser|^pylzma' requirements.txt > /tmp/base_req.txt
+          python -m pip install -r /tmp/base_req.txt pyinstaller
           python -c "import os, tarfile, urllib.request, io, shutil; url='https://files.pythonhosted.org/packages/source/h/http-parser/http-parser-0.9.0.tar.gz'; data=urllib.request.urlopen(url, timeout=30).read(); tar=tarfile.open(fileobj=io.BytesIO(data)); members=['http-parser-0.9.0/http_parser/__init__.py','http-parser-0.9.0/http_parser/pyparser.py','http-parser-0.9.0/http_parser/util.py','http-parser-0.9.0/http_parser/reader.py','http-parser-0.9.0/http_parser/http.py','http-parser-0.9.0/http_parser/_socketio.py']; tar.extractall(path='.', members=[tar.getmember(m) for m in members]); shutil.rmtree('http_parser', ignore_errors=True); os.rename('http-parser-0.9.0/http_parser','http_parser'); shutil.rmtree('http-parser-0.9.0')"
+          python -m pip install ./pylzma-0.5.0
+          python -m pip install M2Crypto==0.46.2
 
       - name: Build binary
         shell: bash
