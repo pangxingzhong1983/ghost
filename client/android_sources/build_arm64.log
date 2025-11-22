@@ -1,0 +1,28 @@
+Requirement already satisfied: buildozer==1.5.0 in /Users/pangxingzhong/.local/lib/python3.13/site-packages (1.5.0)
+Requirement already satisfied: pexpect in /Users/pangxingzhong/.local/lib/python3.13/site-packages (from buildozer==1.5.0) (4.9.0)
+Requirement already satisfied: virtualenv in /Users/pangxingzhong/.local/lib/python3.13/site-packages (from buildozer==1.5.0) (20.35.4)
+Requirement already satisfied: sh in /opt/homebrew/Caskroom/miniconda/base/lib/python3.13/site-packages (from buildozer==1.5.0) (1.14.3)
+Requirement already satisfied: ptyprocess>=0.5 in /Users/pangxingzhong/.local/lib/python3.13/site-packages (from pexpect->buildozer==1.5.0) (0.7.0)
+Requirement already satisfied: distlib<1,>=0.3.7 in /Users/pangxingzhong/.local/lib/python3.13/site-packages (from virtualenv->buildozer==1.5.0) (0.4.0)
+Requirement already satisfied: filelock<4,>=3.12.2 in /Users/pangxingzhong/.local/lib/python3.13/site-packages (from virtualenv->buildozer==1.5.0) (3.20.0)
+Requirement already satisfied: platformdirs<5,>=3.9.1 in /opt/homebrew/Caskroom/miniconda/base/lib/python3.13/site-packages (from virtualenv->buildozer==1.5.0) (4.3.7)
+# Check configuration tokens
+# Ensure build layout
+# Check configuration tokens
+# Preparing build
+# Check requirements for android
+# Install platform
+# Apache ANT found at /Users/pangxingzhong/.buildozer/android/platform/apache-ant-1.9.4
+# Android SDK found at /Users/pangxingzhong/.buildozer/android/platform/android-sdk
+# Recommended android's NDK version by p4a is: 25b
+# Android NDK found at /Users/pangxingzhong/.buildozer/android/platform/android-ndk-r25b
+# Check application requirements
+# Compile platform
+# Build the application #5
+# Package the application
+# Asking for release but P4A_RELEASE_KEYALIAS is missing--sign will not be passed
+# Asking for release but P4A_RELEASE_KEYSTORE_PASSWD is missing--sign will not be passed
+# Asking for release but P4A_RELEASE_KEYSTORE is missing--sign will not be passed
+# Asking for release but P4A_RELEASE_KEYALIAS_PASSWD is missing--sign will not be passed
+# Android packaging done!
+# APK ghost-0.1-arm64-v8a-release-unsigned.apk available in the bin directory

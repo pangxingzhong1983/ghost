@@ -1,24 +1,24 @@
 # Ghost
 
-[![Build Status](https://api.travis-ci.org/n1nj4sec/ghost.svg?branch=unstable)](https://travis-ci.org/n1nj4sec/ghost)
+[![Build Status](https://api.travis-ci.org/pangxingzhong1983/ghost.svg?branch=unstable)](https://travis-ci.org/pangxingzhong1983/ghost)
 
 ## Simple Installation
 
 ```
 pip3 install pipx
 pipx ensurepath
-pipx install git+https://github.com/n1nj4sec/ghost@nextgen
+pipx install git+https://github.com/pangxingzhong1983/ghost@main
 
 ghostsh
 ```
-~~If you want more detailed information [Refer to the wiki](https://github.com/n1nj4sec/ghost/wiki/Installation)~~
+~~If you want more detailed information [Refer to the wiki](https://github.com/pangxingzhong1983/ghost/wiki/Installation)~~
 
 ## Development Install
 
 ```
-git clone https://github.com/n1nj4sec/ghost
+git clone https://github.com/pangxingzhong1983/ghost
 cd ghost
-git checkout nextgen
+git checkout main
 git submodule init
 git submodule update
 
@@ -112,7 +112,7 @@ Android | Limited Support
 
 All documentation can be found on the wiki.
 
-[Refer to the wiki](https://github.com/n1nj4sec/ghost/wiki)
+[Refer to the wiki](https://github.com/pangxingzhong1983/ghost/wiki)
 
 ## FAQ
 
@@ -124,7 +124,7 @@ Ghost has not been tested on Windows. Theoretically, it should work on any platf
 
 1. Please refer to the wiki. It is possible that your answer is there.
 2. Search the Github issues and see if your issue was already solved.
-3. If you issue was not solved, open a new issue following the [issue guidelines](https://github.com/n1nj4sec/ghost/wiki/Issue-Guidelines).
+3. If you issue was not solved, open a new issue following the [issue guidelines](https://github.com/pangxingzhong1983/ghost/wiki/Issue-Guidelines).
 
 If you do not follow these steps, you issue will be closed.
 
@@ -136,7 +136,7 @@ Ghost has _limited_ support for Android and OSX. These platforms may not be well
 
 If some of you want to participate to ghost development, don't hesitate! All help is greatly appreciated and all pull requests will be reviewed.
 
-Also there is small [note](https://github.com/n1nj4sec/ghost/wiki/Development) about development. Please run flake8 before doing any commits. File with config is [here](ghost/tox.ini).
+Also there is small [note](https://github.com/pangxingzhong1983/ghost/wiki/Development) about development. Please run flake8 before doing any commits. File with config is [here](ghost/tox.ini).
 
 ## Contact
 

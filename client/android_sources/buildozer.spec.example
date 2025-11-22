@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = pycrypto,plyer,psutil,tinyec,netaddr,pyjnius,pyuv,cryptography
+requirements = genericndkbuild,libbz2,pycryptodome,plyer,psutil,tinyec,netaddr,dnslib,pyjnius,pyuv,cryptography,kcp,msgpack-python,scandir,ushlex
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -51,8 +51,8 @@ requirements = pycrypto,plyer,psutil,tinyec,netaddr,pyjnius,pyuv,cryptography
 # (str) Icon of the application
 #icon.filename = %(source.dir)s/data/icon.png
 
-# (str) Supported orientation (one of landscape, portrait or all)
-orientation = all
+# (str) Supported orientation (one of landscape, portrait)
+orientation = portrait
 
 # (list) List of service to declare
 # services = ghost:service/main.py
@@ -89,10 +89,13 @@ android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,VIBR
 
 
 # (int) Android API to use
-#android.api = 19
+android.api = 33
 
 # (int) Minimum API required
-#android.minapi = 9
+android.minapi = 21
+
+# (str) Release artifact format: 'aab' (default) or 'apk'
+android.release_artifact = apk
 
 # (int) Android SDK version to use
 #android.sdk = 20
@@ -130,7 +133,7 @@ android.whitelist = lib-dynload/termios.so,lib-dynload/mmap.so,lib-dynload/_json
 # android.skip_update = True
 
 # (str) Bootstrap to use for android builds (android_new only)
-p4a.bootstrap = badservice
+p4a.bootstrap = service_only
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.renpy.android.PythonActivity
