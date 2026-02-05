@@ -21,6 +21,8 @@ android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,VIBR
 
 #android.api = 19
 #android.minapi = 9
+android.api = 33
+android.minapi = 21
 #android.sdk = 20
 #android.ndk = 9c
 #android.private_storage = True
@@ -35,7 +37,7 @@ p4a.source_dir = python-for-android
 
 android.whitelist = lib-dynload/termios.so,lib-dynload/mmap.so,lib-dynload/_json.so,lib-dynload/pyexpat.so
 android.skip_update = True
-p4a.bootstrap = badservice
+p4a.bootstrap = service_only
 
 #android.add_src =
 #android.add_aars =
