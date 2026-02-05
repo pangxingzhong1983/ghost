@@ -55,5 +55,5 @@ android.archs = arm64-v8a
 [buildozer]
 log_level = 1
 warn_on_root = 0
-build_dir = %BUILDOZER%
+build_dir = .buildozer
 # bin_dir = ./bin
