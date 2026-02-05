@@ -2,12 +2,13 @@
 
 ## 1) 用户需求 / 任务目的 / 背景
 - 需求：远程构建失败，要求修复并保证 latest 分支可构建。
-- 背景：Android job 在 buildozer 解析配置时失败；随后因缺少 build-tools 导致 Aidl 不可用；再后续因 SDK License 未接受而无法安装 build-tools；最后因 SDK 目录存在但缺少 sdkmanager 导致构建中断。
+- 背景：Android job 在 buildozer 解析配置时失败；随后因缺少 build-tools 导致 Aidl 不可用；再后续因 SDK License 未接受而无法安装 build-tools；最后因 SDK 目录存在但缺少 sdkmanager 导致构建中断；并出现 libtool/autoconf 宏缺失错误（LT_SYS_SYMBOL_USCORE）。
 
 ## 2) 本次所有变更点
 - 修复 buildozer 配置中 `build_dir` 的 `%BUILDOZER%` 插值导致的解析异常。
 - 允许 buildozer 安装所需 SDK 组件，避免 build-tools 缺失。
 - 在 Android workflow 中预装 commandline tools 并自动接受 License，确保 sdkmanager 可用。
+- Android 依赖补齐 autoconf/automake/libtool 等构建工具，修复 libtool 宏缺失。
 
 ## 3) 变更前后差异对照
 ```diff
@@ -87,6 +88,22 @@
 +          mkdir -p "$SDK_ROOT/tools/bin"
 +          ln -sf "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "$SDK_ROOT/tools/bin/sdkmanager"
 +          yes | "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
+```
+
+```diff
+--- a/.github/workflows/remote-build.yml
++++ b/.github/workflows/remote-build.yml
+@@
+-          sudo apt-get install -y build-essential ccache git zip unzip libffi-dev libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev zlib1g-dev openjdk-17-jdk python3 python3-pip python3-dev liblzma-dev
++          sudo apt-get install -y build-essential ccache git zip unzip libffi-dev libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev zlib1g-dev openjdk-17-jdk python3 python3-pip python3-dev liblzma-dev autoconf automake libtool libtool-bin pkg-config
+```
+
+```diff
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@
+-          sudo apt-get install -y build-essential ccache git zip unzip libffi-dev libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev zlib1g-dev openjdk-17-jdk python3 python3-pip python3-dev liblzma-dev
++          sudo apt-get install -y build-essential ccache git zip unzip libffi-dev libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev zlib1g-dev openjdk-17-jdk python3 python3-pip python3-dev liblzma-dev autoconf automake libtool libtool-bin pkg-config
 ```
 
 ## 4) 使用方式 / 依赖 / 注意事项
