@@ -149,6 +149,13 @@ jobs:
         run: |
           cp -f buildozer-docker.spec buildozer.spec
 
+      - name: Accept Android SDK licenses
+        run: |
+          SDK_LICENSE_DIR="$HOME/.buildozer/android/platform/android-sdk/licenses"
+          mkdir -p "$SDK_LICENSE_DIR"
+          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$SDK_LICENSE_DIR/android-sdk-license"
+          echo "84831b9409646a918e30573bab4c9c91346d8abd" > "$SDK_LICENSE_DIR/android-sdk-preview-license"
+
       - name: Build Android (arm64-v8a)
         working-directory: client/android_sources
         run: |
