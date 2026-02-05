@@ -154,11 +154,21 @@ jobs:
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
           SDK_ROOT="$HOME/.buildozer/android/platform/android-sdk"
           TOOLS_ZIP="/tmp/cmdline-tools.zip"
+          TMP_DIR="$(mktemp -d)"
           mkdir -p "$SDK_ROOT/cmdline-tools"
-          curl -sSL "https://dl.google.com/android/repository/commandlinetools-linux-6514223_latest.zip" -o "$TOOLS_ZIP"
-          unzip -q "$TOOLS_ZIP" -d "$SDK_ROOT/cmdline-tools"
+          curl -fL --retry 3 "https://dl.google.com/android/repository/commandlinetools-linux-6514223_latest.zip" -o "$TOOLS_ZIP"
+          unzip -q "$TOOLS_ZIP" -d "$TMP_DIR"
+          if [[ -d "$TMP_DIR/cmdline-tools" ]]; then
+            SRC_DIR="$TMP_DIR/cmdline-tools"
+          elif [[ -d "$TMP_DIR/tools" ]]; then
+            SRC_DIR="$TMP_DIR/tools"
+          else
+            echo "cmdline-tools not found in archive"
+            exit 1
+          fi
           rm -rf "$SDK_ROOT/cmdline-tools/latest"
-          mv "$SDK_ROOT/cmdline-tools/cmdline-tools" "$SDK_ROOT/cmdline-tools/latest"
+          mv "$SRC_DIR" "$SDK_ROOT/cmdline-tools/latest"
+          rm -rf "$TMP_DIR"
           mkdir -p "$SDK_ROOT/tools/bin"
           ln -sf "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "$SDK_ROOT/tools/bin/sdkmanager"
           yes | "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
