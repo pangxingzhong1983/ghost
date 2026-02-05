@@ -149,12 +149,19 @@ jobs:
         run: |
           cp -f buildozer-docker.spec buildozer.spec
 
-      - name: Accept Android SDK licenses
+      - name: Prepare Android SDK tools and licenses
         run: |
-          SDK_LICENSE_DIR="$HOME/.buildozer/android/platform/android-sdk/licenses"
-          mkdir -p "$SDK_LICENSE_DIR"
-          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$SDK_LICENSE_DIR/android-sdk-license"
-          echo "84831b9409646a918e30573bab4c9c91346d8abd" > "$SDK_LICENSE_DIR/android-sdk-preview-license"
+          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+          SDK_ROOT="$HOME/.buildozer/android/platform/android-sdk"
+          TOOLS_ZIP="/tmp/cmdline-tools.zip"
+          mkdir -p "$SDK_ROOT/cmdline-tools"
+          curl -sSL "https://dl.google.com/android/repository/commandlinetools-linux-6514223_latest.zip" -o "$TOOLS_ZIP"
+          unzip -q "$TOOLS_ZIP" -d "$SDK_ROOT/cmdline-tools"
+          rm -rf "$SDK_ROOT/cmdline-tools/latest"
+          mv "$SDK_ROOT/cmdline-tools/cmdline-tools" "$SDK_ROOT/cmdline-tools/latest"
+          mkdir -p "$SDK_ROOT/tools/bin"
+          ln -sf "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "$SDK_ROOT/tools/bin/sdkmanager"
+          yes | "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
 
       - name: Build Android (arm64-v8a)
         working-directory: client/android_sources
