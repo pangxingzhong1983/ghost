@@ -39,6 +39,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
+import sys
 import logging
 import argparse
 
@@ -74,11 +75,18 @@ try:
 except ImportError:
     pass
 
-from ghost.ghostlib import (
-    GhostServer, GhostCmdLoop, GhostCredentials, GhostConfig
-)
+if os.name != 'nt':
+    from ghost.ghostlib import (
+        GhostServer, GhostCmdLoop, GhostCredentials, GhostConfig
+    )
+else:
+    GhostServer = GhostCmdLoop = GhostCredentials = GhostConfig = None
 
 def main():
+    if os.name == 'nt':
+        print("Ghost shell is not supported on Windows (requires POSIX termios/pty). Use Linux/macOS/Android instead.")
+        return 0
+
     parser = parse_args()
     args = parser.parse_args()
     if args.workdir:

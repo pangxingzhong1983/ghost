@@ -47,4 +47,4 @@
 	url = https://github.com/n1nj4sec/pykcp
 [submodule "client/android_sources/python-for-android"]
 	path = client/android_sources/python-for-android
-	url = https://github.com/kivy/python-for-android.git
+	url = https://github.com/pangxingzhong1983/python-for-android.git
