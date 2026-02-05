@@ -18,18 +18,21 @@ jobs:
             os: macos-14
             python: "3.10"
             bin: ghost-macos-arm64
+            ext: ""
             datasep: ":"
             entry: ghost/cli/ghostsh.py
           - name: linux-x64
             os: ubuntu-latest
             python: "3.10"
             bin: ghost-linux-x64
+            ext: ""
             datasep: ":"
             entry: ghost/cli/ghostsh.py
           - name: windows-x64
             os: windows-latest
             python: "3.10"
             bin: ghost-windows-x64
+            ext: ".exe"
             datasep: ";"
             entry: ghost/cli/ghostwin.py
 
@@ -118,7 +121,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
-          path: dist/${{ matrix.bin }}
+          path: dist/${{ matrix.bin }}${{ matrix.ext }}
           overwrite: true
 
   android:
