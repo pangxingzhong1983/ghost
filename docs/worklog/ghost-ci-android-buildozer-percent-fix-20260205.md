@@ -111,6 +111,7 @@
 - buildozer 将在需要时安装 SDK build-tools 以保证 Aidl 可用。
 - workflow 会预装 commandline tools 并自动接受 License，避免 `sdkmanager` 不存在或交互式许可阻塞。
 - 无新增依赖。
+- 验证：2026-02-05 远程构建 `remote-build` 与 `build` 已在 latest 成功通过。
 
 ## 5) 风险点与回滚方案
 - 风险：若依赖外部环境变量 `%BUILDOZER%` 的构建路径策略将不再生效；构建时会自动下载 SDK 组件（耗时增加）；额外下载 commandline tools 增加少量耗时。
