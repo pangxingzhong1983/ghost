@@ -1,0 +1,23 @@
+#python specific
+*.pyc
+*.so
+*.pyd
+build/*
+dist/*
+MANIFEST
+__pycache__/
+*.egg-info/
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.swo
+*.out
+
+.tox/
+docs/_build/
+
+wheelhouse/
+wheeltmp/

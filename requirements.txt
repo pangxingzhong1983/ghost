@@ -5,7 +5,7 @@ rsa
 netaddr
 ecdsa==0.13
 paramiko==2.0.2
-tinyec @ https://github.com/alxchk/tinyec/archive/master.zip
+tinyec @ file:///app/vendor/tinyec
 urllib3==1.26.20
 psutil
 netifaces
@@ -16,11 +16,11 @@ pyOpenSSL
 scapy
 impacket
 dnslib
-http-parser
+http-parser @ file:///app/vendor/http-parser
 cerberus
 logutils
 secretstorage==2.3.1
-pypykatz @ https://github.com/AlessandroZ/pypykatz/archive/master.zip
+pypykatz @ file:///app/vendor/pypykatz
 ed25519==1.5
 pygments
 requests
@@ -41,11 +41,11 @@ xattr
 dukpy
 pyaes
 chardet
-urllib-auth @ https://github.com/alxchk/urllib-auth/archive/master.zip
+urllib-auth @ file:///app/vendor/urllib-auth
 http_request
-kcp @ git+https://github.com/n1nj4sec/pykcp
+kcp @ file:///app/vendor/pykcp
 flake8
 flake8-per-file-ignores
 ushlex; python_version<'3'
-pyuv @ git+https://github.com/n1nj4sec/pyuv@fix-building-against-python311
+pyuv @ file:///app/vendor/pyuv
 tqdm

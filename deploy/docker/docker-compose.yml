@@ -1,0 +1,32 @@
+services:
+  ghost-webui:
+    build:
+      context: ./app
+      dockerfile: deploy/docker/Dockerfile
+    container_name: ghost-webui
+    restart: always
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./data:/data
+      - ./app/ghost/webui/static:/app/ghost/webui/static:ro
+    environment:
+      - GHOST_UI_HOST=0.0.0.0
+      - GHOST_UI_PORT=8089
+      - GHOST_UI_DATA=/data
+      - GHOST_UI_ADMIN_EMAIL=pangxingzhong@gmail.com
+      - GHOST_UI_ADMIN_PASSWORD=Axing_19830813
+      - GHOST_UI_GHOSTSH_ENCRYPT=0
+      - HOME=/data
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: ghost-webui-tunnel
+    restart: always
+    depends_on:
+      - ghost-webui
+    command: tunnel --no-autoupdate --protocol http2 --config /etc/cloudflared/config.yml run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    volumes:
+      - ./app/deploy/docker/cloudflared.yml:/etc/cloudflared/config.yml:ro

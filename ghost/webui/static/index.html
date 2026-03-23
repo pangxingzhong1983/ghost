@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ghost 控制台</title>
+  <link rel="stylesheet" href="/static/app.css?v=20260308a">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">G</div>
+        <div>
+          <div class="title">Ghost 控制台</div>
+          <div class="subtitle">运维控制台</div>
+        </div>
+      </div>
+      <div class="userbar">
+        <span id="user-email">访客</span>
+        <button id="btn-logout" class="btn ghost">退出</button>
+      </div>
+    </header>
+
+    <section id="login" class="card">
+      <h1>登录</h1>
+      <p class="muted">使用管理员账号管理 Ghost。</p>
+      <div class="row login-row">
+        <input id="login-email" type="email" placeholder="邮箱">
+        <input id="login-pass" type="password" placeholder="密码">
+        <button id="btn-login" class="btn primary">登录</button>
+      </div>
+      <div id="login-error" class="error"></div>
+    </section>
+
+    <section id="main" class="main hidden">
+      <nav class="tabs">
+        <button data-view="dashboard" class="tab active">概览</button>
+        <button data-view="tasks" class="tab">任务</button>
+        <button data-view="terminal" class="tab">终端</button>
+        <button data-view="config" class="tab">配置</button>
+        <button data-view="users" class="tab">用户</button>
+        <button data-view="audit" class="tab">审计</button>
+        <button data-view="logs" class="tab">日志</button>
+      </nav>
+
+      <div class="panel" data-view="dashboard">
+        <h2>命令</h2>
+        <div class="row">
+          <input id="cmd-input" type="text" placeholder="输入 Ghost 命令或 !系统命令">
+          <button id="btn-run" class="btn primary">执行</button>
+        </div>
+        <pre id="cmd-output" class="console"></pre>
+      </div>
+
+      <div class="panel hidden" data-view="tasks">
+        <h2>任务历史</h2>
+        <div class="row">
+          <button id="btn-refresh-tasks" class="btn">刷新</button>
+        </div>
+        <div class="split">
+          <div class="list" id="task-list"></div>
+          <pre id="task-output" class="console"></pre>
+        </div>
+      </div>
+
+      <div class="panel hidden" data-view="terminal">
+        <h2>Web 终端</h2>
+        <pre id="term-output" class="console"></pre>
+        <input id="term-input" type="text" placeholder="输入并回车">
+      </div>
+
+      <div class="panel hidden" data-view="config">
+        <h2>配置管理</h2>
+        <div class="row">
+          <button id="btn-load-config" class="btn">加载</button>
+          <button id="btn-save-config" class="btn primary">保存</button>
+        </div>
+        <textarea id="config-editor" class="editor"></textarea>
+      </div>
+
+      <div class="panel hidden" data-view="users">
+        <h2>用户管理</h2>
+        <div class="row">
+          <input id="user-email" type="email" placeholder="邮箱">
+          <input id="user-pass" type="password" placeholder="密码">
+          <select id="user-role">
+            <option value="user">用户</option>
+            <option value="admin">管理员</option>
+          </select>
+          <button id="btn-add-user" class="btn primary">添加</button>
+        </div>
+        <div id="user-list" class="list"></div>
+      </div>
+
+      <div class="panel hidden" data-view="audit">
+        <h2>审计日志</h2>
+        <div class="row">
+          <button id="btn-refresh-audit" class="btn">刷新</button>
+        </div>
+        <pre id="audit-output" class="console"></pre>
+      </div>
+
+      <div class="panel hidden" data-view="logs">
+        <h2>服务日志</h2>
+        <div class="row">
+          <button id="btn-refresh-logs" class="btn">刷新</button>
+        </div>
+        <pre id="logs-output" class="console"></pre>
+      </div>
+    </section>
+  </div>
+
+  <script src="/static/app.js?v=20260306c"></script>
+</body>
+</html>

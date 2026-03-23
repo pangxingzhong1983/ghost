@@ -1,0 +1,4 @@
+ingress:
+  - hostname: ghost.zhuquejiasu.uk
+    service: http://ghost-webui:8089
+  - service: http_status:404
