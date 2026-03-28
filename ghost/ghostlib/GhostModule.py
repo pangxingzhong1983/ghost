@@ -62,6 +62,11 @@ from ghost.ghostlib.utils.term import (
 from ghost.ghostlib import getLogger
 
 from ghost.network.lib.compat import with_metaclass
+from ghost.modules.lib.platform_compat import (
+    detect_platform,
+    is_compatible,
+    build_unsupported_message,
+)
 
 if sys.version_info.major > 2:
     unicode = str
@@ -409,6 +414,16 @@ class GhostModule(with_metaclass(GhostModuleMetaclass)):
 
     def __init__(self, client, job, io, log=None):
         """ client must be a GhostClient instance """
+        # Platform compatibility check (engineered addition)
+        current_platforms = detect_platform(client)
+        if not is_compatible(self.compatible_systems, current_platforms):
+            raise RuntimeError(
+                build_unsupported_message(
+                    self.__class__.__name__,
+                    self.compatible_systems,
+                    current_platforms,
+                )
+            )
         self.client = client
         self.job = job
         self.new_deps = []

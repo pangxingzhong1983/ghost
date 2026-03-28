@@ -1,0 +1,33 @@
+name: platform-matrix
+
+on:
+  push:
+    branches: [ main, latest, nextgen ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate platform reports
+        run: |
+          python3 scripts/analyze_module_platforms.py
+          python3 scripts/identify_generic_modules.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-matrix-reports
+          path: |
+            docs/module_platform_report.json
+            docs/generic_modules_without_darwin.json
+            docs/platform_module_matrix.md

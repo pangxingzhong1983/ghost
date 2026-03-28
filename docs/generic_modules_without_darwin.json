@@ -1,0 +1,446 @@
+[
+  {
+    "file": "exploit_suggester.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "odbc.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "netmon.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "rfs.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "shell_exec.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "w.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "pyshell.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mapped.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "gpstracker.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "clear_logs.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "services.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "text_to_speach.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "impersonate.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "persistence.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "rwmic.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "rdesktop.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "wmic.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "contacts.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "tasks.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "sshell.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "record_mic.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "env.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "usniper.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "nbnsspoof.py",
+    "reason": "windows_but_generic"
+  },
+  {
+    "file": "dns.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "upload.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "write.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "pipecatcher.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "psh.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "portfwd.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "x509.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "socks5proxy.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "cat.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "smb.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "get_info.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "getsystem.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "download.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "lazagne.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "getuid.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mv.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "credcap.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "port_scan.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "load_package.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "hide_process.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "edit.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "privesc_checker.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mimipy.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "ls.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "cp.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "pywerview.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "apps.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "pexec.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "alive.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "rm.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "lock_screen.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "display.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "getdomain.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "loot_memory.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "netcreds.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "pwd.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mimikatz.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mkdir.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "zip.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "shellcode_exec.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "tcpdump.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "duplicate.py",
+    "reason": "windows_but_generic"
+  },
+  {
+    "file": "netstat.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "reg.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "bypassuac.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "logs.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "last.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "pyexec.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "ip.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "stat.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "http.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "inveigh.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "ps.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "smbspider.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "linux_stealth.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "powerview.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "igd.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "become.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mimishell.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "mouselogger.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "cloudinfo.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "interactive_shell.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "forward.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "search.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "getppid.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "ttyrec.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "sudo_alias.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "scapy_shell.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "ssh.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "memory_exec.py",
+    "reason": "windows_but_generic"
+  },
+  {
+    "file": "exit.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "process_kill.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "call.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "memstrings.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "getprivs.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "beroot.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "hashmon.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "webcamsnap.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "ad.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "echo.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "date.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "migrate.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "getpid.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "keylogger.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "psexec.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "vibrate.py",
+    "reason": "no_compat_block"
+  },
+  {
+    "file": "cd.py",
+    "reason": "no_compat_block"
+  }
+]
