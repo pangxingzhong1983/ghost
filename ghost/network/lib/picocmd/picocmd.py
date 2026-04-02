@@ -50,8 +50,8 @@ if sys.version_info.major > 2:
     from urllib.parse import urlparse
 
     basestring = str
-    long = int
-    xrange = range
+    int = int
+    range = range
 
 else:
     from urlparse import urlparse
@@ -144,7 +144,7 @@ class AddressTable(object):
             return target_id
 
         used_target_ids = set(self.table.values())
-        for target_id in xrange(0xFFFF):
+        for target_id in range(0xFFFF):
             if target_id not in used_target_ids:
                 return target_id
 
@@ -890,7 +890,7 @@ class PasteLink(Command):
         lambda x: baseconv.base62.encode(from_bytes(x)),
     ), (
         'http://paste.openstack.org/raw/{}/',
-        lambda x: to_bytes(long(x)),
+        lambda x: to_bytes(int(x)),
         lambda x: str(from_bytes(x)),
     ), (
         'https://friendpaste.com/{}/raw',
@@ -898,7 +898,7 @@ class PasteLink(Command):
         lambda x: baseconv.base62.encode(from_bytes(x)),
     ), (
         'http://lpaste.net/raw/{}',
-        lambda x: to_bytes(long(x)),
+        lambda x: to_bytes(int(x)),
         lambda x: str(from_bytes(x)),
     )]
 
@@ -1406,7 +1406,7 @@ class ConnectEx(Command):
             except netaddr.AddrFormatError:
                 pass
 
-        elif type(address) in (long, int) and address >= 0 and address < 65536:
+        elif type(address) in (int, int) and address >= 0 and address < 65536:
             self.address = address
             self.address_type = ConnectEx.TARGET_ID
 
@@ -1434,7 +1434,7 @@ class ConnectEx(Command):
             address = self.address.packed
 
         if self.fronting:
-            if type(self.fronting) in (long, int) and \
+            if type(self.fronting) in (int, int) and \
                     self.fronting > 0 and self.fronting < 65536:
                 fronting = struct.pack('>H', self.fronting)
             else:
@@ -1530,7 +1530,7 @@ class DataTransferControl(Command):
             if (total_size is None or crc is None):
                 raise ValueError('total_size and crc must be specified')
 
-            if type(crc) not in (int, long) or crc < 0 or crc > 0xFFFFFFFF:
+            if type(crc) not in (int, int) or crc < 0 or crc > 0xFFFFFFFF:
                 raise ValueError('Invalid CRC field, should be uint32')
 
             if total_size > 0xFFFF:

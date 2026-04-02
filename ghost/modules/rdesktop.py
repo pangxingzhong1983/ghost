@@ -61,7 +61,7 @@ class RdesktopWebSocketHandler(WebSocketHandler):
             self.start_stream()
 
         elif js['msg'] == 'click':
-            logger.info("mouse click at : (%s, %s)"%(js['x'], js['y']))
+            logger.info(f"mouse click at : ({js['x']} {js['y']})")
             self.remote_streamer.click(int(js['x']), int(js['y']))
 
         elif js['msg'] == 'move':
@@ -169,7 +169,7 @@ class RemoteDesktopModule(GhostModule):
             return
 
         port, path = conninfo
-        self.success("Web handler started on http://127.0.0.1:%d%s"%(port, path))
+        self.success(f"Web handler started on http://127.0.0.1:{port}{path}")
         self.info("By default, web handler accepts connections from localhost only")
         self.info("Use the following ghost command for allowing another ip address to connect to web handler:")
         self.info("'config set webserver local_ips X.Y.Z.A'")

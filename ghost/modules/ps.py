@@ -219,7 +219,7 @@ def print_psinfo(fout, families, socktypes, data, colinfo, sections=[], wide=Fal
 
                     infosecs[prop] = [{
                         k:v for k,v in item.items() if filtered is None or k in filtered
-                    } for item in (value if type(value) == list else [value])]
+                    } for item in (value if isinstance(value, list) else [value])]
 
             if sections:
                 for section in sections:
@@ -274,14 +274,14 @@ def is_filtered(pid, columns, hide, show):
     cmd      = columns['cmdline']
 
     for hide_rule in hide:
-        if type(hide_rule) == int:
+        if isinstance(hide_rule, int):
             if hide_rule == pid:
                 deny = True
         elif any(hide_rule.match(x) for x in [exe, name, cmd, username]):
             deny = True
 
     for show_rule in show:
-        if type(show_rule) == int:
+        if isinstance(show_rule, int):
             if show_rule == pid:
                 deny = False
         elif any(show_rule.match(x) for x in [exe, name, cmd, username]):
@@ -353,7 +353,7 @@ def print_pstree(fout, parent, tree, data,
     for child in children:
         print_pstree(
             fout, child, tree, data,
-            prefix=indent+('┌' if first else '├'), indent=indent + '│ ',
+            prefix=indent+('ÃƒÂ¢Ã¢â‚¬ÂÃ…â€™' if first else 'ÃƒÂ¢Ã¢â‚¬ÂÃ…â€œ'), indent=indent + 'ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Å¡ ',
             colinfo=colinfo, info=info, hide=hide, show=show, wide=wide
         )
         first = False
@@ -361,7 +361,7 @@ def print_pstree(fout, parent, tree, data,
     child = tree[parent][-1]
     print_pstree(
         fout, child, tree, data,
-        prefix=indent+'└', indent=indent + '  ',
+        prefix=indent+'ÃƒÂ¢Ã¢â‚¬ÂÃ¢â‚¬Â', indent=indent + '  ',
         colinfo=colinfo,
         info=info, hide=hide, show=show, wide=wide
     )

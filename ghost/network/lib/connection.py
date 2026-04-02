@@ -1034,7 +1034,7 @@ class GhostConnection(Connection):
                 elif msg == consts.MSG_EXCEPTION:
                     self._dispatch_exception(seq, args)
                 else:
-                    raise ValueError("invalid message type: %r" % (msg,))
+                    raise ValueError(f"invalid message type: %r" % (msg,))
 
                 if __debug__:
                     logger.debug(

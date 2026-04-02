@@ -33,7 +33,7 @@ class MimipyMod(GhostModule):
                 'Category': 'Mimipy: %s'%t,
                 'CredType': 'password'
             }
-            self.success('\n\t'.join(["%s: %s"%(i,v) for i,v in cred.items()])+"\n\n")
+            self.success('\n\t'.join([f"{i}: {v}" for i,v in cred.items()])+"\n\n")
             db.add([cred])
             found=True
         if not found:

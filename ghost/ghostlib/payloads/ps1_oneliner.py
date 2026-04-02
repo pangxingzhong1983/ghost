@@ -19,7 +19,7 @@ from ghost.ghostlib.GhostOutput import List, Success, Warn, Error
 CONNECTION_RETRY_SLEEP_TIME = 3
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 def serve_ps1_payload(
@@ -176,7 +176,7 @@ def send_ps1_payload(display, conf, bind_port, target_ip, nothidden=False):
 
     s = None
 
-    for _ in xrange(10):
+    for _ in range(10):
         try:
             s = socket.create_connection((target_ip, int(bind_port)))
             break

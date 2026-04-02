@@ -19,8 +19,8 @@ class MissingModule(object):
 
     def __getattr__(self, name):
         if name.startswith("__"): # issue 71
-            raise AttributeError("module %r not found" % (self.__name,))
-        raise ImportError("module %r not found" % (self.__name,))
+            raise AttributeError(f"module %r not found" % (self.__name,))
+        raise ImportError(f"module %r not found" % (self.__name,))
 
     def __bool__(self):
         return False

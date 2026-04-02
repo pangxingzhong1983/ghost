@@ -319,7 +319,7 @@ class Buffer(object):
             if self.compressor:
                 data = self.compressor.compress(data)
 
-            if self._len and type(self._data[-1]) == type(data) and \
+            if self._len and isinstance(self._data[-1], type(data)) and \
               len(self._data[-1]) + len(data) <= DEFAULT_MAX_STR_SIZE:
                 self._data[-1] += data
             else:

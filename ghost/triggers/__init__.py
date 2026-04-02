@@ -7,13 +7,11 @@ from __future__ import unicode_literals
 __all__ = ('Triggers')
 
 import os
-import imp
+import importlib
+import importlib.util
 
 class Triggers(object):
-    SUFFIXES = tuple([
-        suffix for suffix, _, rtype in imp.get_suffixes() \
-        if rtype == imp.PY_SOURCE
-    ])
+    SUFFIXES = ('.py',)
 
     def __init__(self):
         self._triggers = {}
@@ -47,7 +45,7 @@ class Triggers(object):
             self._folders_stats[path] = path_st_mtime
 
             triggers.update({
-                '.'.join(x.rsplit('.', 1)[:-1]):os.path.join(path, x) \
+                '.'.join(x.rsplit('.', 1)[:-1]):os.path.join(path, x)
                 for x in os.listdir(path) if x.endswith(self.SUFFIXES) and \
                 not x.startswith('__init__')
             })
@@ -62,9 +60,12 @@ class Triggers(object):
 
             if trigger not in self._triggers or self._triggers_stats[trigger] != current_stat.st_mtime:
                 try:
-                    self._triggers[trigger] = imp.load_source(trigger, source)
+                    spec = importlib.util.spec_from_file_location(trigger, source)
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    self._triggers[trigger] = module
                     self._triggers_stats[trigger] = current_stat.st_mtime
-                except IOError:
+                except Exception:
                     pass
 
     def execute(self, trigger_name, event_name, client, server, handler, config, **kwargs):

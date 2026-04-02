@@ -56,7 +56,7 @@ from operator import xor
 from itertools import starmap
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
     izip = zip
 
     def _pseudorandom(x, mac):
@@ -100,9 +100,9 @@ def pbkdf2_bin(data, salt, iterations=1000, keylen=24, hashfunc=None):
 
     buf = []
 
-    for block in xrange(1, -(-keylen // mac.digest_size) + 1):
+    for block in range(1, -(-keylen // mac.digest_size) + 1):
         rv = u = _pseudorandom(salt + _pack_int(block), mac)
-        for i in xrange(iterations - 1):
+        for i in range(iterations - 1):
             u = _pseudorandom(_as_bytes(u), mac)
             rv = starmap(xor, izip(rv, u))
 

@@ -220,7 +220,7 @@ class MultipartParam(object):
         if re.search("^--%s$" % re.escape(boundary), value, re.M):
             raise ValueError("boundary found in encoded string")
 
-        return "%s%s\r\n" % (self.encode_hdr(boundary), value)
+        return f"{self.encode_hdr(boundary)}{value}\r\n"
 
     def iter_encode(self, boundary, blocksize=4096):
         """Yields the encoding of this parameter

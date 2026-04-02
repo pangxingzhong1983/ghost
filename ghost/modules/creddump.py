@@ -221,11 +221,10 @@ class CredDump(GhostModule):
         self.success("dumping cached domain passwords...")
 
         for (u, d, dn, h) in dump_hashes(sysaddr, secaddr, is_vista):
-            self.log("%s:%s:%s:%s" % (u.lower(), h.encode('hex'),
-                d.lower(), dn.lower()))
+            self.log(f"{u.lower()}:{h.encode('hex')}:{d.lower()}:{dn.lower()}")
             hashes.append({
                 'Login': u.lower(),
-                'Hash': "%s:%s:%s" % (h.encode('hex'), d.lower(), dn.lower()),
+                'Hash': f"{h.encode('hex')}:{d.lower()}:{dn.lower()}",
                 'Category': 'MSCACHE hash',
                 'CredType': 'hash'
             })
@@ -241,10 +240,10 @@ class CredDump(GhostModule):
             if not nthash:
                 nthash = empty_nt
 
-            self.log("%s:%d:%s:%s:::" % (get_user_name(user), int(user.Name, 16), lmhash.encode('hex'), nthash.encode('hex')))
+            self.log(f"{get_user_name(user)}:{int(user.Name, 16)}:{lmhash.encode('hex')}:{nthash.encode('hex')}:::")
             hashes.append({
                 'Login': get_user_name(user),
-                'Hash': "%s:%s" % (lmhash.encode('hex'), nthash.encode('hex')),
+                'Hash': f"{lmhash.encode('hex')}:{nthash.encode('hex')}",
                 'Category': 'NTLM hash',
                 'CredType': 'hash'
             })
@@ -272,6 +271,6 @@ class CredDump(GhostModule):
             s,src = src[:length],src[length:]
             hexa = ' '.join(["%02X"%ord(x) for x in s])
             s = s.translate(FILTER)
-            result += "%04X   %-*s   %s\n" % (N, length*3, hexa, s)
+            result += f"{N:04X}   {hexa:<{length*3}}   {s}\n"
             N+=length
         return result

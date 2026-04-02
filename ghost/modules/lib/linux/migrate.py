@@ -11,7 +11,7 @@ from io import open
 import sys
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
     from io import BytesIO
 else:
     from StringIO import StringIO as BytesIO
@@ -60,7 +60,7 @@ def get_payload(module, compressed=True, debug=False, from_payload=None):
 
 def wait_connect(module, pid, timeout=10):
     module.success("waiting for a connection from the DLL ...")
-    for x in xrange(timeout):
+    for x in range(timeout):
         c = has_proc_migrated(module.client, pid)
         if c:
             module.success("got a connection from migrated DLL !")

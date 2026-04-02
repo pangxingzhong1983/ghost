@@ -76,7 +76,7 @@ class BZ2File(_compression.BaseStream):
             mode_code = _MODE_WRITE
             self._compressor = BZ2Compressor(compresslevel)
         else:
-            raise ValueError("Invalid mode: %r" % (mode,))
+            raise ValueError(f"Invalid mode: {mode!r}")
 
         if isinstance(filename, (str, bytes, os.PathLike)):
             if _builtin_open == None:
@@ -295,7 +295,7 @@ def open(filename, mode="rb", compresslevel=9,
     """
     if "t" in mode:
         if "b" in mode:
-            raise ValueError("Invalid mode: %r" % (mode,))
+            raise ValueError(f"Invalid mode: {mode!r}")
     else:
         if encoding is not None:
             raise ValueError("Argument 'encoding' not supported in binary mode")

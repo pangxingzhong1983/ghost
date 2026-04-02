@@ -20,9 +20,9 @@ def getUserHash(userName):
             entropyHex = entropyRaw.encode("hex")
             saltRaw = base64.b64decode(salt64)
             saltHex = saltRaw.encode("hex")
-            return (userName, "$ml$%s$%s$%s" %(iterations, saltHex, entropyHex))
+            return (userName, f"$ml${iterations}${saltHex}${entropyHex}")
     except Exception as e:
-        print("getUserHash() exception: %s" %(e))
+        print(f"getUserHash() exception: {e}")
         pass
 
 def hashdump():

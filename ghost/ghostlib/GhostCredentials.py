@@ -52,7 +52,7 @@ if sys.version_info.major > 2:
     def bord(x):
         return x
 
-    long = int
+    int = int
 
 else:
     bord = ord
@@ -75,7 +75,7 @@ class GnomeKeyring(object):
                 self.bus = secretstorage.dbus_init()
             except Exception as e:
                 logger.exception(
-                    'secretstorage dbus intialization failed: %s', e
+                    f'secretstorage dbus intialization failed: {e}'
                 )
 
                 self.bus = None
@@ -100,7 +100,7 @@ class GnomeKeyring(object):
             pass
 
         except Exception as e:
-            logger.warning("Error with GnomeKeyring get_pass: %s", e)
+            logger.warning(f"Error with GnomeKeyring get_pass: {e}")
 
     def store_pass(self, password):
         if not self.bus:
@@ -116,7 +116,7 @@ class GnomeKeyring(object):
             )
 
         except Exception as e:
-            logger.warning("Error with GnomeKeyring store_pass: %s", e)
+            logger.warning(f"Error with GnomeKeyring store_pass: {e}")
 
     def del_pass(self):
         if not self.bus:
@@ -214,9 +214,9 @@ class Encryptor(object):
                         # to avoid keep using a bad credential
                         GnomeKeyring().del_pass()
                     except Exception as e:
-                        logger.exception('GnomeKeyring del_pass failed: %s', e)
+                        logger.exception(f'GnomeKeyring del_pass failed: {e}')
 
-                    raise ValueError("bad decrypt pad (%d)" % padding_length)
+                    raise ValueError(f"bad decrypt pad ({padding_length})")
 
                 # all the pad-bytes must be the same
                 expected_padding = (padding_length * chr(padding_length))
@@ -270,7 +270,7 @@ def _generate_rsa_keypair(bits=2048):
 def _generate_ssl_ca():
     ca_key_pem, ca_cert_pem, ca_key = _generate_rsa_keypair()
 
-    t = long(time.time())
+    t = int(time.time())
     now = ASN1.ASN1_UTCTIME()
     now.set_time(t)
     expire = ASN1.ASN1_UTCTIME()
@@ -305,7 +305,7 @@ def _generate_ssl_keypair(
     rsa_key, ca_key, ca_cert, role='CONTROL',
         client=False, serial=2):
 
-    t = long(time.time())
+    t = int(time.time())
     now = ASN1.ASN1_UTCTIME()
     now.set_time(t)
     expire = ASN1.ASN1_UTCTIME()
@@ -442,7 +442,7 @@ def gen_identifier(cert, dig='sha256'):
 def _generate_apk_keypair():
     priv, pub, key = _generate_rsa_keypair(2048)
 
-    t = long(time.time())
+    t = int(time.time())
     now = ASN1.ASN1_UTCTIME()
     now.set_time(t)
     expire = ASN1.ASN1_UTCTIME()
@@ -555,7 +555,7 @@ class Credentials(object):
         self.role = role.upper() if role else 'ANY'
 
         if self.role not in ('CONTROL', 'CLIENT'):
-            raise ValueError('Unsupported role: {}'.format(self.role))
+            raise ValueError(f'Unsupported role: {self.role}')
 
         self._load(password)
         if validate:
@@ -569,9 +569,9 @@ class Credentials(object):
             if cred not in self._credentials:
                 required_generators.add(generator)
                 logger.warning(
-                    'Credential "%s" is missing and will be generated', cred
+                    f'Credential "{cred}" is missing and will be generated'
                 )
-            elif b'BEGIN CERTIFICATE' in self._credentials[cred]:
+            elif b'BEGIN CERTIFICATE' in self._credentials[cred] and M2Crypto:
                 cert = X509.load_cert_string(self._credentials[cred])
                 expiration = cert.get_not_after().get_datetime()
                 now = datetime.now(expiration.tzinfo)
@@ -579,22 +579,24 @@ class Credentials(object):
 
                 if expiration <= now:
                     logger.error(
-                        'Credential "%s" is expired! '
+                        f'Credential "{cred}" is expired! '
                         'All related credentials will be regenerated',
                         cred
                     )
 
                     required_generators.add(generator)
                 elif diff < 7:
-                    logger.error('%s will expire in %d days', cred, diff)
+                    logger.error(f'{cred} will expire in {diff} days')
                 elif diff < 90:
-                    logger.warning('%s will expire in %d days', cred, diff)
+                    logger.warning(f'{cred} will expire in {diff} days')
                 else:
                     logger.debug(
-                        'Credential "%s" will expire in %d days', cred, diff
+                        f'Credential "{cred}" will expire in {diff} days'
                     )
+            elif b'BEGIN CERTIFICATE' in self._credentials[cred] and not M2Crypto:
+                logger.warning(f'M2Crypto not available, skipping certificate validation for {cred}')
             else:
-                logger.debug('Credential "%s" exists', cred)
+                logger.debug(f'Credential "{cred}" exists')
 
         for generator in required_generators:
             new_creds = generator()
@@ -608,7 +610,7 @@ class Credentials(object):
         return updated
 
     def save(self, password=None):
-        logger.warning('Saving credentials to %s', self._configfile)
+        logger.warning(f'Saving credentials to {self._configfile}')
 
         try:
             creds_dir = path.dirname(self._configfile)
@@ -654,21 +656,19 @@ class Credentials(object):
     def _load(self, password):
         if path.exists(self._configfile):
             with open(self._configfile, 'rb') as creds:
-                logger.info('Reading credentials from %s', self._configfile)
+                logger.info(f'Reading credentials from {self._configfile}')
 
                 content = creds.read()
                 if not content:
                     logger.error(
-                        'Credentials storage (%s) is empty', self._configfile
+                        f'Credentials storage ({self._configfile}) is empty'
                     )
                     return
 
                 if content.startswith(b'Salted__'):
                     if not ENCRYPTOR:
                         raise EncryptionError(
-                            'Encrpyted credential storage: {}'.format(
-                                self._configfile
-                            )
+                            f'Encrpyted credential storage: {self._configfile}'
                         )
 
                     fcontent = BytesIO()
@@ -708,13 +708,13 @@ class Credentials(object):
 
         if key in self._credentials:
             return self._credentials[key]
-        elif '{}_{}'.format(self.role, key) in self._credentials:
-            return self._credentials['{}_{}'.format(self.role, key)]
+        elif f'{self.role}_{key}' in self._credentials:
+            return self._credentials[f'{self.role}_{key}']
         elif key in env:
             return env[key]
-        elif 'DEFAULT_{}'.format(key) in env:
-            logger.warning("Using default credentials for %s", key)
-            return env['DEFAULT_{}'.format(key)]
+        elif f'DEFAULT_{key}' in env:
+            logger.warning(f"Using default credentials for {key}")
+            return env[f'DEFAULT_{key}']
         else:
             return None
 

@@ -37,7 +37,7 @@ from socket import getaddrinfo
 from socket import error as socket_error
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 LOCAL_IPS = ('127.0.0.1', '::1')
@@ -289,14 +289,14 @@ class GhostWebServer(object):
 
     def get_random_path_at_webroot(self):
         while True:
-            filename = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in xrange(10))
+            filename = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
 
             filepath = path.join(self.root, filename)
             if not path.isfile(filepath):
                 return filepath, filename
 
     def random_path(self):
-        return '/' + ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in xrange(10))
+        return '/' + ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
 
     def register_mapping(self, name, path):
         name = self.random_path()

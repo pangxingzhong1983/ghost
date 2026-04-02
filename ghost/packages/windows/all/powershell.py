@@ -137,7 +137,7 @@ class Powershell(threading.Thread):
         self._v2 = v2
 
         if try_x64:
-            native = ur'C:\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe'
+            native = r'C:\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe'
             if os.path.exists(native):
                 self._executable = native
 

@@ -15,7 +15,7 @@ SOURCES = [
 
 if sys.platform == 'win32':
     SOURCES += [
-        'deps/libuv/src/win/async.c',
+        'deps/libuv/src/win/async_handle.c',
         'deps/libuv/src/win/core.c',
         'deps/libuv/src/win/detect-wakeup.c',
         'deps/libuv/src/win/dl.c',
@@ -45,7 +45,7 @@ if sys.platform == 'win32':
     ]
 else:
     SOURCES += [
-        'deps/libuv/src/unix/async.c',
+        'deps/libuv/src/unix/async_handle.c',
         'deps/libuv/src/unix/core.c',
         'deps/libuv/src/unix/dl.c',
         'deps/libuv/src/unix/fs.c',

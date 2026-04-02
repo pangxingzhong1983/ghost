@@ -11,7 +11,7 @@ import sys
 import os
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 from ghost.modules.lib.windows import powerloader
 
@@ -175,7 +175,7 @@ class BypassUAC(GhostModule):
         random_name = ''.join([
             random.choice(
                 string.ascii_letters + string.digits
-            ) for n in xrange(6)
+            ) for n in range(6)
         ])
 
         local_file = ''

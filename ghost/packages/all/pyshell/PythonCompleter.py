@@ -50,7 +50,7 @@ class PythonCompleter(object):
             return None
 
     def var_matches(self, text):
-        m = re.match(r'\s*(\w+)', text)
+        m = re.match(r'\\s*(\\w+)', text)
 
         if not m:
             return []
@@ -86,7 +86,7 @@ class PythonCompleter(object):
 
         bsw = "[a-zA-Z0-9_\\(\\)\\[\\]\"']"
 
-        m = re.match(r'(\w+(\.\w+)*)\.(\w*)'.replace(r'\w', bsw), text)
+        m = re.match(r'(\\w+(\\.\\w+)*)\\.(\\w*)'.replace(r'\\w', bsw), text)
         if not m:
             return []
 

@@ -1,174 +1,680 @@
 {
+  "generated_at": "2026-03-28T15:29:30",
+  "module_total": 122,
   "coverage": {
-    "windows": 10,
-    "linux": 8,
-    "darwin": 7,
-    "posix": 2,
-    "solaris": 1
+    "all": 1,
+    "android": 7,
+    "darwin": 11,
+    "linux": 32,
+    "posix": 5,
+    "solaris": 3,
+    "windows": 46
+  },
+  "category_by_platform": {
+    "all": {
+      "manage": 1
+    },
+    "android": {
+      "gather": 5,
+      "troll": 2
+    },
+    "darwin": {
+      "admin": 4,
+      "creds": 1,
+      "gather": 4,
+      "manage": 1,
+      "troll": 1
+    },
+    "linux": {
+      "admin": 9,
+      "creds": 5,
+      "exploit": 1,
+      "gather": 8,
+      "manage": 6,
+      "privesc": 1,
+      "troll": 1,
+      "unknown": 1
+    },
+    "posix": {
+      "admin": 4,
+      "gather": 1
+    },
+    "solaris": {
+      "creds": 1,
+      "gather": 2
+    },
+    "windows": {
+      "admin": 13,
+      "creds": 4,
+      "exploit": 6,
+      "gather": 12,
+      "manage": 6,
+      "network": 1,
+      "privesc": 3,
+      "troll": 1
+    }
+  },
+  "platform_modules": {
+    "all": [
+      "load_package.py"
+    ],
+    "android": [
+      "apps.py",
+      "call.py",
+      "contacts.py",
+      "gpstracker.py",
+      "text_to_speach.py",
+      "vibrate.py",
+      "webcamsnap.py"
+    ],
+    "darwin": [
+      "check_vm.py",
+      "creddump.py",
+      "drives.py",
+      "keylogger.py",
+      "lock_screen.py",
+      "msgbox.py",
+      "rdesktop.py",
+      "rdp.py",
+      "screenshot.py",
+      "sudo_alias.py",
+      "users.py"
+    ],
+    "linux": [
+      "become.py",
+      "beroot.py",
+      "check_vm.py",
+      "credcap.py",
+      "creddump.py",
+      "duplicate.py",
+      "exploit_suggester.py",
+      "hashmon.py",
+      "hide_process.py",
+      "keylogger.py",
+      "last.py",
+      "lazagne.py",
+      "linux_stealth.py",
+      "loot_memory.py",
+      "mapped.py",
+      "memory_exec.py",
+      "memstrings.py",
+      "migrate.py",
+      "mimipy.py",
+      "msgbox.py",
+      "persistence.py",
+      "privesc_checker.py",
+      "rdesktop.py",
+      "rdp.py",
+      "screenshot.py",
+      "services.py",
+      "shares.py",
+      "stat.py",
+      "sudo_alias.py",
+      "ttyrec.py",
+      "users.py",
+      "usniper.py"
+    ],
+    "posix": [
+      "become.py",
+      "display.py",
+      "drives.py",
+      "logs.py",
+      "users.py"
+    ],
+    "solaris": [
+      "hashmon.py",
+      "memstrings.py",
+      "screenshot.py"
+    ],
+    "windows": [
+      "beroot.py",
+      "bypassuac.py",
+      "check_vm.py",
+      "clear_logs.py",
+      "credcap.py",
+      "creddump.py",
+      "drives.py",
+      "duplicate.py",
+      "exploit_suggester.py",
+      "getdomain.py",
+      "getprivs.py",
+      "getsystem.py",
+      "impersonate.py",
+      "inveigh.py",
+      "isearch.py",
+      "keylogger.py",
+      "last.py",
+      "lazagne.py",
+      "lock_screen.py",
+      "logs.py",
+      "loot_memory.py",
+      "memory_exec.py",
+      "memstrings.py",
+      "migrate.py",
+      "mimikatz.py",
+      "mimishell.py",
+      "mouselogger.py",
+      "msgbox.py",
+      "nbnsspoof.py",
+      "outlook.py",
+      "persistence.py",
+      "pipecatcher.py",
+      "powerview.py",
+      "psh.py",
+      "pywerview.py",
+      "rdesktop.py",
+      "rdp.py",
+      "record_mic.py",
+      "screenshot.py",
+      "services.py",
+      "shares.py",
+      "shellcode_exec.py",
+      "stat.py",
+      "users.py",
+      "webcamsnap.py",
+      "wmic.py"
+    ]
   },
   "all_modules": [
     {
-      "file": "exploit_suggester.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "odbc.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "netmon.py",
-      "class_name": null,
+      "file": "ad.py",
+      "class_name": "AD",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "rfs.py",
-      "class_name": null,
+      "file": "alive.py",
+      "class_name": "alive",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "shell_exec.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "msgbox.py",
-      "class_name": "MsgBoxPopup",
-      "category": "troll",
+      "file": "apps.py",
+      "class_name": "apps",
+      "category": "gather",
       "platforms": [
-        "windows",
-        "linux",
-        "darwin"
+        "android"
       ]
     },
     {
-      "file": "w.py",
-      "class_name": null,
+      "file": "become.py",
+      "class_name": "Become",
+      "category": "admin",
+      "platforms": [
+        "linux",
+        "posix"
+      ]
+    },
+    {
+      "file": "beroot.py",
+      "class_name": "Beroot",
+      "category": "admin",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "bypassuac.py",
+      "class_name": "BypassUAC",
+      "category": "privesc",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "call.py",
+      "class_name": "call",
+      "category": "gather",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "file": "cat.py",
+      "class_name": "cat",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "pyshell.py",
-      "class_name": null,
+      "file": "cd.py",
+      "class_name": "cd",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "mapped.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "get_hwuuid.py",
-      "class_name": null,
+      "file": "check_vm.py",
+      "class_name": "CheckVM",
       "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "gpstracker.py",
-      "class_name": "gpstracker",
-      "category": "gather",
-      "platforms": []
+      "platforms": [
+        "darwin",
+        "linux",
+        "windows"
+      ]
     },
     {
       "file": "clear_logs.py",
       "class_name": "ClearLogs",
       "category": "admin",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "cloudinfo.py",
+      "class_name": "CloudInfo",
+      "category": "gather",
       "platforms": []
     },
     {
-      "file": "services.py",
-      "class_name": "Services",
+      "file": "contacts.py",
+      "class_name": "contacts",
+      "category": "gather",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "file": "cp.py",
+      "class_name": "cp",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "text_to_speach.py",
-      "class_name": "AndroidTTS",
-      "category": "troll",
-      "platforms": []
-    },
-    {
-      "file": "impersonate.py",
-      "class_name": "ImpersonateModule",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "persistence.py",
-      "class_name": null,
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "rwmic.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "rdesktop.py",
-      "class_name": "RemoteDesktopModule",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "wmic.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
+      "file": "credcap.py",
+      "class_name": "Credcap",
+      "category": "gather",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
     },
     {
       "file": "creddump.py",
       "class_name": "CredDump",
       "category": "creds",
       "platforms": [
-        "windows",
+        "darwin",
         "linux",
-        "darwin"
+        "windows"
       ]
     },
     {
-      "file": "contacts.py",
-      "class_name": "contacts",
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "tasks.py",
-      "class_name": "Tasks",
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "sshell.py",
-      "class_name": "SSHell",
+      "file": "date.py",
+      "class_name": "date",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "record_mic.py",
-      "class_name": "RecordMicrophoneModule",
-      "category": "gather",
+      "file": "display.py",
+      "class_name": "Display",
+      "category": "admin",
+      "platforms": [
+        "posix"
+      ]
+    },
+    {
+      "file": "dns.py",
+      "class_name": "DNS",
+      "category": "admin",
       "platforms": []
     },
     {
-      "file": "env.py",
-      "class_name": null,
+      "file": "download.py",
+      "class_name": "DownloaderScript",
       "category": "manage",
       "platforms": []
     },
     {
-      "file": "usniper.py",
-      "class_name": null,
+      "file": "drives.py",
+      "class_name": "Drives",
+      "category": "admin",
+      "platforms": [
+        "darwin",
+        "posix",
+        "windows"
+      ]
+    },
+    {
+      "file": "duplicate.py",
+      "class_name": "MemoryDuplicate",
+      "category": "manage",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "echo.py",
+      "class_name": "Echo",
+      "category": null,
+      "platforms": []
+    },
+    {
+      "file": "edit.py",
+      "class_name": "Edit",
+      "category": "manage",
+      "platforms": []
+    },
+    {
+      "file": "env.py",
+      "class_name": "Env",
+      "category": "manage",
+      "platforms": []
+    },
+    {
+      "file": "exit.py",
+      "class_name": "ExitModule",
+      "category": null,
+      "platforms": []
+    },
+    {
+      "file": "exploit_suggester.py",
+      "class_name": "Exploit_Suggester",
+      "category": "exploit",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "forward.py",
+      "class_name": "Forward",
+      "category": "network",
+      "platforms": []
+    },
+    {
+      "file": "get_hwuuid.py",
+      "class_name": "GetHwUuid",
       "category": "gather",
+      "platforms": []
+    },
+    {
+      "file": "get_info.py",
+      "class_name": "GetInfo",
+      "category": "gather",
+      "platforms": []
+    },
+    {
+      "file": "getdomain.py",
+      "class_name": "GetDomain",
+      "category": "admin",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "getpid.py",
+      "class_name": "PsModule",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "getppid.py",
+      "class_name": "PsModule",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "getprivs.py",
+      "class_name": "GetPrivsModule",
+      "category": "manage",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "getsystem.py",
+      "class_name": "GetSystem",
+      "category": "privesc",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "getuid.py",
+      "class_name": "getuid",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "gpstracker.py",
+      "class_name": "gpstracker",
+      "category": "gather",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "file": "hashmon.py",
+      "class_name": "KeyloggerModule",
+      "category": "gather",
+      "platforms": [
+        "linux",
+        "solaris"
+      ]
+    },
+    {
+      "file": "hide_process.py",
+      "class_name": "HideProcessModule",
+      "category": "manage",
+      "platforms": [
+        "linux"
+      ]
+    },
+    {
+      "file": "http.py",
+      "class_name": "http",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "igd.py",
+      "class_name": "IGDClient",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "impersonate.py",
+      "class_name": "ImpersonateModule",
+      "category": "exploit",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "interactive_shell.py",
+      "class_name": "InteractiveShell",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "inveigh.py",
+      "class_name": "Inveigh",
+      "category": "privesc",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "ip.py",
+      "class_name": "IPModule",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "isearch.py",
+      "class_name": "IndexSearchModule",
+      "category": "gather",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "keylogger.py",
+      "class_name": "KeyloggerModule",
+      "category": "gather",
+      "platforms": [
+        "darwin",
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "last.py",
+      "class_name": "LastModule",
+      "category": "admin",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "lazagne.py",
+      "class_name": "LaZagne",
+      "category": "creds",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "linux_stealth.py",
+      "class_name": "SetStealth",
+      "category": "manage",
+      "platforms": [
+        "linux"
+      ]
+    },
+    {
+      "file": "load_package.py",
+      "class_name": "LoadPackageModule",
+      "category": "manage",
+      "platforms": [
+        "all"
+      ]
+    },
+    {
+      "file": "lock_screen.py",
+      "class_name": "GhostMod",
+      "category": "manage",
+      "platforms": [
+        "darwin",
+        "windows"
+      ]
+    },
+    {
+      "file": "logs.py",
+      "class_name": "Logs",
+      "category": "admin",
+      "platforms": [
+        "posix",
+        "windows"
+      ]
+    },
+    {
+      "file": "loot_memory.py",
+      "class_name": "LootMemory",
+      "category": "creds",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "ls.py",
+      "class_name": "ls",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "mapped.py",
+      "class_name": "Mapped",
+      "category": null,
+      "platforms": [
+        "linux"
+      ]
+    },
+    {
+      "file": "memory_exec.py",
+      "class_name": "MemoryExec",
+      "category": "manage",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "memstrings.py",
+      "class_name": "MemStrings",
+      "category": "creds",
+      "platforms": [
+        "linux",
+        "solaris",
+        "windows"
+      ]
+    },
+    {
+      "file": "migrate.py",
+      "class_name": "MigrateModule",
+      "category": "manage",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "mimikatz.py",
+      "class_name": "Mimikatz",
+      "category": "exploit",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "mimipy.py",
+      "class_name": "MimipyMod",
+      "category": "creds",
+      "platforms": [
+        "linux"
+      ]
+    },
+    {
+      "file": "mimishell.py",
+      "class_name": "Mimishell",
+      "category": "exploit",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "mkdir.py",
+      "class_name": "mkdir",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "mouselogger.py",
+      "class_name": "MouseLoggerModule",
+      "category": "gather",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "msgbox.py",
+      "class_name": "MsgBoxPopup",
+      "category": "troll",
+      "platforms": [
+        "darwin",
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "mv.py",
+      "class_name": "mv",
+      "category": "admin",
       "platforms": []
     },
     {
@@ -180,177 +686,45 @@
       ]
     },
     {
-      "file": "dns.py",
-      "class_name": "DNS",
+      "file": "netcreds.py",
+      "class_name": "NetCreds",
+      "category": "creds",
+      "platforms": []
+    },
+    {
+      "file": "netmon.py",
+      "class_name": "NetMon",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "upload.py",
-      "class_name": "UploaderScript",
-      "category": "manage",
+      "file": "netstat.py",
+      "class_name": "NetStatModule",
+      "category": "admin",
       "platforms": []
     },
     {
-      "file": "write.py",
-      "class_name": null,
-      "category": "manage",
+      "file": "odbc.py",
+      "class_name": "ODBC",
+      "category": "admin",
       "platforms": []
     },
     {
-      "file": "pipecatcher.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "psh.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "users.py",
-      "class_name": null,
+      "file": "outlook.py",
+      "class_name": "Outlook",
       "category": "gather",
       "platforms": [
-        "windows",
-        "linux",
-        "darwin",
-        "posix"
+        "windows"
       ]
     },
     {
-      "file": "portfwd.py",
-      "class_name": null,
-      "category": "network",
-      "platforms": []
-    },
-    {
-      "file": "x509.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "socks5proxy.py",
-      "class_name": null,
-      "category": "network",
-      "platforms": []
-    },
-    {
-      "file": "cat.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "smb.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "get_info.py",
-      "class_name": "GetInfo",
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "getsystem.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "download.py",
-      "class_name": "DownloaderScript",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "lazagne.py",
-      "class_name": null,
-      "category": "creds",
-      "platforms": []
-    },
-    {
-      "file": "getuid.py",
-      "class_name": "getuid",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "mv.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "credcap.py",
-      "class_name": "Credcap",
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "port_scan.py",
-      "class_name": "PortScan",
-      "category": "network",
-      "platforms": []
-    },
-    {
-      "file": "load_package.py",
-      "class_name": null,
+      "file": "persistence.py",
+      "class_name": "Persistence",
       "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "hide_process.py",
-      "class_name": null,
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "edit.py",
-      "class_name": null,
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "privesc_checker.py",
-      "class_name": "PrivEsc_Checker",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "mimipy.py",
-      "class_name": "MimipyMod",
-      "category": "creds",
-      "platforms": []
-    },
-    {
-      "file": "ls.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "cp.py",
-      "class_name": "cp",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "pywerview.py",
-      "class_name": "Pywerview",
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "apps.py",
-      "class_name": "apps",
-      "category": "gather",
-      "platforms": []
+      "platforms": [
+        "linux",
+        "windows"
+      ]
     },
     {
       "file": "pexec.py",
@@ -359,131 +733,70 @@
       "platforms": []
     },
     {
-      "file": "alive.py",
-      "class_name": "alive",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "rm.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "lock_screen.py",
-      "class_name": "GhostMod",
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "display.py",
-      "class_name": "Display",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "getdomain.py",
-      "class_name": "GetDomain",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "loot_memory.py",
-      "class_name": "LootMemory",
-      "category": "creds",
-      "platforms": []
-    },
-    {
-      "file": "netcreds.py",
-      "class_name": null,
-      "category": "creds",
-      "platforms": []
-    },
-    {
-      "file": "pwd.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "mimikatz.py",
-      "class_name": null,
+      "file": "pipecatcher.py",
+      "class_name": "PipeCatcher",
       "category": "exploit",
-      "platforms": []
+      "platforms": [
+        "windows"
+      ]
     },
     {
-      "file": "mkdir.py",
-      "class_name": "mkdir",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "zip.py",
-      "class_name": "Zip",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "shellcode_exec.py",
-      "class_name": "ShellcodeExec",
-      "category": "exploit",
-      "platforms": []
-    },
-    {
-      "file": "tcpdump.py",
-      "class_name": null,
+      "file": "port_scan.py",
+      "class_name": "PortScan",
       "category": "network",
       "platforms": []
     },
     {
-      "file": "duplicate.py",
-      "class_name": null,
-      "category": null,
+      "file": "portfwd.py",
+      "class_name": "PortFwdModule",
+      "category": "network",
+      "platforms": []
+    },
+    {
+      "file": "powerview.py",
+      "class_name": "Powerview",
+      "category": "gather",
       "platforms": [
-        "windows",
+        "windows"
+      ]
+    },
+    {
+      "file": "privesc_checker.py",
+      "class_name": "PrivEsc_Checker",
+      "category": "privesc",
+      "platforms": [
         "linux"
       ]
     },
     {
-      "file": "isearch.py",
-      "class_name": null,
-      "category": "gather",
+      "file": "process_kill.py",
+      "class_name": "KillModule",
+      "category": "general",
       "platforms": []
     },
     {
-      "file": "netstat.py",
-      "class_name": null,
+      "file": "ps.py",
+      "class_name": "PsModule",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "reg.py",
-      "class_name": null,
+      "file": "psexec.py",
+      "class_name": "PSExec",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "bypassuac.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "outlook.py",
-      "class_name": "Outlook",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "logs.py",
-      "class_name": null,
+      "file": "psh.py",
+      "class_name": "PowershellManager",
       "category": "admin",
-      "platforms": []
+      "platforms": [
+        "windows"
+      ]
     },
     {
-      "file": "last.py",
-      "class_name": "LastModule",
+      "file": "pwd.py",
+      "class_name": "pwd",
       "category": "admin",
       "platforms": []
     },
@@ -494,116 +807,68 @@
       "platforms": []
     },
     {
-      "file": "ip.py",
-      "class_name": null,
+      "file": "pyshell.py",
+      "class_name": "InteractivePythonShell",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "stat.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "http.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "inveigh.py",
-      "class_name": "Inveigh",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "ps.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "smbspider.py",
-      "class_name": "SMBSpider",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "linux_stealth.py",
-      "class_name": "SetStealth",
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "powerview.py",
-      "class_name": "Powerview",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "igd.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "become.py",
-      "class_name": "Become",
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "mimishell.py",
-      "class_name": "Mimishell",
-      "category": "exploit",
-      "platforms": []
-    },
-    {
-      "file": "mouselogger.py",
-      "class_name": null,
+      "file": "pywerview.py",
+      "class_name": "Pywerview",
       "category": "gather",
-      "platforms": []
+      "platforms": [
+        "windows"
+      ]
     },
     {
-      "file": "cloudinfo.py",
-      "class_name": "CloudInfo",
+      "file": "rdesktop.py",
+      "class_name": "RemoteDesktopModule",
+      "category": "admin",
+      "platforms": [
+        "darwin",
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "rdp.py",
+      "class_name": "Rdp",
+      "category": "admin",
+      "platforms": [
+        "darwin",
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "record_mic.py",
+      "class_name": "RecordMicrophoneModule",
       "category": "gather",
-      "platforms": []
+      "platforms": [
+        "windows"
+      ]
     },
     {
-      "file": "interactive_shell.py",
-      "class_name": "InteractiveShell",
+      "file": "reg.py",
+      "class_name": "reg",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "forward.py",
-      "class_name": null,
-      "category": "network",
-      "platforms": []
-    },
-    {
-      "file": "search.py",
-      "class_name": null,
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "getppid.py",
-      "class_name": "PsModule",
+      "file": "rfs.py",
+      "class_name": "RemoteFS",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "ttyrec.py",
-      "class_name": null,
-      "category": "gather",
+      "file": "rm.py",
+      "class_name": "rm",
+      "category": "admin",
       "platforms": []
     },
     {
-      "file": "sudo_alias.py",
-      "class_name": "SudoAlias",
+      "file": "rwmic.py",
+      "class_name": "RWMIC",
       "category": "admin",
       "platforms": []
     },
@@ -614,290 +879,759 @@
       "platforms": []
     },
     {
+      "file": "screenshot.py",
+      "class_name": "Screenshoter",
+      "category": "gather",
+      "platforms": [
+        "darwin",
+        "linux",
+        "solaris",
+        "windows"
+      ]
+    },
+    {
+      "file": "search.py",
+      "class_name": "SearchModule",
+      "category": "gather",
+      "platforms": []
+    },
+    {
+      "file": "services.py",
+      "class_name": "Services",
+      "category": "admin",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "shares.py",
+      "class_name": "Shares",
+      "category": "admin",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "shell_exec.py",
+      "class_name": "ShellExec",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "shellcode_exec.py",
+      "class_name": "ShellcodeExec",
+      "category": "exploit",
+      "platforms": [
+        "windows"
+      ]
+    },
+    {
+      "file": "smb.py",
+      "class_name": "SMB",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "smbspider.py",
+      "class_name": "SMBSpider",
+      "category": "admin",
+      "platforms": []
+    },
+    {
+      "file": "socks5proxy.py",
+      "class_name": "Socks5Proxy",
+      "category": "network",
+      "platforms": []
+    },
+    {
       "file": "ssh.py",
       "class_name": "SSH",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "memory_exec.py",
-      "class_name": "MemoryExec",
-      "category": null,
-      "platforms": [
-        "windows",
-        "linux"
-      ]
-    },
-    {
-      "file": "check_vm.py",
-      "class_name": null,
-      "category": null,
-      "platforms": [
-        "windows",
-        "linux",
-        "darwin"
-      ]
-    },
-    {
-      "file": "screenshot.py",
-      "class_name": "Screenshoter",
-      "category": "gather",
-      "platforms": [
-        "windows",
-        "linux",
-        "darwin",
-        "solaris"
-      ]
-    },
-    {
-      "file": "exit.py",
-      "class_name": "ExitModule",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "process_kill.py",
-      "class_name": "KillModule",
-      "category": "general",
-      "platforms": []
-    },
-    {
-      "file": "call.py",
-      "class_name": "call",
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "memstrings.py",
-      "class_name": "MemStrings",
-      "category": "creds",
-      "platforms": []
-    },
-    {
-      "file": "getprivs.py",
-      "class_name": null,
-      "category": "manage",
-      "platforms": []
-    },
-    {
-      "file": "beroot.py",
-      "class_name": "Beroot",
+      "file": "sshell.py",
+      "class_name": "SSHell",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "hashmon.py",
-      "class_name": null,
+      "file": "stat.py",
+      "class_name": "FStat",
+      "category": "admin",
+      "platforms": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "file": "sudo_alias.py",
+      "class_name": "SudoAlias",
+      "category": "admin",
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
+    },
+    {
+      "file": "tasks.py",
+      "class_name": "Tasks",
+      "category": "manage",
+      "platforms": []
+    },
+    {
+      "file": "tcpdump.py",
+      "class_name": "TcpdumpModule",
+      "category": "network",
+      "platforms": []
+    },
+    {
+      "file": "text_to_speach.py",
+      "class_name": "AndroidTTS",
+      "category": "troll",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "file": "ttyrec.py",
+      "class_name": "TTYRec",
       "category": "gather",
+      "platforms": [
+        "linux"
+      ]
+    },
+    {
+      "file": "upload.py",
+      "class_name": "UploaderScript",
+      "category": "manage",
+      "platforms": []
+    },
+    {
+      "file": "users.py",
+      "class_name": "Users",
+      "category": "gather",
+      "platforms": [
+        "darwin",
+        "linux",
+        "posix",
+        "windows"
+      ]
+    },
+    {
+      "file": "usniper.py",
+      "class_name": "USniper",
+      "category": "gather",
+      "platforms": [
+        "linux"
+      ]
+    },
+    {
+      "file": "vibrate.py",
+      "class_name": "AndroidVibrate",
+      "category": "troll",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "file": "w.py",
+      "class_name": "WModule",
+      "category": "admin",
       "platforms": []
     },
     {
       "file": "webcamsnap.py",
       "class_name": "WebcamSnapModule",
       "category": "gather",
-      "platforms": []
+      "platforms": [
+        "android",
+        "windows"
+      ]
     },
     {
-      "file": "ad.py",
-      "class_name": null,
+      "file": "wmic.py",
+      "class_name": "WMIC",
       "category": "admin",
-      "platforms": []
+      "platforms": [
+        "windows"
+      ]
     },
     {
-      "file": "echo.py",
-      "class_name": null,
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "date.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "migrate.py",
-      "class_name": null,
+      "file": "write.py",
+      "class_name": "Write",
       "category": "manage",
       "platforms": []
     },
     {
-      "file": "drives.py",
-      "class_name": "Drives",
-      "category": null,
-      "platforms": [
-        "windows",
-        "posix",
-        "darwin"
-      ]
-    },
-    {
-      "file": "shares.py",
-      "class_name": "Shares",
-      "category": null,
-      "platforms": []
-    },
-    {
-      "file": "getpid.py",
-      "class_name": "PsModule",
+      "file": "x509.py",
+      "class_name": "x509",
       "category": "admin",
       "platforms": []
     },
     {
-      "file": "keylogger.py",
-      "class_name": null,
-      "category": "gather",
-      "platforms": []
-    },
-    {
-      "file": "rdp.py",
-      "class_name": "Rdp",
-      "category": "admin",
-      "platforms": [
-        "windows",
-        "linux",
-        "darwin"
-      ]
-    },
-    {
-      "file": "psexec.py",
-      "class_name": null,
-      "category": "admin",
-      "platforms": []
-    },
-    {
-      "file": "vibrate.py",
-      "class_name": "AndroidVibrate",
-      "category": "troll",
-      "platforms": []
-    },
-    {
-      "file": "cd.py",
-      "class_name": "cd",
+      "file": "zip.py",
+      "class_name": "Zip",
       "category": "admin",
       "platforms": []
     }
   ],
   "missing_darwin": [
-    "exploit_suggester.py",
-    "odbc.py",
-    "netmon.py",
-    "rfs.py",
-    "shell_exec.py",
-    "w.py",
-    "pyshell.py",
-    "mapped.py",
-    "get_hwuuid.py",
-    "gpstracker.py",
-    "clear_logs.py",
-    "services.py",
-    "text_to_speach.py",
-    "impersonate.py",
-    "persistence.py",
-    "rwmic.py",
-    "rdesktop.py",
-    "wmic.py",
-    "contacts.py",
-    "tasks.py",
-    "sshell.py",
-    "record_mic.py",
-    "env.py",
-    "usniper.py",
-    "nbnsspoof.py",
-    "dns.py",
-    "upload.py",
-    "write.py",
-    "pipecatcher.py",
-    "psh.py",
-    "portfwd.py",
-    "x509.py",
-    "socks5proxy.py",
-    "cat.py",
-    "smb.py",
-    "get_info.py",
-    "getsystem.py",
-    "download.py",
-    "lazagne.py",
-    "getuid.py",
-    "mv.py",
-    "credcap.py",
-    "port_scan.py",
-    "load_package.py",
-    "hide_process.py",
-    "edit.py",
-    "privesc_checker.py",
-    "mimipy.py",
-    "ls.py",
-    "cp.py",
-    "pywerview.py",
-    "apps.py",
-    "pexec.py",
-    "alive.py",
-    "rm.py",
-    "lock_screen.py",
-    "display.py",
-    "getdomain.py",
-    "loot_memory.py",
-    "netcreds.py",
-    "pwd.py",
-    "mimikatz.py",
-    "mkdir.py",
-    "zip.py",
-    "shellcode_exec.py",
-    "tcpdump.py",
-    "duplicate.py",
-    "isearch.py",
-    "netstat.py",
-    "reg.py",
-    "bypassuac.py",
-    "outlook.py",
-    "logs.py",
-    "last.py",
-    "pyexec.py",
-    "ip.py",
-    "stat.py",
-    "http.py",
-    "inveigh.py",
-    "ps.py",
-    "smbspider.py",
-    "linux_stealth.py",
-    "powerview.py",
-    "igd.py",
-    "become.py",
-    "mimishell.py",
-    "mouselogger.py",
-    "cloudinfo.py",
-    "interactive_shell.py",
-    "forward.py",
-    "search.py",
-    "getppid.py",
-    "ttyrec.py",
-    "sudo_alias.py",
-    "scapy_shell.py",
-    "ssh.py",
-    "memory_exec.py",
-    "exit.py",
-    "process_kill.py",
-    "call.py",
-    "memstrings.py",
-    "getprivs.py",
-    "beroot.py",
-    "hashmon.py",
-    "webcamsnap.py",
     "ad.py",
-    "echo.py",
+    "alive.py",
+    "apps.py",
+    "become.py",
+    "beroot.py",
+    "bypassuac.py",
+    "call.py",
+    "cat.py",
+    "cd.py",
+    "clear_logs.py",
+    "cloudinfo.py",
+    "contacts.py",
+    "cp.py",
+    "credcap.py",
     "date.py",
-    "migrate.py",
-    "shares.py",
+    "display.py",
+    "dns.py",
+    "download.py",
+    "duplicate.py",
+    "echo.py",
+    "edit.py",
+    "env.py",
+    "exit.py",
+    "exploit_suggester.py",
+    "forward.py",
+    "get_hwuuid.py",
+    "get_info.py",
+    "getdomain.py",
     "getpid.py",
-    "keylogger.py",
+    "getppid.py",
+    "getprivs.py",
+    "getsystem.py",
+    "getuid.py",
+    "gpstracker.py",
+    "hashmon.py",
+    "hide_process.py",
+    "http.py",
+    "igd.py",
+    "impersonate.py",
+    "interactive_shell.py",
+    "inveigh.py",
+    "ip.py",
+    "isearch.py",
+    "last.py",
+    "lazagne.py",
+    "linux_stealth.py",
+    "load_package.py",
+    "logs.py",
+    "loot_memory.py",
+    "ls.py",
+    "mapped.py",
+    "memory_exec.py",
+    "memstrings.py",
+    "migrate.py",
+    "mimikatz.py",
+    "mimipy.py",
+    "mimishell.py",
+    "mkdir.py",
+    "mouselogger.py",
+    "mv.py",
+    "nbnsspoof.py",
+    "netcreds.py",
+    "netmon.py",
+    "netstat.py",
+    "odbc.py",
+    "outlook.py",
+    "persistence.py",
+    "pexec.py",
+    "pipecatcher.py",
+    "port_scan.py",
+    "portfwd.py",
+    "powerview.py",
+    "privesc_checker.py",
+    "process_kill.py",
+    "ps.py",
     "psexec.py",
+    "psh.py",
+    "pwd.py",
+    "pyexec.py",
+    "pyshell.py",
+    "pywerview.py",
+    "record_mic.py",
+    "reg.py",
+    "rfs.py",
+    "rm.py",
+    "rwmic.py",
+    "scapy_shell.py",
+    "search.py",
+    "services.py",
+    "shares.py",
+    "shell_exec.py",
+    "shellcode_exec.py",
+    "smb.py",
+    "smbspider.py",
+    "socks5proxy.py",
+    "ssh.py",
+    "sshell.py",
+    "stat.py",
+    "tasks.py",
+    "tcpdump.py",
+    "text_to_speach.py",
+    "ttyrec.py",
+    "upload.py",
+    "usniper.py",
     "vibrate.py",
-    "cd.py"
+    "w.py",
+    "webcamsnap.py",
+    "wmic.py",
+    "write.py",
+    "x509.py",
+    "zip.py"
+  ],
+  "missing_linux": [
+    "ad.py",
+    "alive.py",
+    "apps.py",
+    "bypassuac.py",
+    "call.py",
+    "cat.py",
+    "cd.py",
+    "clear_logs.py",
+    "cloudinfo.py",
+    "contacts.py",
+    "cp.py",
+    "date.py",
+    "display.py",
+    "dns.py",
+    "download.py",
+    "drives.py",
+    "echo.py",
+    "edit.py",
+    "env.py",
+    "exit.py",
+    "forward.py",
+    "get_hwuuid.py",
+    "get_info.py",
+    "getdomain.py",
+    "getpid.py",
+    "getppid.py",
+    "getprivs.py",
+    "getsystem.py",
+    "getuid.py",
+    "gpstracker.py",
+    "http.py",
+    "igd.py",
+    "impersonate.py",
+    "interactive_shell.py",
+    "inveigh.py",
+    "ip.py",
+    "isearch.py",
+    "load_package.py",
+    "lock_screen.py",
+    "logs.py",
+    "ls.py",
+    "mimikatz.py",
+    "mimishell.py",
+    "mkdir.py",
+    "mouselogger.py",
+    "mv.py",
+    "nbnsspoof.py",
+    "netcreds.py",
+    "netmon.py",
+    "netstat.py",
+    "odbc.py",
+    "outlook.py",
+    "pexec.py",
+    "pipecatcher.py",
+    "port_scan.py",
+    "portfwd.py",
+    "powerview.py",
+    "process_kill.py",
+    "ps.py",
+    "psexec.py",
+    "psh.py",
+    "pwd.py",
+    "pyexec.py",
+    "pyshell.py",
+    "pywerview.py",
+    "record_mic.py",
+    "reg.py",
+    "rfs.py",
+    "rm.py",
+    "rwmic.py",
+    "scapy_shell.py",
+    "search.py",
+    "shell_exec.py",
+    "shellcode_exec.py",
+    "smb.py",
+    "smbspider.py",
+    "socks5proxy.py",
+    "ssh.py",
+    "sshell.py",
+    "tasks.py",
+    "tcpdump.py",
+    "text_to_speach.py",
+    "upload.py",
+    "vibrate.py",
+    "w.py",
+    "webcamsnap.py",
+    "wmic.py",
+    "write.py",
+    "x509.py",
+    "zip.py"
+  ],
+  "missing_android": [
+    "ad.py",
+    "alive.py",
+    "become.py",
+    "beroot.py",
+    "bypassuac.py",
+    "cat.py",
+    "cd.py",
+    "check_vm.py",
+    "clear_logs.py",
+    "cloudinfo.py",
+    "cp.py",
+    "credcap.py",
+    "creddump.py",
+    "date.py",
+    "display.py",
+    "dns.py",
+    "download.py",
+    "drives.py",
+    "duplicate.py",
+    "echo.py",
+    "edit.py",
+    "env.py",
+    "exit.py",
+    "exploit_suggester.py",
+    "forward.py",
+    "get_hwuuid.py",
+    "get_info.py",
+    "getdomain.py",
+    "getpid.py",
+    "getppid.py",
+    "getprivs.py",
+    "getsystem.py",
+    "getuid.py",
+    "hashmon.py",
+    "hide_process.py",
+    "http.py",
+    "igd.py",
+    "impersonate.py",
+    "interactive_shell.py",
+    "inveigh.py",
+    "ip.py",
+    "isearch.py",
+    "keylogger.py",
+    "last.py",
+    "lazagne.py",
+    "linux_stealth.py",
+    "load_package.py",
+    "lock_screen.py",
+    "logs.py",
+    "loot_memory.py",
+    "ls.py",
+    "mapped.py",
+    "memory_exec.py",
+    "memstrings.py",
+    "migrate.py",
+    "mimikatz.py",
+    "mimipy.py",
+    "mimishell.py",
+    "mkdir.py",
+    "mouselogger.py",
+    "msgbox.py",
+    "mv.py",
+    "nbnsspoof.py",
+    "netcreds.py",
+    "netmon.py",
+    "netstat.py",
+    "odbc.py",
+    "outlook.py",
+    "persistence.py",
+    "pexec.py",
+    "pipecatcher.py",
+    "port_scan.py",
+    "portfwd.py",
+    "powerview.py",
+    "privesc_checker.py",
+    "process_kill.py",
+    "ps.py",
+    "psexec.py",
+    "psh.py",
+    "pwd.py",
+    "pyexec.py",
+    "pyshell.py",
+    "pywerview.py",
+    "rdesktop.py",
+    "rdp.py",
+    "record_mic.py",
+    "reg.py",
+    "rfs.py",
+    "rm.py",
+    "rwmic.py",
+    "scapy_shell.py",
+    "screenshot.py",
+    "search.py",
+    "services.py",
+    "shares.py",
+    "shell_exec.py",
+    "shellcode_exec.py",
+    "smb.py",
+    "smbspider.py",
+    "socks5proxy.py",
+    "ssh.py",
+    "sshell.py",
+    "stat.py",
+    "sudo_alias.py",
+    "tasks.py",
+    "tcpdump.py",
+    "ttyrec.py",
+    "upload.py",
+    "users.py",
+    "usniper.py",
+    "w.py",
+    "wmic.py",
+    "write.py",
+    "x509.py",
+    "zip.py"
+  ],
+  "missing_windows": [
+    "ad.py",
+    "alive.py",
+    "apps.py",
+    "become.py",
+    "call.py",
+    "cat.py",
+    "cd.py",
+    "cloudinfo.py",
+    "contacts.py",
+    "cp.py",
+    "date.py",
+    "display.py",
+    "dns.py",
+    "download.py",
+    "echo.py",
+    "edit.py",
+    "env.py",
+    "exit.py",
+    "forward.py",
+    "get_hwuuid.py",
+    "get_info.py",
+    "getpid.py",
+    "getppid.py",
+    "getuid.py",
+    "gpstracker.py",
+    "hashmon.py",
+    "hide_process.py",
+    "http.py",
+    "igd.py",
+    "interactive_shell.py",
+    "ip.py",
+    "linux_stealth.py",
+    "load_package.py",
+    "ls.py",
+    "mapped.py",
+    "mimipy.py",
+    "mkdir.py",
+    "mv.py",
+    "netcreds.py",
+    "netmon.py",
+    "netstat.py",
+    "odbc.py",
+    "pexec.py",
+    "port_scan.py",
+    "portfwd.py",
+    "privesc_checker.py",
+    "process_kill.py",
+    "ps.py",
+    "psexec.py",
+    "pwd.py",
+    "pyexec.py",
+    "pyshell.py",
+    "reg.py",
+    "rfs.py",
+    "rm.py",
+    "rwmic.py",
+    "scapy_shell.py",
+    "search.py",
+    "shell_exec.py",
+    "smb.py",
+    "smbspider.py",
+    "socks5proxy.py",
+    "ssh.py",
+    "sshell.py",
+    "sudo_alias.py",
+    "tasks.py",
+    "tcpdump.py",
+    "text_to_speach.py",
+    "ttyrec.py",
+    "upload.py",
+    "usniper.py",
+    "vibrate.py",
+    "w.py",
+    "write.py",
+    "x509.py",
+    "zip.py"
+  ],
+  "unspecified": [
+    "ad.py",
+    "alive.py",
+    "cat.py",
+    "cd.py",
+    "cloudinfo.py",
+    "cp.py",
+    "date.py",
+    "dns.py",
+    "download.py",
+    "echo.py",
+    "edit.py",
+    "env.py",
+    "exit.py",
+    "forward.py",
+    "get_hwuuid.py",
+    "get_info.py",
+    "getpid.py",
+    "getppid.py",
+    "getuid.py",
+    "http.py",
+    "igd.py",
+    "interactive_shell.py",
+    "ip.py",
+    "ls.py",
+    "mkdir.py",
+    "mv.py",
+    "netcreds.py",
+    "netmon.py",
+    "netstat.py",
+    "odbc.py",
+    "pexec.py",
+    "port_scan.py",
+    "portfwd.py",
+    "process_kill.py",
+    "ps.py",
+    "psexec.py",
+    "pwd.py",
+    "pyexec.py",
+    "pyshell.py",
+    "reg.py",
+    "rfs.py",
+    "rm.py",
+    "rwmic.py",
+    "scapy_shell.py",
+    "search.py",
+    "shell_exec.py",
+    "smb.py",
+    "smbspider.py",
+    "socks5proxy.py",
+    "ssh.py",
+    "sshell.py",
+    "tasks.py",
+    "tcpdump.py",
+    "upload.py",
+    "w.py",
+    "write.py",
+    "x509.py",
+    "zip.py"
   ],
   "quick_win_candidates": [
-    "nbnsspoof.py",
+    "ad.py",
+    "alive.py",
+    "beroot.py",
+    "bypassuac.py",
+    "cat.py",
+    "cd.py",
+    "clear_logs.py",
+    "cloudinfo.py",
+    "cp.py",
+    "credcap.py",
+    "date.py",
+    "dns.py",
+    "download.py",
     "duplicate.py",
-    "memory_exec.py"
+    "echo.py",
+    "edit.py",
+    "env.py",
+    "exit.py",
+    "exploit_suggester.py",
+    "forward.py",
+    "get_hwuuid.py",
+    "get_info.py",
+    "getdomain.py",
+    "getpid.py",
+    "getppid.py",
+    "getprivs.py",
+    "getsystem.py",
+    "getuid.py",
+    "http.py",
+    "igd.py",
+    "impersonate.py",
+    "interactive_shell.py",
+    "inveigh.py",
+    "ip.py",
+    "isearch.py",
+    "last.py",
+    "lazagne.py",
+    "logs.py",
+    "loot_memory.py",
+    "ls.py",
+    "memory_exec.py",
+    "memstrings.py",
+    "migrate.py",
+    "mimikatz.py",
+    "mimishell.py",
+    "mkdir.py",
+    "mouselogger.py",
+    "mv.py",
+    "nbnsspoof.py",
+    "netcreds.py",
+    "netmon.py",
+    "netstat.py",
+    "odbc.py",
+    "outlook.py",
+    "persistence.py",
+    "pexec.py",
+    "pipecatcher.py",
+    "port_scan.py",
+    "portfwd.py",
+    "powerview.py",
+    "process_kill.py",
+    "ps.py",
+    "psexec.py",
+    "psh.py",
+    "pwd.py",
+    "pyexec.py",
+    "pyshell.py",
+    "pywerview.py",
+    "record_mic.py",
+    "reg.py",
+    "rfs.py",
+    "rm.py",
+    "rwmic.py",
+    "scapy_shell.py",
+    "search.py",
+    "services.py",
+    "shares.py",
+    "shell_exec.py",
+    "shellcode_exec.py",
+    "smb.py",
+    "smbspider.py",
+    "socks5proxy.py",
+    "ssh.py",
+    "sshell.py",
+    "stat.py",
+    "tasks.py",
+    "tcpdump.py",
+    "upload.py",
+    "w.py",
+    "webcamsnap.py",
+    "wmic.py",
+    "write.py",
+    "x509.py",
+    "zip.py"
   ]
 }

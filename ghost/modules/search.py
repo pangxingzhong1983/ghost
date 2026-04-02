@@ -197,7 +197,7 @@ class SearchModule(GhostModule):
 
                 file_to_download = res
 
-                if type(res) == tuple:
+                if isinstance(res, tuple):
                     file_to_download, _ = res
 
                 if file_to_download in downloaded_files:
@@ -237,7 +237,7 @@ class SearchModule(GhostModule):
                 if terminate.is_set():
                     return
 
-                if type(res) == tuple:
+                if isinstance(res, tuple):
                     f, v = res
                     self.success('{}: {}'.format(f, v))
                 else:

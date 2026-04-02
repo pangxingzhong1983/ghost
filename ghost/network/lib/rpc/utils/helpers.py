@@ -37,10 +37,10 @@ def buffiter(obj, chunk = 10, max_chunk = 1000, factor = 2):
 
         cursor = db.get_cursor()
         for id, name, dob in buffiter(cursor.select("Id", "Name", "DoB")):
-            print id, name, dob
+print(id, name, dob)
     """
     if factor < 1:
-        raise ValueError("factor must be >= 1, got %r" % (factor,))
+        raise ValueError(f"factor must be >= 1, got %r" % (factor,))
     it = iter(obj)
     count = chunk
     while True:
@@ -110,7 +110,7 @@ class _Async(object):
         return asyncreq(self.proxy, HANDLE_CALL, args, tuple(kwargs.items()))
 
     def __repr__(self):
-        return "nowait(%r)" % (self.proxy,)
+        return f"nowait(%r)" % (self.proxy,)
 
 
 _async_proxies_cache = WeakValueDict()
@@ -118,7 +118,7 @@ def nowait(proxy):
     """
     Returns an asynchronous "version" of the given proxy. Invoking the returned
     proxy will not block; instead it will return an
-    :class:`network.lib.rpc.core.async.AsyncResult` object that you can test for completion
+    :class:`network.lib.rpc.core.async_handle.AsyncResult` object that you can test for completion
 
     :param proxy: any **callable** RPyC proxy
 
@@ -162,7 +162,7 @@ def nowait(proxy):
 
     if not callable(proxy):
         raise TypeError(
-            "'proxy' must be callable: %r (%s)" % (proxy, type(proxy))
+            f"'proxy' must be callable: {proxy!r} ({type(proxy)})"
         )
 
     caller = _Async(proxy)
@@ -176,7 +176,7 @@ nowait.__doc__ = _Async.__doc__
 
 class timed(object):
     """Creates a timed asynchronous proxy. Invoking the timed proxy will
-    run in the background and will raise an :class:`network.lib.rpc.core.async.AsyncResultTimeout`
+    run in the background and will raise an :class:`network.lib.rpc.core.async_handle.AsyncResultTimeout`
     exception if the computation does not terminate within the given time frame
 
     :param proxy: any **callable** RPyC proxy
@@ -203,7 +203,7 @@ class timed(object):
         return res
 
     def __repr__(self):
-        return "timed(%r, %r)" % (self.proxy.proxy, self.timeout)
+        return f"timed(%r, %r)" % (self.proxy.proxy, self.timeout)
 
 
 class BgServingThread(object):

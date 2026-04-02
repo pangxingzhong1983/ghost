@@ -38,7 +38,7 @@ import logging
 from os import W_OK, X_OK, R_OK
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 ntdll = WinDLL('ntdll', use_last_error=True)
 advapi32 = WinDLL('advapi32', use_last_error=True)
@@ -1220,7 +1220,7 @@ try:
         WTSIncomingFrames, WTSOutgoingFrames, WTSClientInfo, WTSSessionInfo,
         WTSSessionInfoEx, WTSConfigInfo, WTSValidationInfo,
         WTSSessionAddressV4, WTSIsRemoteSession
-    ) = xrange(30)
+    ) = range(30)
 
     MAX_PATH = 260
 
@@ -1346,7 +1346,7 @@ try:
         sessions = []
         try:
             _info = cast(info, POINTER(WTS_SESSION_INFOW))
-            for idx in xrange(count.value):
+            for idx in range(count.value):
                 sessions.append((
                     _info[idx].SessionId,
                     _info[idx].pWinStationName or '{Empty}',

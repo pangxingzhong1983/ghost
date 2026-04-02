@@ -131,7 +131,7 @@ class PExec(GhostModule):
 
             self.stdout.write(data)
 
-        if type(cmdargs) == list:
+        if isinstance(cmdargs, list):
             cmdargs = tuple(cmdargs)
 
         kwargs = tuple((k,v) for k,v in cmdenv.items())

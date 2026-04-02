@@ -83,7 +83,7 @@ class Obj(object):
         try:
             off, tp = get_obj_offset(types, [self.name, attr])
         except:
-            raise AttributeError("'%s' has no attribute '%s'" % (self.name, attr))
+            raise AttributeError(f"'{self.name}' has no attribute '{attr}'")
         
         if tp == 'array':
             a_len = types[self.name][1][attr][1][1]
@@ -149,7 +149,7 @@ class Obj(object):
             return types[self.name][0]
     
     def __repr__(self):
-        return "<%s @%08x>" % (self.name, self.address)
+        return f"<{self.name} @{self.address:08x}>"
 
     def __eq__(self, other):
         if not isinstance(other, Obj):
@@ -224,7 +224,7 @@ class Pointer(Obj):
             return getattr(self.value, attr)
     
     def __repr__(self):
-        return "<pointer to [%s @%08x]>" % (self.value.name, self.value.address)
+        return f"<pointer to [{self.value.name} @{self.value.address:08x}]>"
 
     def members(self):
         return self.value.members()

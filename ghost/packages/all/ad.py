@@ -73,7 +73,7 @@ except ImportError:
     auto_discovery = False
 
 if version_info.major > 2:
-    xrange = range
+    range = range
     basestring = str
 
 
@@ -328,7 +328,7 @@ class LDAPLargeRequest(LDAPRequest):
         while not (completed or (interruption and interruption.is_set())):
             chunk = []
 
-            for _ in xrange(page_size):
+            for _ in range(page_size):
                 try:
                     chunk.append(next(iterator))
                 except StopIteration:

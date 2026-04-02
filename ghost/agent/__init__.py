@@ -73,7 +73,7 @@ import importlib.util as imputil
 
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 def _stub(*args, **kwargs):
@@ -451,7 +451,7 @@ def make_module(fullname, path=None, is_pkg=False, mod=None):
         #mod = imp.new_module(fullname)
         spec = imputil.spec_from_loader(fullname, loader=None)
         mod = imputil.module_from_spec(spec)
-    dprint("make_module: %s %s %s"%(fullname, path, mod))
+    dprint(f"make_module: {fullname} {path} {mod}")
     mod.__name__ = str(fullname)
     mod.__file__ = str(
         'ghost://{}'.format(path or fullname + '.py')
@@ -589,7 +589,7 @@ class GhostPackageLoader(object):
         except Exception as e:
             dprint('Error loading package {} ({} pkg={}): {}',fullname, self.path, self.is_pkg, e)
             if fullname in sys.modules:
-                dprint("Error ! %s : deleting from modules : %s"%(e,fullname))
+                dprint(f"Error ! {e} : deleting from modules : {fullname}")
                 del sys.modules[fullname]
 
             remote_error(
@@ -617,7 +617,7 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
 
     def __init__(self, path):
         dprint("GhostPackageFinder for {}".format(path))
-        if type(path) == bytes:
+        if isinstance(path, bytes):
             path = path.decode('utf8', 'replace')
         if path and not path.startswith('ghost://'):
             raise GhostPackageFinderImportError()
@@ -648,7 +648,7 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
     def _is_already_loaded(self, fullname):
         parts = fullname.split('.')[:-1]
 
-        for i in xrange(len(parts)):
+        for i in range(len(parts)):
             part = '.'.join(parts[:i+1])
             if part in ghost_modules.modules or part in sys.modules:
                 return True

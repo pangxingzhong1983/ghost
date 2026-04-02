@@ -18,7 +18,7 @@ def execute(event_name, client, server, handler, config, **kwargs):
     if 'id' in kwargs:
         client_id = 'session={}'.format(kwargs['id'])
     elif 'node' in kwargs and kwargs['node']:
-        if type(kwargs['node']) in (int, long):
+        if type(kwargs['node']) in (int, int):
             client_id = '{:012x}'.format(kwargs['node'])
         else:
             client_id = kwargs['node']
@@ -27,7 +27,7 @@ def execute(event_name, client, server, handler, config, **kwargs):
         if client_id:
             client_id += '/'
 
-        if type(kwargs['sid']) in (int, long):
+        if type(kwargs['sid']) in (int, int):
             client_id += 'sid:{:08x}'.format(kwargs['sid'])
         else:
             client_id += 'sid:'+kwargs['sid']

@@ -80,7 +80,7 @@ from . import getLogger
 logger = getLogger('cmd')
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
     def bm_byte(x):
         return bytes((x,))
@@ -695,7 +695,7 @@ class GhostCmd(cmd.Cmd):
             return [
                 IOGroup(
                     None, ObjectStream(stream=stream, pipe=pipe)
-                ) for _ in xrange(amount)
+                ) for _ in range(amount)
             ]
 
     def process(self, job, background=False, daemon=False, unique=False):

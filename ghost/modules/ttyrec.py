@@ -75,7 +75,7 @@ def _to_unicode(x):
 def _to_int(x):
     if x is None:
         return None
-    elif isinstance(x, (int, long)):
+    elif isinstance(x, (int, int)):
         return x
     elif x.startswith('0x'):
         return int(x[2:], 16)

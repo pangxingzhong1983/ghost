@@ -38,9 +38,9 @@ if not getattr(sys, '__from_build_library_zip_compiler__', False):
     from .GhostConfig import GhostConfig
     from .GhostCredentials import Credentials
 
-    from ghost.network.conf import load_network_modules
-
-    load_network_modules()
+    # from ghost.network.conf import load_network_modules
+    # load_network_modules()
+    # TODO: Implement network modules loading
 
     if not getattr(sys, '__ghost_main__', False):
         from .GhostCmd import GhostCmdLoop

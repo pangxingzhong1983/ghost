@@ -7,7 +7,9 @@ from __future__ import print_function
 __all__ = ('InvalidCommand', 'Commands')
 
 import os
-import imp
+import importlib
+import importlib.util
+import sys
 
 from ghost.ghostlib.GhostCompleter import commands_completer
 from ghost.ghostlib.GhostModule import GhostArgumentParser
@@ -29,10 +31,7 @@ class CommandsNamespace(object):
 
 
 class Commands(object):
-    SUFFIXES = tuple([
-        suffix for suffix, _, rtype in imp.get_suffixes() \
-        if rtype == imp.PY_SOURCE
-    ])
+    SUFFIXES = ('.py',)
 
     def __init__(self):
         self._commands = {}
@@ -48,7 +47,7 @@ class Commands(object):
 
         for path in commands_paths:
             files.update({
-                '.'.join(x.rsplit('.', 1)[:-1]):os.path.join(path, x) \
+                '.'.join(x.rsplit('.', 1)[:-1]):os.path.join(path, x)
                 for x in os.listdir(path) if x.endswith(self.SUFFIXES) and \
                 not x.startswith('__init__')
             })
@@ -63,9 +62,12 @@ class Commands(object):
 
             if command not in self._commands or self._commands_stats[command] != current_stat.st_mtime:
                 try:
-                    self._commands[command] = imp.load_source(command, source)
+                    spec = importlib.util.spec_from_file_location(command, source)
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    self._commands[command] = module
                     self._commands_stats[command] = current_stat.st_mtime
-                except IOError:
+                except Exception:
                     pass
 
     def _get_command(self, cmdline, aliases, modules, refresh=True):

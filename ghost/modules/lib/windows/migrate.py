@@ -13,7 +13,7 @@ from ghost.cli import ghostgen
 from ghost.ghostlib.payloads.dependencies import Target
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 def has_proc_migrated(client, pid):
@@ -118,7 +118,7 @@ def migrate(
     if module.config.getboolean('ghostd', 'alt_header'):
         module.warning('Using ALT markers')
         # Use ALT markers to simplify debugging
-        for offt in xrange(0, 1024, 4):
+        for offt in range(0, 1024, 4):
             if dllbuff[offt:offt+4] == b'PE\0\0':
                 dllbuff = b''.join([
                     b'HE',

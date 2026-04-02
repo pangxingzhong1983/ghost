@@ -21,7 +21,7 @@ from ghost.network.lib.convcompat import (
 )
 
 if sys.version_info[0]==3:
-    long = int
+    int = int
 
 families = {
     int(v): k[3:] for k, v in socket.__dict__.items()
@@ -57,7 +57,7 @@ if sys.version_info.major > 2:
 
 else:
     def iteritems(value):
-        return value.iteritems()
+        return value.items()
 
     def psutil_str(value):
         return as_unicode_string_deep(
@@ -212,7 +212,7 @@ def psinfo(pids):
         info = {}
         for key, val in safe_as_dict(process, KNOWN_FIELDS).items():
             newv = None
-            if type(val) == list:
+            if isinstance(val, list):
                 newv = []
                 for item in val:
                     if _is_iterable(item):
@@ -461,7 +461,7 @@ def cstring(string):
 
 
 def convrecord(item):
-    return item if type(item) in (int, long) else cstring(item)
+    return item if type(item) in (int, int) else cstring(item)
 
 
 def wtmp(input='/var/log/wtmp'):

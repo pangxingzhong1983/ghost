@@ -41,7 +41,7 @@ class BindLauncher(BaseLauncher):
         if self.args is None:
             raise LauncherError("parse_args needs to be called before iterate")
 
-        logging.info("binding on %s:%s using transport %s ..."%(self.args.host, self.args.port, self.args.transport))
+        logging.info(f"binding on {self.args.host}:{self.args.port} using transport {self.args.transport} ...")
         opt_args = utils.parse_transports_args(' '.join(self.args.transport_args))
         t = transports[self.args.transport](bind_payload=True)
 

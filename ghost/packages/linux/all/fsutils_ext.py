@@ -34,7 +34,7 @@ from ghost.network.lib.convcompat import (
 )
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 def getselinux(filepath):
@@ -104,7 +104,7 @@ def getcaps(filepath):
 
     permitted_flags = []
     inheritable_flags = []
-    for x in xrange(min(len(ALL_CAP_NAMES), MAX_CAP)):
+    for x in range(min(len(ALL_CAP_NAMES), MAX_CAP)):
         idx = ((x) >> 5)
         mask = (1 << ((x) & 31))
 

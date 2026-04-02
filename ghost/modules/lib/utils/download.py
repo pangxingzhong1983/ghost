@@ -13,7 +13,7 @@ if sys.version_info.major > 2:
     from queue import Queue, Empty
     from io import BytesIO
 
-    xrange = range
+    range = range
 else:
     from Queue import Queue, Empty
     from StringIO import StringIO as BytesIO
@@ -487,7 +487,7 @@ class DownloadFronted(object):
                                 start=self._current_file_dir.upper()
                             ).split(os.path.sep)
 
-                            for i in xrange(min(len(symto), len(lnk))):
+                            for i in range(min(len(symto), len(lnk))):
                                 if symto[-i-1] == '..':
                                     break
 

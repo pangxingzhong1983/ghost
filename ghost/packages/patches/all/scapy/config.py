@@ -43,7 +43,7 @@ class ConfClass(object):
                 wlen = 76-max(len(i),10)
                 if len(r) > wlen:
                     r = r[:wlen-3]+"..."
-                s += "%-10s = %s\n" % (i, r)
+                s += f"{i:10} = {r}\n"
         return s[:-1]
 
 class ProgPath(ConfClass):
@@ -95,7 +95,7 @@ class ConfigFieldList:
             return elt in self.layers
         return elt in self.fields
     def __repr__(self):
-        return "<%s [%s]>" %  (self.__class__.__name__," ".join(str(x) for x in self.fields))
+        return f"<{self.__class__.__name__} [{' '.join(str(x) for x in self.fields)}]>"
 
 class Emphasize(ConfigFieldList):
     pass
@@ -136,7 +136,7 @@ class LayersList(list):
     def __repr__(self):
         s=[]
         for l in self:
-            s.append("%-20s: %s" % (l.__name__,l.name))
+            s.append(f"{l.__name__:20}: {l.name}")
         return "\n".join(s)
     def register(self, layer):
         self.append(layer)
@@ -149,7 +149,7 @@ class CommandsList(list):
                 doc = l.__doc__.split("\n")[0]
             else:
                 doc = "--"
-            s.append("%-20s: %s" % (l.__name__,doc))
+            s.append(f"{l.__name__:20}: {doc}")
         return "\n".join(s)
     def register(self, cmd):
         self.append(cmd)

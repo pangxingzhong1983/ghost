@@ -73,7 +73,7 @@ class DNS(GhostModule):
             found = False
 
             for k,v in launch_dns_ip_resolver(target).items():
-                if v and not type(v) == str:
+                if v and not isinstance(v, str):
                     v = [x for x in v if x not in known]
                     for x in v:
                         known.add(x)

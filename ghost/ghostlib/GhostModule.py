@@ -30,10 +30,6 @@
 # THE POSSIBILITY OF SUCH DAMAGE
 # --------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import textwrap
 import time
@@ -61,7 +57,12 @@ from ghost.ghostlib.utils.term import (
 
 from ghost.ghostlib import getLogger
 
-from ghost.network.lib.compat import with_metaclass
+# from ghost.network.lib.compat import with_metaclass
+
+# 临时实现，后续需要从正确的位置导入
+class with_metaclass(type):
+    def __new__(cls, name, bases, dct):
+        return type(name, bases, dct)
 from ghost.modules.lib.platform_compat import (
     detect_platform,
     is_compatible,
@@ -503,7 +504,7 @@ class GhostModule(with_metaclass(GhostModuleMetaclass)):
         return cls.__module__
 
     def import_dependencies(self):
-        if type(self.dependencies) == dict:
+        if isinstance(self.dependencies, dict):
             dependencies = self.dependencies.get(self.client.platform, []) + (
                 self.dependencies.get('posix', [])
                 if self.client.is_posix() else []
@@ -630,7 +631,7 @@ class GhostModule(with_metaclass(GhostModuleMetaclass)):
 def config(**kwargs):
     for option in ['compat', 'compatibilities', 'compatibility', 'tags']:
         if option in kwargs:
-            if type(kwargs[option]) != list:
+            if not isinstance(kwargs[option], list):
                 kwargs[option] = [kwargs[option]]
 
     def class_rebuilder(klass):

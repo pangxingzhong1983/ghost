@@ -113,7 +113,7 @@ def stun_test(sock, host, port, send_data="", count=3):
     retVal = {'Resp': False, 'ExternalIP': None, 'ExternalPort': None,
               'SourceIP': None, 'SourcePort': None, 'ChangedIP': None,
               'ChangedPort': None}
-    str_len = "%#04d" % (len(send_data) // 2)
+    str_len = f"%#04d" % (len(send_data) // 2)
     tranid = gen_tran_id()
     str_data = ''.join([BindRequestMsg, str_len, tranid, send_data])
     data = binascii.a2b_hex(str_data)

@@ -10,7 +10,7 @@ import json
 import base64
 import string
 
-is_dict = re.compile(r'^(\d+)=([^/]+)$')
+is_dict = re.compile(r'^(\\d+)=([^/]+)$')
 
 
 METADATA_SERVER = 'http://169.254.169.254'

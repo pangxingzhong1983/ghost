@@ -21,7 +21,7 @@ import os
 from readlogs_generic import GenericLogReader
 
 if sys.version_info.major > 2:
-    long = int
+    int = int
     basestring = str
 
 LIBJOURNAL = None
@@ -149,7 +149,7 @@ def _payload_to_key_value(payload):
 def _value_to_timestamp(value):
     ts = 0
 
-    if isinstance(value, (int, long)):
+    if isinstance(value, (int, int)):
         if value < 0:
             ts = int((time.time() - value) * 1000000)
             ts = ctypes.c_ulonglong(ts)

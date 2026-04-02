@@ -41,7 +41,7 @@ def open_key(root, key):
     for s in subkeys(root):
         if s.Name.upper() == keyname.upper():
             return open_key(s, key)
-    print("ERR: Couldn't find subkey %s of %s" % (keyname, root.Name))
+    print(f"ERR: Couldn't find subkey {keyname} of {root.Name}")
     return None
 
 

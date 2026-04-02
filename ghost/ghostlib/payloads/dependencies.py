@@ -27,7 +27,7 @@ if sys.version_info.major > 2:
     import pickle
     from os import getcwd
 
-    xrange = range
+    range = range
 
 else:
     import cPickle as pickle
@@ -243,7 +243,7 @@ def remove_dt_needed(data, libname):
 
     tag_idx = None
 
-    for idx in xrange(sect_size // ent_size):
+    for idx in range(sect_size // ent_size):
         tag = dyn.get_tag(idx)
         if tag['d_tag'] == 'DT_NEEDED':
             if tag.needed == libname:
@@ -478,7 +478,7 @@ def get_content(target, prefix, filepath, archive=None, honor_ignore=True):
                 else:
                     subpaths = basepath.split(os.path.sep)
 
-                    for i in xrange(len(subpaths)):
+                    for i in range(len(subpaths)):
                         ignore = [patch_dir] + subpaths[:i]
                         ignore.append('.ignore')
                         ignore = os.path.sep.join(ignore)
@@ -562,7 +562,7 @@ def from_path(
                     continue
 
                 modprefix = root[len(search_path.rstrip(os.sep))+1:]
-                modpath = os.path.join(modprefix, f).replace('\\', '/')
+                modpath = os.path.join(modprefix, f).replace('\\\\', '/')
 
                 modpath=rename_cext_path(target, modpath)
                 base, ext = modpath.rsplit('.', 1)

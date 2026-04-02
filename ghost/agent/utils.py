@@ -84,7 +84,7 @@ def has_module(name):
 
     except Exception as e:
         ghost.agent.dprint(
-            'has_module Exception: {}/{} (type(name) == {})',
+            'has_module Exception: {}/{}/{} (isinstance(name, {}))',
             type(e), e, type(name)
         )
 
@@ -103,7 +103,7 @@ def new_modules(names):
 
     except Exception as e:
         ghost.agent.dprint(
-            'new_modules Exception: {}/{} (type(names) == {})',
+            'new_modules Exception: {}/{}/{} (isinstance(names, {}))',
             type(e), e, type(names)
         )
 

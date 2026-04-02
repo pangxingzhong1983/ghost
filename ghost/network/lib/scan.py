@@ -22,7 +22,7 @@ from . import getLogger
 logger = getLogger('scan')
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 TOP1000 = (
     1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,79,80,81,82,
@@ -214,7 +214,7 @@ def scanthread_parse(hosts, ports, on_complete, **kwargs):
 
     ports = list({
         p for prange in ports.split(',') for p in (
-            xrange(
+            range(
                 int(prange.split('-')[0]), int(prange.split('-')[1])+1
             ) if '-' in prange else [int(prange)]
         )

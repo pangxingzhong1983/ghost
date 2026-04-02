@@ -735,7 +735,7 @@ def _search(
             if ignorecase:
                 value = value.lower()
             return u_term in value
-        elif isinstance(value, (int, long)):
+        elif isinstance(value, (int, int)):
             if i_term is None:
                 return False
             return i_term == value
@@ -757,7 +757,7 @@ def _search(
             if ignorecase:
                 value = value.lower()
             return u_term == value
-        elif isinstance(value, (int, long)):
+        elif isinstance(value, (int, int)):
             if i_term is None:
                 return False
             return i_term == value
@@ -901,7 +901,7 @@ def enum(path=None):
         tupleized = []
 
         for item in Key(path):
-            if type(item) == Key:
+            if isinstance(item, Key):
                 tupleized.append((True, unicode(item)))
             else:
                 tupleized.append((
@@ -919,7 +919,7 @@ def set(path, name, value, create):
         try:
             old_value = k[name]
             if old_value.type in (REG_DWORD, REG_DWORD_LITTLE_ENDIAN):
-                if not isinstance(value, (int, long)):
+                if not isinstance(value, (int, int)):
                     value = int(value)
         except KeyError:
             pass

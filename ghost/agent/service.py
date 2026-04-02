@@ -58,7 +58,7 @@ import umsgpack
 import ghost.agent as agent
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
     builtin = 'builtins'
 else:
     builtin = '__builtin__'
@@ -211,7 +211,7 @@ class ReverseSlaveService(Service):
 
             if os.name == 'posix':
                 try:
-                    for _ in xrange(1024):
+                    for _ in range(1024):
                         if not os.waitpid(-1, os.WNOHANG):
                             break
 
@@ -260,7 +260,7 @@ class ReverseSlaveService(Service):
             infos = {}
 
             if self.client:
-                infos.update(self.client.iteritems())
+                infos.update(self.client.items())
                 infos['launcher'] = self.client.launcher
 
             debug, debug_file = agent.get_debug()
@@ -592,7 +592,7 @@ class GhostClient(object):
             except Exception as e:
                 agent.remote_error('Launcher: {}', e)
 
-                if type(e) == SystemExit:
+                if isinstance(e, SystemExit):
                     self.terminated = True
 
             finally:

@@ -38,7 +38,7 @@ if sys.version_info.major > 2:
     from http.cookiejar import CookieJar
 
     basestring = str
-    xrange = range
+    range = range
 else:
     from cookielib import CookieJar
     from urlparse import urlparse

@@ -75,7 +75,7 @@ class SocketPiper(threading.Thread):
 class LocalPortFwdRequestHandler(BaseRequestHandler):
     def handle(self):
         DST_ADDR, DST_PORT=self.server.remote_address
-        logging.debug("forwarding local addr %s to remote %s "%(self.server.server_address, self.server.remote_address))
+        logging.debug(f"forwarding local addr {self.server.server_address} to remote {self.server.remote_address} ")
         rsocket_mod=self.server.rpyc_client.conn.modules.socket
         rsocket=rsocket_mod.socket(rsocket_mod.AF_INET, rsocket_mod.SOCK_STREAM)
         rsocket.settimeout(5)
@@ -95,7 +95,7 @@ class LocalPortFwdRequestHandler(BaseRequestHandler):
         sp2.start()
         sp1.join()
         sp2.join()
-        logging.debug("conn to %s:%s closed"%(DST_ADDR,DST_PORT))
+        logging.debug(f"conn to {DST_ADDR}:{DST_PORT} closed")
 
 
 class LocalPortFwdServer(TCPServer):
@@ -109,12 +109,12 @@ class LocalPortFwdServer(TCPServer):
 
 class ThreadedLocalPortFwdServer(ThreadingMixIn, LocalPortFwdServer):
     def __str__(self):
-        return "<LocalPortForward local=%s remote=%s"%(self.server_address,self.remote_address)
+        return f"<LocalPortForward local={self.server_address} remote={self.remote_address}>"
 
 
 def get_remote_port_fwd_cb(remote_addr, local_addr):
     def func(rsocket):
-        logging.debug("forwarding remote addr %s to local %s "%(remote_addr, local_addr))
+        logging.debug(f"forwarding remote addr {remote_addr} to local {local_addr} ")
         lsocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         lsocket.settimeout(5)
         try:
@@ -133,7 +133,7 @@ def get_remote_port_fwd_cb(remote_addr, local_addr):
         sp2.start()
         sp1.join()
         sp2.join()
-        logging.debug("conn to %s from %s closed"%(local_addr, remote_addr))
+        logging.debug(f"conn to {local_addr} from {remote_addr} closed")
 
     return func
 
@@ -189,7 +189,7 @@ class PortFwdModule(GhostModule):
             t=threading.Thread(target=server.serve_forever)
             t.daemon=True
             t.start()
-            self.success("LOCAL %s:%s forwarded to REMOTE %s:%s"%(local_addr, local_port, remote_addr, remote_port))
+            self.success(f"LOCAL {local_addr}:{local_port} forwarded to REMOTE {remote_addr}:{remote_port}")
         elif args.remote:
             tab=args.remote.split(':')
             remote_addr="127.0.0.1"
@@ -229,7 +229,7 @@ class PortFwdModule(GhostModule):
             self.portfwd_dic[self.current_id]=remote_server
             self.current_id+=1
             remote_server.start_serve()
-            self.success("REMOTE %s:%s forwarded to LOCAL %s:%s"%(remote_addr, remote_port, local_addr, local_port))
+            self.success(f"REMOTE {remote_addr}:{remote_port} forwarded to LOCAL {local_addr}:{local_port}")
 
         elif args.kill:
             if args.kill in self.portfwd_dic:
@@ -259,4 +259,4 @@ class PortFwdModule(GhostModule):
                 self.error("There are currently no ports forwarded on %s"%self.client)
             else:
                 for cid, server in self.portfwd_dic.items():
-                    self.success("%s : %s"%(cid, server))
+                    self.success(f"{cid} : {server}")

@@ -9,10 +9,10 @@ import pyuv
 
 
 RESPONSE = b"HTTP/1.1 200 OK\r\n" \
-           "Content-Type: text/plain\r\n" \
-           "Content-Length: 12\r\n" \
-           "\r\n" \
-           "hello world\n"
+           b"Content-Type: text/plain\r\n" \
+           b"Content-Length: 12\r\n" \
+           b"\r\n" \
+           b"hello world\n"
 
 
 def on_client_shutdown(client, error):
@@ -36,22 +36,22 @@ def on_connection(server, error):
     clients.append(client)
     client.start_read(on_read)
 
-def async_exit(async):
+def async_exit(async_handle):
     [c.close() for c in clients]
-    async.close()
+    async_handle.close()
     signal_h.close()
     server.close()
 
 def signal_cb(handle, signum):
-    global async
-    async.send()
+    global async_handle
+    async_handle.send()
 
 
 print("PyUV version %s" % pyuv.__version__)
 
 loop = pyuv.Loop.default_loop()
 
-async = pyuv.Async(loop, async_exit)
+async_handle = pyuv.Async(loop, async_exit)
 clients = []
 
 server = pyuv.TCP(loop)
@@ -64,5 +64,3 @@ signal_h.start(signal_cb, signal.SIGINT)
 loop.run()
 
 print("Stopped!")
-
-

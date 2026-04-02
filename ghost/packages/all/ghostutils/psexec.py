@@ -50,7 +50,7 @@ from Crypto.Cipher import DES
 assert(DES)
 
 if version_info.major > 2:
-    xrange = range
+    range = range
     basestring = str
 
 SMB_SESSIONS_CACHE = {}
@@ -203,7 +203,7 @@ SERVICE_NAME   = ''.join(random.sample(string.ascii_letters, 10))
 
 
 def generate_stager_cmd(size=1024):
-    pipename = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in xrange(10))
+    pipename = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     encoded = b64encode(PIPE_STAGER_TEMPLATE.format(
         pipename=pipename, size=size, powershell=POWERSHELL_PATH))
     cmd = POWERSHELL_CMD_TEMPLATE_CMD.format(powershell=POWERSHELL_PATH, cmd=encoded)
@@ -212,7 +212,7 @@ def generate_stager_cmd(size=1024):
 
 def generate_loader_payload(size):
     pipename = ''.join(random.choice(
-        string.ascii_uppercase + string.digits) for _ in xrange(10)
+        string.ascii_uppercase + string.digits) for _ in range(10)
     )
     payload = PIPE_LOADER_TEMPLATE.format(pipename=pipename, size=size)
     return payload, pipename
@@ -221,7 +221,7 @@ def generate_loader_payload(size):
 def generate_stdo_payload(arg0, argv):
     argv = ' '.join(argv)
     pipename = ''.join(
-        random.choice(string.ascii_uppercase + string.digits) for _ in xrange(10)
+        random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
     )
     payload = PIPE_STDOUT_TEMPLATE.format(
         pipename=pipename, size=1024, arg0=arg0, argv=argv)
@@ -593,7 +593,7 @@ class FileTransfer(object):
         tid = self._conn.connectTree('IPC$')
         pipeReady = False
 
-        for _ in xrange(timeout):
+        for _ in range(timeout):
             try:
                 self._conn.waitNamedPipe(tid, '\\' + path)
                 pipeReady = True
@@ -722,7 +722,7 @@ class FileTransfer(object):
                 pipe, FILE_WRITE_DATA | FILE_APPEND_DATA, timeout) as pipe:
             # Write by small chunks (1.4 KB)
             # Slow, but should work with crappy networks
-            for offset in xrange(0, len(data), 1400):
+            for offset in range(0, len(data), 1400):
                 pipe.write(data[offset:offset+1400])
 
     def close(self):

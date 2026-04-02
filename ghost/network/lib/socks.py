@@ -76,10 +76,7 @@ import sys
 from collections.abc import Callable
 from base64 import b64encode
 
-try:
-    from http_parser.parser import HttpParser
-except ImportError:
-    from http_parser.pyparser import HttpParser
+# 使用Python标准库替代http_parser模块
 
 try:
     from urllib_auth import (
@@ -448,7 +445,7 @@ class socksocket(_BaseSocket):
 
         if self.type != socket.SOCK_DGRAM:
             bind_addr = pos[0]
-            if type(bind_addr) is not tuple or len(bind_addr) != 2:
+            if not (isinstance(bind_addr, tuple) and len(bind_addr) >= 2):
                 raise socket.error(EINVAL, 'Bind address should be tuple')
 
             self._socks5_bind_addr = bind_addr
@@ -554,28 +551,42 @@ class socksocket(_BaseSocket):
         return bytes
 
     def recv_http_response(self, conn):
-        response = HttpParser(kind=1)
+        import re
         status_code = None
-        headers = None
+        headers = {}
+        response = b''
 
         try:
             while True:
                 chunk = conn.recv(1024)
-
-                response.execute(chunk, len(chunk))
-                if response.is_headers_complete():
-                    headers = response.get_headers()
-                    status_code = response.get_status_code()
-
+                if not chunk:
+                    raise EOFError('Incomplete Message')
+                response += chunk
+                
+                # 检查是否收到完整的响应头
+                if b'\r\n\r\n' in response:
+                    # 解析状态行
+                    status_match = re.search(b'HTTP/1\\.\\d (\\d{3}) .*?\r\n', response)
+                    if status_match:
+                        status_code = int(status_match.group(1))
+                    
+                    # 解析头部
+                    header_lines = response.split(b'\r\n')[1:]
+                    for line in header_lines:
+                        if line == b'':
+                            break
+                        if b':' in line:
+                            key, value = line.split(b':', 1)
+                            headers[key.decode('utf-8').lower()] = value.decode('utf-8').strip()
+                    
+                    # 检查是否需要读取消息体
                     content_length = headers.get('content-length')
                     if not content_length or int(content_length) == 0:
                         break
-
-                if response.is_message_complete():
-                    break
-
-                if not chunk:
-                    raise EOFError('Incomplete Message')
+                    
+                    # 检查是否已收到完整的消息体
+                    if len(response.split(b'\r\n\r\n', 1)[1]) >= int(content_length):
+                        break
 
         except Exception as e:
             raise GeneralProxyError(

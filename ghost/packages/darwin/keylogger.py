@@ -51,7 +51,7 @@ def get_ruby_code():
     module Carbon
       extend Importer
       dlload '/System/Library/Frameworks/Carbon.framework/Carbon'
-      extern 'unsigned long CopyProcessName(const ProcessSerialNumber *, void *)'
+      extern 'unsigned int CopyProcessName(const ProcessSerialNumber *, void *)'
       extern 'void GetFrontProcess(ProcessSerialNumber *)'
       extern 'void GetKeys(void *)'
       extern 'unsigned char *GetScriptVariable(int, int)'
@@ -131,12 +131,12 @@ def get_ruby_code():
           lastWindow = app_name
         end
         if ctrlchar != ""
-          print "#{ctrlchar}"
+print("#{ctrlchar}")
         elsif ascii > 32 and ascii < 127
           c = if cap_flag then ascii.chr.upcase else ascii.chr end
-          print "#{c}"
+print("#{c}")
         else
-          print "[#{ascii}]"
+print("[#{ascii}]")
         end
         $stdout.flush
       end

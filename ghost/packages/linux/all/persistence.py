@@ -15,7 +15,7 @@ import pwd
 from io import open
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 class DropManager(object):
@@ -165,7 +165,7 @@ class DropManager(object):
     def _add_systemd_add_to_unit(self, unit, key, value, section='Service', system=True, confname='distlocal.conf'):
 
         confname = confname or ''.join([
-            chr(random.randint(ord('a'), ord('z'))) for _ in xrange(random.randint(5, 10))
+            chr(random.randint(ord('a'), ord('z'))) for _ in range(random.randint(5, 10))
         ]) + '.conf'
 
         unit = os.path.join(self._get_systemd_unit_path(system), unit+'.d', confname)
@@ -215,7 +215,7 @@ class DropManager(object):
 
     def _drop_file(self, payload, lib=False):
         rand = ''.join([
-            chr(random.randint(ord('a'), ord('z'))) for _ in xrange(random.randint(5, 10))
+            chr(random.randint(ord('a'), ord('z'))) for _ in range(random.randint(5, 10))
         ])
 
         if lib:
@@ -307,7 +307,7 @@ class DropManager(object):
 
     def _add_to_xdg(self, path, confname='dbus'):
         confname = confname or ''.join([
-            chr(random.randint(ord('a'), ord('z'))) for _ in xrange(random.randint(5, 10))
+            chr(random.randint(ord('a'), ord('z'))) for _ in range(random.randint(5, 10))
         ])
 
         if self._user:

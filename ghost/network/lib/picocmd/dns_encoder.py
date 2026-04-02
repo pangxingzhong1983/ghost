@@ -148,7 +148,7 @@ class Huffman(object):
             return i - 1
 
         def _walk(tree, prefix=1):
-            if type(tree) == tuple:
+            if isinstance(tree, tuple):
                 _walk(tree[0], (prefix << 1) | 0)
                 _walk(tree[1], (prefix << 1) | 1)
             else:
@@ -311,7 +311,7 @@ class Huffman(object):
             if root is None:
                 return
 
-            elif type(root) == Root:
+            elif isinstance(root, Root):
                 return (
                     _make_tree(root.A, (prefix << 1) | 0),
                     _make_tree(root.B, (prefix << 1) | 1)
@@ -390,7 +390,7 @@ class DnsEncoder(object):
             generic_encoded_tables = list(encoded_tables)
             generic_encoded_tables.append(self.TABLE_GENERIC)
 
-            for merged_parts in xrange(2, len(rest)+1):
+            for merged_parts in range(2, len(rest)+1):
                 joined_rest = '.'.join(rest[:merged_parts])
                 not_joined_rest = rest[merged_parts:]
 
@@ -460,7 +460,7 @@ class DnsEncoder(object):
         tables = []
         tables_cnt = (tables_map_encoded >> 6) & 0b11
 
-        for idx in xrange(tables_cnt):
+        for idx in range(tables_cnt):
             tables.insert(0, (tables_map_encoded >> (idx * 2)) & 0b11)
 
         for table in tables:

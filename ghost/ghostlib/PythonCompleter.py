@@ -33,7 +33,7 @@ class PythonCompleter:
 
     def var_matches(self, text):
         import re
-        m = re.match(r"(\w*)", text)
+        m = re.match(r"(\\w*)", text)
         if not m:
             return []
         words=[x for x in self.local_ns if x.startswith(m.group(1))]
@@ -54,7 +54,7 @@ class PythonCompleter:
         """
         import re
         bsw="[a-zA-Z0-9_\\(\\)\\[\\]\"']"
-        m = re.match(r"(\w+(\.\w+)*)\.(\w*)".replace(r"\w",bsw), text)
+        m = re.match(r"(\\w+(\\.\\w+)*)\\.(\\w*)".replace(r"\\w",bsw), text)
         if not m:
             return []
 
@@ -64,7 +64,7 @@ class PythonCompleter:
                 thisobject = eval(expr, self.global_ns, self.local_ns)
             except NameError:
                 """
-                print str(e)
+print(str(e))
                 try:
                     exec "import %s"%expr in global_ns, self.local_ns
                     thisobject = eval(expr, global_ns, self.local_ns)
@@ -88,7 +88,7 @@ class PythonCompleter:
         for word in words:
             if word[:n] == attr and hasattr(thisobject, word):
                 val = getattr(thisobject, word)
-                word = self._callable_postfix(val, "%s.%s" % (expr, word))
+                word = self._callable_postfix(val, "{}.{}".format(expr, word))
                 matches.append(word)
         return matches
 

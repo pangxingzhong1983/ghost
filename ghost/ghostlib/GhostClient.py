@@ -30,10 +30,6 @@
 # POSSIBILITY OF SUCH DAMAGE
 # --------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import zlib
 
@@ -595,7 +591,7 @@ class GhostClient(object):
             compressed=True,
             # Use None to prevent import-then-clean-then-search behavior
             name=(
-                None if type(requirements) != str else requirements
+                None if not isinstance(requirements, str) else requirements
             )
         )
 

@@ -44,7 +44,7 @@ def dump(src, length=8):
        s,src = src[:length],src[length:]
        hexa = ' '.join(["%02X"%ord(x) for x in s])
        s = s.translate(FILTER)
-       result += "%04X   %-*s   %s\n" % (N, length*3, hexa, s)
+       result += f"{N:04X}   {hexa:<{length*3}}   {s}\n"
        N+=length
     return result
 

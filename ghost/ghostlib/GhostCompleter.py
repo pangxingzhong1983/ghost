@@ -30,7 +30,7 @@ from .GhostErrors import GhostModuleExit, GhostModuleUsageError
 from .payloads.dependencies import paths
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 def package_completer(module, args, text, context):
@@ -265,7 +265,7 @@ class GhostModCompleter(object):
         i = 0
         omit = 0
 
-        for i in xrange(0, ltab):
+        for i in range(0, ltab):
             if i >= omit:
                 if i-omit >= posmax:
                     return posmax, True

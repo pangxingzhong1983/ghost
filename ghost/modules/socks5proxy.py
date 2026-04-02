@@ -171,21 +171,21 @@ class Socks5RequestHandler(BaseRequestHandler):
             return
 
         #now we have all we need, we can open the socket proxyfied through rpyc :)
-        self.server.module.info("connecting to %s:%s ..."%(DST_ADDR,DST_PORT))
+        self.server.module.info(f"connecting to {DST_ADDR}:{DST_PORT} ...")
         rsocket_mod=self.server.rpyc_client.conn.modules.socket
         rsocket=rsocket_mod.socket(rsocket_mod.AF_INET,rsocket_mod.SOCK_STREAM)
         rsocket.settimeout(5)
         try:
             rsocket.connect((DST_ADDR, DST_PORT))
         except Exception as e:
-            self.server.module.error("error %s connecting to %s:%s ..."%(str(e),DST_ADDR,DST_PORT))
+            self.server.module.error(f"error {str(e)} connecting to {DST_ADDR}:{DST_PORT} ...")
             if e[0]==10060:
                 self._socks_response(CODE_HOST_UNREACHABLE, terminate=True)
             else:
                 self._socks_response(CODE_NET_NOT_REACHABLE, terminate=True)
             return
         self._socks_response(CODE_SUCCEEDED)
-        self.server.module.success("connection to %s:%s succeed !"%(DST_ADDR,DST_PORT))
+        self.server.module.success(f"connection to {DST_ADDR}:{DST_PORT} succeed !")
 
         #self.request.settimeout(30)
         #rsocket.settimeout(30)
@@ -196,7 +196,7 @@ class Socks5RequestHandler(BaseRequestHandler):
         sp2.start()
         sp1.join()
         sp2.join()
-        self.server.module.info("conn to %s:%s closed"%(DST_ADDR,DST_PORT))
+        self.server.module.info(f"conn to {DST_ADDR}:{DST_PORT} closed")
 
 class Socks5Server(TCPServer):
     allow_reuse_address = True

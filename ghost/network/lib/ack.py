@@ -3,7 +3,7 @@
 # Event (cond var) is simply to complex for our dumb case
 # for c in ( Event, Ack ):
 #     start = time.time()
-#     for x in xrange(1000000):
+#     for x in range(1000000):
 #         a = c()
 #         a.is_set()
 #         a.set()

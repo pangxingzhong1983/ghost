@@ -22,7 +22,7 @@ from collections import namedtuple
 
 if sys.version_info.major > 2:
     from queue import Queue, Empty
-    xrange = range
+    range = range
     basestring = str
     ints = int
 
@@ -30,7 +30,7 @@ if sys.version_info.major > 2:
         return x
 else:
     from Queue import Queue, Empty
-    ints = (int, long)
+    ints = (int, int)
 
     def bval(x):
         return ord(x)
@@ -64,7 +64,7 @@ class Context(object):
 CODE_SUCCEEDED, CODE_GENERAL_SRV_FAILURE, CODE_CONN_NOT_ALLOWED, \
     CODE_NET_NOT_REACHABLE, CODE_HOST_UNREACHABLE, CODE_CONN_REFUSED, \
     CODE_TTL_EXPIRED, CODE_COMMAND_NOT_SUPPORTED, \
-    CODE_ADDRESS_TYPE_NOT_SUPPORTED, CODE_UNASSIGNED = xrange(10)
+    CODE_ADDRESS_TYPE_NOT_SUPPORTED, CODE_UNASSIGNED = range(10)
 
 ERRNO_TO_SOCKS5 = {
     errno.ECONNREFUSED: CODE_CONN_REFUSED,
@@ -77,13 +77,13 @@ ERRNO_TO_SOCKS5 = {
     -1: CODE_CONN_REFUSED
 }
 
-CMD_CONNECT, CMD_BIND, CMD_UDP_ASSOCIATE = xrange(1, 4)
+CMD_CONNECT, CMD_BIND, CMD_UDP_ASSOCIATE = range(1, 4)
 
-METHOD_NO_AUTH, METHOD_GSSAPI, METHOD_PASSWORD, METHOD_IANA = xrange(4)
+METHOD_NO_AUTH, METHOD_GSSAPI, METHOD_PASSWORD, METHOD_IANA = range(4)
 METHOD_RESERVED = 0x80
 METHOD_NO_ACCEPTABLE_METHOD = 0xFF
 
-ADDR_IPV4, _, ADDR_HOSTNAME, ADDR_IPV6 = xrange(1, 5)
+ADDR_IPV4, _, ADDR_HOSTNAME, ADDR_IPV6 = range(1, 5)
 
 
 def get_id():
@@ -415,7 +415,7 @@ class Acceptor(object):
             self.socket = pyuv.TCP(self.loop)
 
     def start(self):
-        if not os.name == 'nt' and type(self.socket) == pyuv.Pipe:
+        if not os.name == 'nt' and isinstance(self.socket, pyuv.Pipe):
             try:
                 fd = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM, 0)
                 if self.local_address[0] == '@':
@@ -435,7 +435,7 @@ class Acceptor(object):
             logger.error('_on_connection: %s', error)
             return
 
-        if type(self.socket) == pyuv.TCP:
+        if isinstance(self.socket, pyuv.TCP):
             client = pyuv.TCP(self.loop)
         else:
             client = pyuv.Pipe(self.loop, True)
@@ -629,7 +629,7 @@ class Acceptor(object):
             self.neighbor.stop(dead=True)
 
     def close(self):
-        if type(self.socket) == pyuv.Pipe:
+        if isinstance(self.socket, pyuv.Pipe):
             try:
                 if os.path.exists(self.local_address):
                     os.unlink(self.local_address)

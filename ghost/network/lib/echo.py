@@ -26,7 +26,7 @@ from ghost.network.lib.scan import scan, TOP1000
 from ghost.network.lib.tinyhttp import NullHandler
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 MAGIC = b'\xDE\xAD\xBE\xEF'
@@ -106,7 +106,7 @@ class EchoScanTcp(object):
             sock.settimeout(self.timeout)
 
             payload = MAGIC + b''.join(
-                choice(letters) for i in xrange(64))
+                choice(letters) for i in range(64))
 
             sock.send(payload)
             response = sock.recv(len(payload))
@@ -144,7 +144,7 @@ def udp(host, timeout=10, amount=10, abort=None):
             s.connect((host, port))
 
             payload = MAGIC + ''.join(
-                choice(letters) for i in xrange(64))
+                choice(letters) for i in range(64))
 
             datas[s] = (port, payload, time())
             try:
@@ -189,7 +189,7 @@ def tcp(host, timeout=10, amount=10, abort=None):
     tcp_context = EchoScanTcp(timeout)
 
     top_ports = list(TOP1000)
-    low_ports = list(x for x in xrange(1, 65535) if x not in top_ports)
+    low_ports = list(x for x in range(1, 65535) if x not in top_ports)
 
     shuffle(top_ports)
     shuffle(low_ports)

@@ -101,7 +101,7 @@ class PwdMon(ghost.Task):
                     try:
                         for x in mw.mem_search(regex, ftype='re'):
                             passwd = None
-                            if type(x) == tuple:
+                            if isinstance(x, tuple):
                                 for i in x:
                                     try:
                                         passwd = i.read(type="string", maxlen=100, errors='ignore')

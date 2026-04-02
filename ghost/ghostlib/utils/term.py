@@ -80,7 +80,7 @@ if sys.version_info.major > 2:
 
         return stdout
 
-    xrange = range
+    range = range
     unicode = str
 
 else:

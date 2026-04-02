@@ -64,7 +64,7 @@ from .picocmd import (
 
 from ghost.network.lib.transports.cryptoutils import ECPV
 from ghost.network.lib.compat import (
-    as_byte, is_int, is_str, xrange
+    as_byte, is_int, is_str, range
 )
 
 blocks_logger = logger.getChild('whitelist')
@@ -749,7 +749,7 @@ class DnsCommandServerHandler(BaseResolver):
         response = []
 
         for idx, part in enumerate([
-                payload[i:i+3] for i in xrange(0, len(payload), 3)]):
+                payload[i:i+3] for i in range(0, len(payload), 3)]):
             header = (random.randint(1, 3) << 30)
             idx = idx << 25
             bits = (struct.unpack('>I', b'\x00'+part+as_byte(
@@ -791,12 +791,12 @@ class DnsCommandServerHandler(BaseResolver):
         response = []
 
         for idx, part in enumerate([
-                payload[i:i+15] for i in xrange(0, len(payload), 15)]):
+                payload[i:i+15] for i in range(0, len(payload), 15)]):
             packed = struct.pack('B', idx) + part
             if len(packed) < 16:
                 packed = packed + b'\x00' * (16 - len(packed))
             addr = ':'.join([
-                packed[i:i+2].encode('hex') for i in xrange(0, len(packed), 2)
+                packed[i:i+2].encode('hex') for i in range(0, len(packed), 2)
             ])
             response.append(addr)
 
@@ -1286,7 +1286,7 @@ class DnsCommandServerHandler(BaseResolver):
 
         except DnsPingRequest as e:
             replies = []
-            for i in xrange(e.args[0]):
+            for i in range(e.args[0]):
                 x = (i % 65535) >> 8
                 y = i % 255
                 template = '127.0.{}.{}'
@@ -1340,7 +1340,7 @@ class DnsCommandServerHandler(BaseResolver):
         gen_csum = encoder.gen_csum if version > 1 else None
         total = len(responses)
 
-        for postpone in xrange(total):
+        for postpone in range(total):
             to_send = responses[:total-postpone]
 
             try:

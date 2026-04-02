@@ -205,15 +205,15 @@ class GhostJob(object):
                 event(ON_JOB_EXIT, module.client, self.pupsrv, **kwargs)
 
                 if e:
-                    self.pupsrv.info('<jid={}/cid={}> - error: {}'.format(self.id, module.client.id, e))
+                    self.pupsrv.info(f'<jid={self.id}/cid={module.client.id}> - error: {e}')
                 elif self.interrupted:
-                    self.pupsrv.info('<jid={}/cid={}> interrupted'.format(self.id, module.client.id))
+                    self.pupsrv.info(f'<jid={self.id}/cid={module.client.id}> interrupted')
                 else:
-                    self.pupsrv.info('<jid={}/cid={}> done'.format(self.id, module.client.id))
+                    self.pupsrv.info(f'<jid={self.id}/cid={module.client.id}> done')
 
     def start(self, once=False):
         #if self.started.is_set():
-        #    raise RuntimeError("job %s has already been started !"%str(self))
+        #    raise RuntimeError(f"job {str(self)} has already been started !")
 
         for m in self.ghostmodules:
 
@@ -228,7 +228,7 @@ class GhostJob(object):
                 comp_exp = "reason not precised"
 
             if not comp:
-                m.error("Compatibility error : %s"%comp_exp)
+                m.error(f"Compatibility error : {comp_exp}")
                 continue
 
             self.worker_pool.apply_async(self.module_worker, (m, once))
@@ -237,7 +237,7 @@ class GhostJob(object):
 
     def interrupt(self):
         if not self.started:
-            raise RuntimeError("can't interrupt. job %s has not been started"%str(self))
+            raise RuntimeError(f"can't interrupt. job {str(self)} has not been started")
 
         if self.interrupted:
             return True
@@ -288,8 +288,7 @@ class GhostJob(object):
                     continue
 
                 except (AsyncResultTimeout, ReferenceError, EOFError) as e:
-                    logging.error('connection {} seems blocked ({}), reinitialising...'.format(
-                        m.client.short_name(), e))
+                    logging.error(f'connection {m.client.short_name()} seems blocked ({e}), reinitialising...')
 
                     try:
                         m.client.conn._conn.close()
@@ -316,5 +315,5 @@ class GhostJob(object):
     def __str__(self):
         name = self.name
         if self.id:
-            name = '{} (id={})'.format(name, self.id)
+            name = f'{name} (id={self.id})'
         return name

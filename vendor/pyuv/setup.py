@@ -11,7 +11,7 @@ from setup_libuv import libuv_build_ext
 
 
 def get_version():
-    return re.search(r"""__version__\s+=\s+(?P<quote>['"])(?P<version>.+?)(?P=quote)""", open('pyuv/_version.py').read()).group('version')
+    return re.search(r"""__version__\\\\s+=\\\\s+(?P<quote>['"])(?P<version>.+?)(?P=quote)""", open('pyuv/_version.py').read()).group('version')
 
 
 setup(name             = 'pyuv',

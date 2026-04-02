@@ -82,7 +82,7 @@ class InteractiveShell(GhostModule):
         try:
             new, ps = acquire_shell(cmdline, term, args.su)
         except Exception as e:
-            self.error(' '.join(x for x in e.args if type(x) == str))
+            self.error(' '.join(x for x in e.args if isinstance(x, str)))
             return
 
         if not ps:

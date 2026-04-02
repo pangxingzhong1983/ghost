@@ -39,7 +39,7 @@ from ghost.network.lib import getLogger
 logger = getLogger('dnscnc')
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 
 class DNSCommandClientLauncher(DnsCommandsClient):
@@ -127,7 +127,7 @@ class DNSCommandClientLauncher(DnsCommandsClient):
                 logger.exception(e)
 
     def _checkconnect_worker(self, host, port_start, port_end):
-        ports = xrange(port_start, port_end+1)
+        ports = range(port_start, port_end+1)
         connectable = scan([str(host)], ports)
         while connectable:
             chunk = [x[1] for x in connectable[:5]]

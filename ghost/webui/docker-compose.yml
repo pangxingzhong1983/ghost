@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # Ghost WebUI 服务
+  ghost-webui:
+    build: .
+    container_name: ghost-webui
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - ghost-websocket
+
+  # Ghost WebSocket 服务
+  ghost-websocket:
+    build:
+      context: ..
+      dockerfile: ghost-webui/Dockerfile.websocket
+    container_name: ghost-websocket
+    restart: always
+    ports:
+      - "8766:8766"
+    volumes:
+      - ./data:/app/data

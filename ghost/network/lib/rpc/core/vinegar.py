@@ -174,11 +174,11 @@ def load(
             cls = None
 
     if cls is None:
-        fullname = "%s.%s" % (modname, clsname)
+        fullname = f"{modname}.{clsname}"
         # py2: `type()` expects `str` not `unicode`!
         fullname = str(fullname)
         if fullname not in _generic_exceptions_cache:
-            fakemodule = {"__module__": "%s/%s" % (__name__, modname)}
+            fakemodule = {f"__module__": "{}/{}" % (__name__, modname)}
             if isinstance(GenericException, ClassType):
                 _generic_exceptions_cache[fullname] = ClassType(
                     fullname, (GenericException,), fakemodule

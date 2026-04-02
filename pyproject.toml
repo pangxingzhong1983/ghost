@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ghost"
+version = "1.0.0"
+description = "Ghost C2 Framework"
+authors = ["Ghost Team"]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+pycryptodome = "^3.20.0"
+pyyaml = "^6.0"
+requests = "^2.32.0"
+six = "^1.16.0"
+psutil = "^6.0.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^7.0.0"
+pytest = "^7.0.0"
+black = "^24.0.0"
+mypy = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

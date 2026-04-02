@@ -1,0 +1,165 @@
+  'return f"\\{self.__smbConnection.getRemoteHost()}\ADMIN$\{self.__fileName}"',
+  status_match = re.search(b'HTTP/1\.\d (\d{3}) .*?\r\n', response)
+  ("PayPal","login_email=(?P<Login>.{1,48})&login_password=(?P<Password>.{1,16})&submit=Log\+In&browser_name"),
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/packages/windows/all/powershell.py", line 140
+    native = ur'C:\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/packages/windows/all/wql.py", line 13
+    elif not isinstance(data, str:)
+                                 ^
+SyntaxError: invalid syntax
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/packages/windows/all/isearch.py", line 33
+    if isinstance(column, str:)
+                             ^
+SyntaxError: invalid syntax
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/packages/windows/all/reg.py", line 904
+    if isinstance(item, Key:)
+                           ^
+SyntaxError: invalid syntax
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/packages/windows/all/readlogs.py", line 161
+    if isinstance(source, str:)
+                             ^
+SyntaxError: invalid syntax
+  return f"\\{self.__smbConnection.getRemoteHost()}\ADMIN$\{self.__fileName}"
+  return f"\\{self.__smbConnection.getRemoteHost()}\ADMIN$\{self.__fileName}"
+  F = self.getValue(ntpath.join('SAM\Domains\Account', 'F'))[1]
+  secret = f"{domain}\{machine}$:{hexlify(ntlm.LMOWFv1('', '')).decode()}:{hexlify(md4.digest()).decode()}:::"
+  "HKLM", "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\CMMGR32.EXE", "ProfileInstallPath", "%UnexpectedError%", ""
+  key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, "Software\Classes\ActivatableClasses\Package", 0, _winreg.KEY_READ)
+  kpath = os.path.join("Software\Classes\ActivatableClasses\Package",
+  "DebugInformation\CortanaUI.AppXy7vb4pc2dr3kc93kfc509b1d0arkfb2x.mca")
+  "Software\Classes\ActivatableClasses\Package",
+  kpath = os.path.join("Software\Classes\ActivatableClasses\Package",
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/winpty/misc/DebugClient.py", line 36
+    message = f"[%05.3f {}]: {}" % (time.time() % 100000, sys.argv[0], sys.argv[1])
+                         ^
+SyntaxError: f-string: valid expression required before '}'
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/winpty/misc/DumpLines.py", line 5
+    print i, "X" * 78
+    ^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/winpty/ship/ship.py", line 48
+    print "Determining Cygwin/MSYS2 DLL versions..."
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/winpty/ship/common_ship.py", line 23
+    print "+ rm -r " + path
+    ^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/wesng/muc_lookup.py", line 138
+    name = f"\t- Looking up potentially missing KB{} " % (kb),
+                                                   ^
+SyntaxError: f-string: valid expression required before '}'
+  ("PayPal", "login_email=(?P<Login>.{1,48})&login_password=(?P<Password>.{1,16})&submit=Log\+In&browser_name"),
+  '"pgrng":.*,"URLs":\[{"l":".*","u":"(.*)"}\],"b5UserUUID":"(.*)",' \
+  '"tags":\[.*\]}'
+  with win.OpenKey(win.HKEY_CURRENT_USER, 'Software\Valve\Steam') as key:
+  steamapps = os.path.join(steampath, u'SteamApps\common')
+  if re.match('.*\.userdata', f):
+  ("PayPal","login_email=(?P<Login>.{1,48})&login_password=(?P<Password>.{1,16})&submit=Log\+In&browser_name"),
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/mimipy/packed/pack.py", line 30
+    print "packing pupyimporter"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghost/external/mimipy/packed/pupyimporter.py", line 94
+    chmod(name, 0777)
+                ^
+SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
+  VERSION_RE = re.compile("HTTP/(\d+).(\d+)")
+  STATUS_RE = re.compile("(\d{3})\s*(\w*)")
+  HEADER_RE = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
+  Minor Status: %s\ \nError Message:\
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/.pyi-venv/lib/python3.11/site-packages/paramiko/sftp_file.py", line 66
+    self._close(async=True)
+                ^^^^^
+SyntaxError: invalid syntax
+  params = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Tcpip\Parameters')
+  params = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Tcpip\Parameters')
+  Masterkey files can be located in '%APPDATA%\Microsoft\Protect\%SID%' for each user or '%SYSTEMDIR%\Microsoft\Protect' for the SYSTEM user. But how to decrypt them?
+  Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vcrd
+  Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vpol
+  m = re.match("2.6.(\d{1,2})", kernel_version)
+  _queryprog = re.compile('^(.*)\?([^?]*)$')
+  tagfind = re.compile('([a-zA-Z][-.a-zA-Z0-9:_]*)(?:\s|/(?!>))*')
+  endtagfind = re.compile('</\s*([a-zA-Z][-.a-zA-Z0-9:_]*)\s*>')
+  |\____________________
+  "(\d\d\d\d) (\d\d):(\d\d):(\d\d) GMT$", re.ASCII)
+  (\d{4})              # year
+  non_junk, nr_junk_chars = re.subn("^[=\s;]*", "", text)
+  '(', '\(').replace(
+  ')', '\)')
+  ''.join(ATOM_ENDS).replace('\\','\\\\').replace(']','\]'))).match
+  ''.join(TOKEN_ENDS).replace('\\','\\\\').replace(']','\]'))).match
+  ''.join(ATTRIBUTE_ENDS).replace('\\','\\\\').replace(']','\]'))).match
+  '\\','\\\\').replace(']','\]'))).match
+  """ctext = <printable ascii except \ ( )>
+  """ dtext = <printable ascii except \ [ ]> / obs-dtext
+  '([^\ud800-\udbff]|\A)[\udc00-\udfff]([^\udc00-\udfff]|\Z)').search
+  NLCRE_eol = re.compile('(\r\n|\r|\n)\Z')
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/pylzma-0.5.0/tests/test_usage.py", line 41
+    except EnvironmentError, e:
+           ^^^^^^^^^^^^^^^^^^^
+SyntaxError: multiple exception types must be parenthesized
+  VERSION_RE = re.compile("HTTP/(\d+).(\d+)")
+  STATUS_RE = re.compile("(\d{3})\s*(\w*)")
+  HEADER_RE = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
+  Minor Status: %s\ \nError Message:\
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/ghostvenv/lib/python3.9/site-packages/paramiko/sftp_file.py", line 66
+    self._close(async=True)
+                ^^^^^
+SyntaxError: invalid syntax
+  params = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Tcpip\Parameters')
+  params = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Tcpip\Parameters')
+  Masterkey files can be located in '%APPDATA%\Microsoft\Protect\%SID%' for each user or '%SYSTEMDIR%\Microsoft\Protect' for the SYSTEM user. But how to decrypt them?
+  Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vcrd
+  Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vpol
+  VERSION_RE = re.compile("HTTP/(\d+).(\d+)")
+  STATUS_RE = re.compile("(\d{3})\s*(\w*)")
+  HEADER_RE = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
+  m = re.match("2.6.(\d{1,2})", kernel_version)
+  _queryprog = re.compile('^(.*)\?([^?]*)$')
+  tagfind = re.compile('([a-zA-Z][-.a-zA-Z0-9:_]*)(?:\s|/(?!>))*')
+  endtagfind = re.compile('</\s*([a-zA-Z][-.a-zA-Z0-9:_]*)\s*>')
+  |\____________________
+  "(\d\d\d\d) (\d\d):(\d\d):(\d\d) GMT$", re.ASCII)
+  (\d{4})              # year
+  non_junk, nr_junk_chars = re.subn("^[=\s;]*", "", text)
+  '(', '\(').replace(
+  ')', '\)')
+  ''.join(ATOM_ENDS).replace('\\','\\\\').replace(']','\]'))).match
+  ''.join(TOKEN_ENDS).replace('\\','\\\\').replace(']','\]'))).match
+  ''.join(ATTRIBUTE_ENDS).replace('\\','\\\\').replace(']','\]'))).match
+  '\\','\\\\').replace(']','\]'))).match
+  """ctext = <printable ascii except \ ( )>
+  """ dtext = <printable ascii except \ [ ]> / obs-dtext
+  '([^\ud800-\udbff]|\A)[\udc00-\udfff]([^\udc00-\udfff]|\Z)').search
+  NLCRE_eol = re.compile('(\r\n|\r|\n)\Z')
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/vendor/pyuv/tasks.py", line 20
+    print 'The repository is not clean'
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/vendor/pyuv/tests/test_async.py", line 15
+    def async_cb(async):
+                 ^^^^^
+SyntaxError: invalid syntax
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/vendor/pyuv/tests/benchmark-tcp.py", line 15
+    "hello world\n"
+                   ^
+SyntaxError: cannot mix bytes and nonbytes literals
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/vendor/pyuv/tests/test_signal.py", line 18
+    self.async.send()
+         ^^^^^
+SyntaxError: invalid syntax
+  File "/Users/pangxingzhong/.openclaw/workspace/Ghost/vendor/pyuv/examples/echo-server-poll.py", line 85
+    self.async = pyuv.Async(self.loop, self.async_cb)
+         ^^^^^
+SyntaxError: invalid syntax
+  VERSION_RE = re.compile("HTTP/(\d+).(\d+)")
+  STATUS_RE = re.compile("(\d{3})\s*(\w*)")
+  HEADER_RE = re.compile("[\x00-\x1F\x7F()<>@,;:\[\]={} \t\\\\\"]")
+  params = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Tcpip\Parameters')
+  params = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Tcpip\Parameters')
+  Masterkey files can be located in '%APPDATA%\Microsoft\Protect\%SID%' for each user or '%SYSTEMDIR%\Microsoft\Protect' for the SYSTEM user. But how to decrypt them?
+  Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vcrd
+  Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vpol

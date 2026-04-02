@@ -37,7 +37,7 @@ class Session(object):
         self.server_public_key = None
         self.aes_key = None
         self.encrypted = True
-        # 128-bytes-long strong random number
+        # 128-bytes-int strong random number
         self.my_private_key = int_from_bytes(os.urandom(0x80), 'big')
         self.my_public_key = pow(2, self.my_private_key, DH_PRIME_1024)
 

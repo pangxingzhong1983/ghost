@@ -1,6 +1,6 @@
 """
 **Brine** is a simple, fast and secure object serializer for **immutable** objects.
-The following types are supported: ``int``, ``long``, ``bool``, ``str``, ``float``,
+The following types are supported: ``int``, ``int``, ``bool``, ``str``, ``float``,
 ``unicode``, ``bytes``, ``slice``, ``complex``, ``tuple`` (of simple types),
 ``frozenset`` (of simple types) as well as the following singletons: ``None``,
 ``NotImplemented``, and ``Ellipsis``.
@@ -27,7 +27,7 @@ from __future__ import unicode_literals
 import logging
 
 from ghost.network.lib.compat import (
-    Struct, BytesIO, is_py3k, as_byte, xrange
+    Struct, BytesIO, is_py3k, as_byte, range
 )
 
 
@@ -79,11 +79,11 @@ F8 = Struct(">d")
 C16 = Struct(">dd")
 
 _dump_registry = tuple(
-    dict() for _ in xrange(MAX_REGISTERED_VERSION + 1)
+    dict() for _ in range(MAX_REGISTERED_VERSION + 1)
 )
 
 _load_registry = tuple(
-    ([None]*256) for _ in xrange(MAX_REGISTERED_VERSION + 1)
+    ([None]*256) for _ in range(MAX_REGISTERED_VERSION + 1)
 )
 
 
@@ -104,13 +104,13 @@ def register_named_tuple(code, ntype):
     REGISTERED_NAMED_TUPLES_PACK[ntype] = code
     REGISTERED_NAMED_TUPLES_UNPACK[code] = ntype
 
-    for ver in xrange(1, MAX_REGISTERED_VERSION + 1):
+    for ver in range(1, MAX_REGISTERED_VERSION + 1):
         _dump_registry[ver][ntype] = _dump_named_tuple
 
 
 def register(coll, key, min_version=0):
     def deco(func):
-        for version in xrange(min_version, MAX_REGISTERED_VERSION + 1):
+        for version in range(min_version, MAX_REGISTERED_VERSION + 1):
             if coll is _dump_registry:
                 _dump_registry[version][key] = func
 
@@ -259,7 +259,7 @@ else:
         stream.append(TAG_UNICODE)
         _dump_str(obj.encode('utf8'), stream, version)
 
-    @register(_dump_registry, long)
+    @register(_dump_registry, int)
     def _dump_long(obj, stream, version):
         stream.append(TAG_LONG)
         _dump_int(obj, stream, version)
@@ -270,7 +270,7 @@ else:
         items = len(obj)
         stream.append(I4.pack(items))
 
-        for item in obj.iteritems():
+        for item in obj.items():
             _dump(item, stream, version)
 
 
@@ -350,7 +350,7 @@ def _load_immutable_dict(stream, version):
     items, = I4.unpack(stream.read(4))
     dict_items = []
 
-    for _ in xrange(items):
+    for _ in range(items):
         dict_items.append(_load(stream, version))
 
     return dict(dict_items)
@@ -361,7 +361,7 @@ def _load_immutable_set(stream, version):
     items, = I4.unpack(stream.read(4))
     result = set()
 
-    for _ in xrange(items):
+    for _ in range(items):
         result.add(_load(stream, version))
 
     return result
@@ -372,7 +372,7 @@ def _load_immutable_list(stream, version):
     items, = I4.unpack(stream.read(4))
     result = list()
 
-    for _ in xrange(items):
+    for _ in range(items):
         result.append(_load(stream, version))
 
     return result
@@ -422,7 +422,7 @@ else:
     @register(_load_registry, TAG_LONG)
     def _load_long(stream, version):
         obj = _load(stream, version)
-        return long(obj)
+        return int(obj)
 
 
 @register(_load_registry, TAG_FLOAT)
@@ -503,13 +503,13 @@ def _load_tup4(stream, version):
 @register(_load_registry, TAG_TUP_L1)
 def _load_tup_l1(stream, version):
     obj_len, = I1.unpack(stream.read(1))
-    return tuple(_load(stream, version) for _ in xrange(obj_len))
+    return tuple(_load(stream, version) for _ in range(obj_len))
 
 
 @register(_load_registry, TAG_TUP_L4)
 def _load_tup_l4(stream, version):
     obj_len, = I4.unpack(stream.read(4))
-    return tuple(_load(stream, version) for _ in xrange(obj_len))
+    return tuple(_load(stream, version) for _ in range(obj_len))
 
 
 @register(_load_registry, TAG_SLICE)
@@ -584,7 +584,7 @@ if is_py3k:
     ])
 else:
     simple_types = frozenset([
-        type(None), int, long, bool, float, str, unicode, complex,
+        type(None), int, int, bool, float, str, unicode, complex,
         type(NotImplemented), type(Ellipsis)
     ])
 

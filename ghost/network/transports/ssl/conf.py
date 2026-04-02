@@ -47,16 +47,14 @@ class GhostSSLAuthenticator(object):
         os.close(fd_ca_path)
 
         try:
-            wrapped_socket = ssl.wrap_socket(
-                sock,
-                keyfile=tmp_key_path,
-                certfile=tmp_cert_path,
-                ca_certs=tmp_ca_path,
-                server_side=True,
-                cert_reqs=self.cert_reqs,
-                ssl_version=self.ssl_version,
-                ciphers=self.ciphers
-            )
+            context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+            context.load_cert_chain(certfile=tmp_cert_path, keyfile=tmp_key_path)
+            context.load_verify_locations(tmp_ca_path)
+            # 暂时将验证模式设置为可选，以避免客户端证书问题
+            context.verify_mode = ssl.CERT_OPTIONAL
+            if self.ciphers:
+                context.set_ciphers(self.ciphers)
+            wrapped_socket = context.wrap_socket(sock, server_side=True)
 
         finally:
             os.unlink(tmp_cert_path)

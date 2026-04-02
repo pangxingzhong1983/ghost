@@ -33,7 +33,7 @@ from ghost.agent import manager, Task
 
 if sys.version_info.major > 2:
     basestring = str
-    long = int
+    int = int
 
 DEFAULT_SHELL = None
 
@@ -81,7 +81,7 @@ def find_shell():
 def prepare(suid):
     if suid is not None:
         try:
-            if not isinstance(suid, (int, long)):
+            if not isinstance(suid, (int, int)):
                 userinfo = pwd.getpwnam(suid)
                 suid = userinfo.pw_uid
                 sgid = userinfo.pw_gid
@@ -270,7 +270,7 @@ class PtyShell(Task):
                 pass
 
             try:
-                if type(suid) == int:
+                if isinstance(suid, int):
                     info = pwd.getpwuid(suid)
                 else:
                     info = pwd.getpwnam(suid)

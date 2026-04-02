@@ -12,7 +12,7 @@ __all__ = (
     'is_py3k', 'maxint',
     'Struct', 'BytesIO', 'pickle', 'callable',
     'select_module', 'select', 'get_exc_errno',
-    'select_error', 'poll', 'xrange',
+    'select_error', 'poll', 'range',
     'is_str', 'is_int', 'is_bin',
     'as_byte', 'as_native_string'
 )
@@ -29,7 +29,7 @@ if is_py3k:
     exec('execute = exec')
 
     maxint = sys.maxsize
-    xrange = range
+    range = range
 
     def is_int(value):
         return isinstance(value, int)
@@ -41,7 +41,7 @@ if is_py3k:
         return bytes((value,))
 
 else:
-    from __builtin__ import xrange
+    from __builtin__ import range
 
     exec('''def execute(code, globals = None, locals = None):
                 exec code in globals, locals''')
@@ -49,7 +49,7 @@ else:
     maxint = sys.maxsize
 
     def is_int(value):
-        return isinstance(value, (int, long))
+        return isinstance(value, (int, int))
 
     def is_str(value):
         return isinstance(value, basestring)

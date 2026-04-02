@@ -56,7 +56,7 @@ from win32evtlog import (
 if version_info.major > 2:
     basestring = str
     unicode = str
-    long = int
+    int = int
 
 LANGID = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL)
 BLACKLIST = (
@@ -158,7 +158,7 @@ class EventLog(object):
 
                     dups.add(source)
 
-                    if type(source) == str:
+                    if isinstance(source, str):
                         source = source.decode(getdefaultencoding())
 
                     yield source
@@ -220,7 +220,7 @@ class EventLog(object):
 
     def get_events(self, logtype, server='', filter_event_id=None, fmt=True, filter_source=None):
         if filter_event_id is not None:
-            if isinstance(filter_event_id, (int, long)):
+            if isinstance(filter_event_id, (int, int)):
                 filter_event_id = {filter_event_id}
             elif isinstance(filter_event_id, basestring):
                 if ',' in filter_event_id:
@@ -273,7 +273,7 @@ class EventLog(object):
                     if fmt and ev_obj.SourceName not in self._formatters_cache \
                           and ev_obj.SourceName not in BLACKLIST:
                         source_name = ev_obj.SourceName
-                        if type(source_name) == str:
+                        if isinstance(source_name, str):
                             source_name = source_name.decode(getdefaultencoding())
 
                         subkey = u'SYSTEM\\CurrentControlSet\\Services\\EventLog\\{}\\{}'.format(

@@ -15,9 +15,9 @@ def size_human_readable(num, suffix=''):
         num = int(num)
         for unit in [suffix or 'B','K','M','G','T','P','E','Z']:
             if abs(num) < 1024.0:
-                return "%3.1f%s%s" % (num, unit, suffix)
+                return f"{num:3.1f}{unit}{suffix}"
             num /= 1024.0
-        return "%.1f%s%s" % (num, 'Yi', suffix)
+        return f"{num:.1f}Yi{suffix}"
     except:
         return '0.0B'
 

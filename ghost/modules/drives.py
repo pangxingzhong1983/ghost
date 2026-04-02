@@ -86,7 +86,7 @@ class Drives(GhostModule):
 
                 color = option_colors.get(k)
                 if color:
-                    if type(color) == dict:
+                    if isinstance(color, dict):
                         if v in color:
                             return colorize(
                                 '='.join([x for x in [k, v] if x]), color.get(v)

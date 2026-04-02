@@ -30,27 +30,21 @@
 # THE POSSIBILITY OF SUCH DAMAGE
 # --------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from threading import Thread, Event, Lock
 
-import imp
+import importlib
+import importlib.util
 import sys
 
 from os import path, listdir, stat, unlink
 from itertools import count
 
-if sys.version_info.major > 2:
-    from itertools import filterfalse
 
-    basestring = str
-    long = int
-
-else:
-    from itertools import ifilterfalse as filterfalse
 
 from netaddr import IPAddress
 from netaddr.core import AddrFormatError
@@ -128,7 +122,7 @@ class Listener(Thread):
 
         Thread.__init__(self)
         self.daemon = True
-        self.name = 'Listener({})'.format(name)
+        self.name = f'Listener({name})'
 
         self.igd = igd
         self.server = None
@@ -194,7 +188,7 @@ class Listener(Thread):
                     self.ipv6 = (address.version == 6) or default_ipv6
                 except Exception as e:
                     raise ListenerException(
-                        'Invalid IP: {} ({})'.format(ip, e)
+                        f'Invalid IP: {ip} ({e})'
                     )
 
             else:
@@ -234,21 +228,21 @@ class Listener(Thread):
                 self.external_port = int(port[0])
             except ValueError:
                 raise ListenerException(
-                    "Invalid external port: {}".format(port[0])
+                    f"Invalid external port: {port[0]}"
                 )
 
             try:
                 self.port = int(port[1])
             except ValueError:
                 raise ListenerException(
-                    "Invalid local port: {}".format(port[1])
+                    f"Invalid local port: {port}"
                 )
         else:
             try:
                 self.port = int(port)
             except ValueError:
                 raise ListenerException(
-                    "Invalid local port: {}".format(port[1])
+                    f"Invalid local port: {port}"
                 )
 
             self.external_port = self.port
@@ -268,7 +262,7 @@ class Listener(Thread):
             if val in transport_kwargs:
                 transport_kwargs[val] = opt_args[val]
             else:
-                logger.warning('Unknown transport argument: %s', val)
+                logger.warning(f'Unknown transport argument: {val}')
 
         self.kwargs = transport_kwargs
 
@@ -291,7 +285,7 @@ class Listener(Thread):
         authenticator = self.authenticator
 
         if self.pproxy:
-            if type(authenticator) == GhostSSLAuthenticator:
+            if isinstance(authenticator, GhostSSLAuthenticator):
                 extra = {
                     'certs': {
                         'ca': authenticator.castr,
@@ -305,7 +299,7 @@ class Listener(Thread):
             if stream == GhostUDPSocketStream:
                 stream = GhostKCPSocketStream
                 method = self.pproxy.kcp
-            elif type(authenticator) == GhostSSLAuthenticator:
+            elif isinstance(authenticator, GhostSSLAuthenticator):
                 method = self.pproxy.ssl
             elif stream == GhostSocketStream:
                 method = self.pproxy.tcp
@@ -351,7 +345,7 @@ class Listener(Thread):
                     self.external_port, self.port)
             except UPNPError as e:
                 logger.error(
-                    "Couldn't delete IGD Mapping: {}".format(e.description)
+                    f"Couldn't delete IGD Mapping: {e.description}"
                 )
             except Exception:
                 pass
@@ -371,40 +365,28 @@ class Listener(Thread):
             external = ''
 
         if self.port == 0:
-            return '{}: pproxy:{}:{}'.format(
-                self.name, external, self.external_port
-            )
+            return f'{self.name}: pproxy:{external}:{self.external_port}'
 
         result = str(self.port)
         if self.address:
-            result = '{}:{}'.format(
-                self.address if not self.ipv6 and ':' not in self.address
-                else '[{}]'.format(self.address),
-                self.port
-            )
+            result = f'{self.address if not self.ipv6 and ":" not in self.address else f"[{self.address}]"}:{self.port}'
 
         if self.external and not self.local and self.external != self.address:
             if not self.address:
-                result = '0.0.0.0:{}'.format(result)
+                result = f'0.0.0.0:{result}'
 
-            result = 'Remote: {}:{} -> Local: {}'.format(
-                external, self.external_port, result
-            )
+            result = f'Remote: {external}:{self.external_port} -> Local: {result}'
 
         if self.kwargs:
             result += ' ' + ' '.join(
-                '{}={}'.format(
-                    k, v if k != 'password' else '*'*len(v)
-                ) for k, v in self.kwargs.items())
+                f'{k}={v if k != "password" else "*"*len(v)}'
+                for k, v in self.kwargs.items())
 
-        return '{}: {}'.format(self.name, result)
+        return f'{self.name}: {result}'
 
 
 class GhostServer(object):
-    SUFFIXES = tuple([
-        suffix for suffix, _, rtype in imp.get_suffixes()
-        if rtype == imp.PY_SOURCE
-    ])
+    SUFFIXES = ('.py',)
 
     def __init__(self, config, credentials):
         self.httpd = None
@@ -465,20 +447,17 @@ class GhostServer(object):
                     pproxy_dnscnc = pproxy_manager
 
                 self.motd['ok'].append(
-                    'Offload Proxy: proxy={} external={}{}'.format(
-                        pproxy,
-                        pproxy_manager.external,
-                        ' via {}'.format(via) if via else ''))
+                    f'Offload Proxy: proxy={pproxy} external={pproxy_manager.external}{f" via {via}" if via else ""}')
 
             except (socket.error, OffloadProxyCommonError) as e:
                 self.motd['fail'].append(
-                    'Offload proxy unavailable: {}'.format(e)
+                    f'Offload proxy unavailable: {e}'
                 )
 
             except Exception as e:
                 logger.exception(e)
                 self.motd['fail'].append(
-                    'Using Ghost Offload Proxy: Failed: {}'.format(e)
+                    f'Using Ghost Offload Proxy: Failed: {e}'
                 )
 
         if self.config.getboolean('ghostd', 'httpd'):
@@ -502,7 +481,7 @@ class GhostServer(object):
                 if self.igd.available:
                     self.motd['ok'].append('IGDClient enabled')
             except UPNPError as e:
-                self.motd['fail'].append('IGDClient failed: {}'.format(e))
+                self.motd['fail'].append(f'IGDClient failed: {e}')
 
         self.dnscnc = None
 
@@ -522,7 +501,7 @@ class GhostServer(object):
                     server=self
                 )
             except Exception as e:
-                logger.exception('DnsCNC failed: %s', e)
+                logger.exception(f'DnsCNC failed: {e}')
 
     def get_listeners(self):
         return self.listeners
@@ -549,9 +528,7 @@ class GhostServer(object):
         if not self.pupweb:
             self.pupweb = GhostWebServer(self, self.config)
             self.pupweb.start()
-            self.display('WebServer started ({}:{}, webroot={})'.format(
-                self.pupweb.hostname, self.pupweb.port, self.pupweb.wwwroot),
-                motd=motd)
+            self.display(f'WebServer started ({self.pupweb.hostname}:{self.pupweb.port} webroot={self.pupweb.wwwroot})', motd=motd)
         else:
             self.display(
                 'WebServer already started', error=True, motd=motd)
@@ -579,7 +556,7 @@ class GhostServer(object):
 
                 if not dst_client:
                     raise ValueError(
-                        'Client with id {} not found'.format(dst_id)
+                        f'Client with id {dst_id} not found'
                     )
 
                 dst_client = dst_client[0]
@@ -593,7 +570,7 @@ class GhostServer(object):
 
                 if not src_client:
                     raise ValueError(
-                        'Client with id {} not found'.format(src_id)
+                        f'Client with id {src_id} not found'
                     )
 
                 src_client = src_client[0]
@@ -611,7 +588,7 @@ class GhostServer(object):
             try:
                 self._current_id.remove(int(id))
             except ValueError:
-                logger.debug('Id not found in current_id list: %s', id)
+                logger.debug(f'Id not found in current_id list: {id}')
 
     def register_handler(self, instance):
         """
@@ -632,11 +609,11 @@ class GhostServer(object):
         if not self.config.getboolean('ghostd', 'whitelist'):
             return True
 
-        if type(cid) in (int, long):
-            cid = '{:016x}'.format(cid)
+        if type(cid) in (int, int):
+            cid = f'{cid:016x}'
 
-        if type(nodeid) in (int, long):
-            nodeid = '{:012x}'.format(nodeid)
+        if type(nodeid) in (int, int):
+            nodeid = f'{nodeid:012x}'
 
         if not cid or not nodeid:
             return self.config.getboolean('ghostd', 'allow_by_default')
@@ -656,39 +633,17 @@ class GhostServer(object):
         client = None
 
         if conn.remote_is_purepy:
-            conn.execute(
-                'exec({})'.format(
-                    reprb(
-                            open(path.join(
-                                ROOT,
-                                "ghostlib",
-                                'GhostClientInitializer.py'
-                            ), 'r').read()
-                    )
-                )
-            )
+            code = open(path.join(ROOT, "ghostlib", 'GhostClientInitializer.py'), 'r').read()
+            conn.execute('exec({})'.format(reprb(code)))
         else:
-            conn.execute(
-                'import marshal;exec(marshal.loads({}))'.format(
-                    reprb(
-                        ghostcompile(
-                            path.join(
-                                ROOT,
-                                "ghostlib",
-                                'GhostClientInitializer.py'
-                            ),
-                            path=True, raw=True,
-                            target=conn.remote_version
-                        )
-                    )
-                )
-            )
+            compiled = ghostcompile(path.join(ROOT, "ghostlib", 'GhostClientInitializer.py'), path=True, raw=True, target=conn.remote_version)
+            conn.execute('import marshal;exec(marshal.loads({}))'.format(reprb(compiled)))
 
         uuid = obtain(conn.namespace['get_uuid']())
 
         if not self._whitelist(uuid.get('node'), uuid.get('cid')):
             blocks_logger.warning(
-                'Rejected: {} on {}'.format(uuid.get('cid'), uuid.get('node')))
+                f'Rejected: {uuid.get("cid")} on {uuid.get("node")}')
             conn._conn.close()
             return
 
@@ -747,7 +702,7 @@ class GhostServer(object):
                 if ':' in client_ip:
                     client_ip = '[' + client_ip + ']'
 
-                remote = ' ({}:{})'.format(client_ip, client_port)
+                remote = f' ({client_ip}:{client_port})'
 
                 user = client_info.get('user', '?')
 
@@ -757,9 +712,7 @@ class GhostServer(object):
 
                     user_info = user_info + '@' + hostname
 
-                self.info('Session {} opened ({}){}'.format(
-                    client_id, user_info, remote if client_port != 0 else '')
-                )
+                self.info(f'Session {client.desc["id"]} opened ({client_info.get("user", "?")}@{client_info.get("hostname", "?")}){remote}')
 
         if client and self.handler:
             event(ON_CONNECT, client, self, **client.desc)
@@ -768,7 +721,7 @@ class GhostServer(object):
         with self.clients_lock:
             client = [x for x in self.clients if (x.conn is conn or x is conn)]
             if not client:
-                logger.debug('No clients matches request: %s', conn)
+                logger.debug(f'No clients matches request: {conn}')
                 return
 
             client = client[0]
@@ -778,7 +731,7 @@ class GhostServer(object):
             self.clients.remove(client)
             self.free_id(client.desc['id'])
 
-            self.info('Session {} closed'.format(client.desc['id']))
+            self.info(f'Session {client.desc["id"]} closed')
 
     def get_clients(self, search_criteria):
         """
@@ -951,13 +904,15 @@ class GhostServer(object):
                 continue
 
             try:
-                module_object = imp.load_source(modname, modpath)
-                logger.debug('Load module %s', modname)
+                spec = importlib.util.spec_from_file_location(modname, modpath)
+                module_object = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module_object)
+                logger.debug(f'Load module {modname}')
                 self.modules[modname] = module_object
                 self._modules_stats[modname] = current_stats.st_mtime
 
             except IgnoreModule as e:
-                logger.debug('Ignore module %s: %s', modname, e)
+                logger.debug(f'Ignore module {modname}: {e}')
                 continue
 
             except Exception as e:
@@ -965,9 +920,7 @@ class GhostServer(object):
                 error = Line(
                     Error('Invalid module:'),
                     Color(modname, 'yellow'),
-                    'at ({}): {}. Traceback:\n{}'.format(
-                        modpath, e, tb
-                    )
+                    f'at ({modpath}): {e}. Traceback:\\n{tb}'
                 )
 
                 self.info(error, error=True)

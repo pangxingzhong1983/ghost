@@ -30,9 +30,9 @@ def query(sql, limit):
 
             line = []
             for cidx, column in enumerate(record):
-                if type(column) == str:
+                if isinstance(column, str):
                     column = column.decode(encoding)
-                elif type(column) == datetime.datetime:
+                elif isinstance(column, datetime.datetime):
                     column = int((
                         column - datetime.datetime.utcfromtimestamp(0)
                     ).total_seconds())

@@ -203,7 +203,7 @@ class ls(GhostModule):
                     for x in r[T_FILES]:
                         if args.userinfo:
                             uid = x.get(T_UID, '?')
-                            if type(uid) == int:
+                            if isinstance(uid, int):
                                 uid = str(uid)
 
                             if symbol_len(uid) > uid_len:
@@ -211,7 +211,7 @@ class ls(GhostModule):
 
                         if args.groupinfo:
                             gid = x.get(T_GID, '?')
-                            if type(gid) == int:
+                            if isinstance(gid, int):
                                 gid = str(gid)
 
                             if symbol_len(gid) > gid_len:
@@ -321,14 +321,14 @@ class ls(GhostModule):
 
                 if args.userinfo:
                     uid = r[T_FILE][T_UID]
-                    if type(uid) == int:
+                    if isinstance(uid, int):
                         uid = str(uid)
 
                     uid_len = symbol_len(uid)
 
                 if args.groupinfo:
                     gid = r[T_FILE][T_GID]
-                    if type(gid) == int:
+                    if isinstance(gid, int):
                         gid = str(gid)
 
                     gid_len = symbol_len(gid)

@@ -342,7 +342,7 @@ class LiveReader:
 		
 		logging.log(1, 'Getting build number')
 		#self.BuildNumber = GetVersionEx().dwBuildNumber #this one doesnt work reliably on frozen binaries :(((
-		key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\')
+		key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\')
 		buildnumber, t = winreg.QueryValueEx(key, 'CurrentBuildNumber')
 		self.BuildNumber = int(buildnumber)
 		

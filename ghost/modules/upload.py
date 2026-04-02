@@ -69,7 +69,7 @@ class UploaderScript(GhostModule):
             )
             return
 
-        self.success("file local:%s uploaded to remote:%s"%(localfile, remotefile))
+        self.success(f"file local:{localfile} uploaded to remote:{remotefile}")
 
         self.client.conn.modules['os'].chmod(
             remotefile,

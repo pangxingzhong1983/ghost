@@ -32,17 +32,21 @@ import errno
 import shutil
 import os
 
-from ghost.network.lib.convcompat import (
-    as_unicode_string, as_native_string
-)
+# from ghost.network.lib.convcompat import (
+#     as_unicode_string, as_native_string
+# )
+
+# 临时实现，后续需要从正确的位置导入
+as_unicode_string = str
+as_native_string = str
 
 from .GhostLogger import getLogger
 from ghost.ghostlib import ROOT
 logger = getLogger('config')
 
 if sys.version_info.major > 2:
-    long = int
-    xrange = range
+    int = int
+    range = range
 
 
 TAGS_SECTION = as_native_string('tags')
@@ -114,7 +118,7 @@ class GhostConfig(RawConfigParser):
                 os.makedirs(self.user_root)
             if not os.path.exists(self.user_path):
                 shutil.copyfile(self.default_file, self.user_path)
-                logger.info("No default ghost config file, creating one in {}".format(self.user_path))
+                logger.info(f"No default ghost config file creating one in {self.user_path}")
 
         self.files = [
             self.default_file,
@@ -130,15 +134,15 @@ class GhostConfig(RawConfigParser):
                 self.read_file(open(file, 'r'))
 
                 logger.info(
-                    'Loaded config data from %s', file
+                    f'Loaded config data from {file}'
                 )
             except (IOError, OSError) as e:
                 if e.errno == errno.EEXIST:
                     pass
 
     def tags(self, node):
-        if type(node) in (int, long):
-            node = '{:012x}'.format(node)
+        if type(node) in (int, int):
+            node = f'{node:012x}'
 
         return Tags(self, node)
 
@@ -178,7 +182,7 @@ class GhostConfig(RawConfigParser):
             with open(self.project_path, 'w') as config:
                 self.write(config)
 
-            logger.info('Config saved to %s', self.project_path)
+            logger.info(f'Config saved to {self.project_path}')
 
         if user:
             user_dir = path.dirname(self.user_path)
@@ -188,7 +192,7 @@ class GhostConfig(RawConfigParser):
             with open(self.user_path, 'w') as config:
                 self.write(config)
 
-            logger.info('Config saved to %s', self.user_path)
+            logger.info(f'Config saved to {self.user_path}')
 
     def get_path(self, filepath, substitutions={}, create=True, dir=False):
         prefer_workdir = self.getboolean(PATHS_SECTION, 'prefer_workdir')
@@ -247,9 +251,7 @@ class GhostConfig(RawConfigParser):
         elif not dir and path.isfile(retfilepath):
             return path.abspath(retfilepath)
         elif path.exists(retfilepath):
-            raise ValueError('{} is not a {}'.format(
-                path.abspath(retfilepath),
-                'dir' if dir else 'file'))
+            raise ValueError(f'{path.abspath(retfilepath)} is not a {"dir" if dir else "file"}')
         elif create:
             if dir:
                 makedirs(retfilepath)
@@ -305,7 +307,7 @@ class GhostConfig(RawConfigParser):
             try:
                 RawConfigParser.set(self, section, key, value)
             except NoSectionError:
-                logger.debug('Create new section {}'.format(section))
+                logger.debug(f'Create new section {section}')
                 RawConfigParser.add_section(self, section)
                 RawConfigParser.set(self, section, key, value)
 
@@ -349,7 +351,7 @@ class GhostConfig(RawConfigParser):
                         self.randoms[option] = ''.join(
                             random.choice(
                                 string.ascii_letters + string.digits
-                            ) for _ in xrange(random)
+                            ) for _ in range(random)
                         )
 
                 return self.randoms.get(option, None)

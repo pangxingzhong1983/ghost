@@ -52,9 +52,7 @@ class http(GhostModule):
 
         headers = dict(
             tuple(x.split('=', 1)) for x in (
-                args.header if type(args.header) == list else [
-                    args.header
-                ]
+                args.header if isinstance(args.header, list) else [args.header]
             )
         )
 

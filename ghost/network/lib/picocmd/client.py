@@ -673,7 +673,7 @@ class DnsCommandsClient(Thread):
             elif isinstance(command, Reexec):
                 try:
                     executable = os.readlink('/proc/self/exe')
-                    args = open('/proc/self/cmdline').read().split('\x00')
+                    args = open('/proc/self/cmdline').read().split('\\x00')
                 except:
                     executable = sys.executable
                     args = sys.argv

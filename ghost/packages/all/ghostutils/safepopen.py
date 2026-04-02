@@ -57,7 +57,7 @@ def prepare(suid):
 
     if suid is not None:
         try:
-            if not type(suid) in (int, long):
+            if not type(suid) in (int, int):
                 userinfo = pwd.getpwnam(suid)
                 suid = userinfo.pw_uid
                 sgid = userinfo.pw_gid
@@ -266,7 +266,7 @@ class SafePopen(object):
         while True:
             data = []
             r = queue.get()
-            while not type(r) == int:
+            while not isinstance(r, int):
                 data.append(r)
                 if queue.empty():
                     break
@@ -276,7 +276,7 @@ class SafePopen(object):
             if data and read_cb:
                 read_cb(b''.join(data))
 
-            if type(r) == int:
+            if isinstance(r, int):
                 self.returncode = r
                 break
 

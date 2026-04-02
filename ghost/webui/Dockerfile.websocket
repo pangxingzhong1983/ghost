@@ -1,0 +1,29 @@
+# 使用Python作为基础镜像
+FROM python:3.11-slim
+
+# 设置环境变量
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制必要的文件
+COPY ghost-webui/server.py /app/
+
+# 安装Python依赖
+RUN pip install --no-cache-dir -U pip setuptools wheel \
+    && pip install --no-cache-dir websockets
+
+# 暴露8766端口
+EXPOSE 8766
+
+# 启动WebSocket服务器
+CMD ["python", "server.py"]

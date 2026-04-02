@@ -59,10 +59,10 @@ if is_py3k:
     _builtin_types.extend([
         bytes, bytearray, type(iter(range(10))), memoryview,
     ])
-    xrange = range
+    range = range
 else:
     _builtin_types.extend([
-        basestring, unicode, long, xrange, type(iter(xrange(10))), file,
+        basestring, unicode, int, range, type(iter(range(10))), file,
         types.InstanceType, type, types.DictProxyType,
     ])
 
@@ -107,7 +107,7 @@ def asyncreq(proxy, handler, *args):
                     ``.protocol.consts``)
     :param args: arguments to the handler
 
-    :returns: an :class:`AsyncResult <.core.async.AsyncResult>` representing
+    :returns: an :class:`AsyncResult <.core.async_handle.AsyncResult>` representing
               the operation
     """
     conn = object.__getattribute__(proxy, "____conn__")()
@@ -126,9 +126,9 @@ class NetrefMetaclass(type):
 
     def __repr__(self):
         if self.__module__:
-            return "<netref class '%s.%s'>" % (self.__module__, self.__name__)
+            return f"<netref class '{self.__module__}.{self.__name__}'>"
         else:
-            return "<netref class '%s'>" % (self.__name__,)
+            return f"<netref class '{self.__name__}'>"
 
 
 class BaseNetref(object):

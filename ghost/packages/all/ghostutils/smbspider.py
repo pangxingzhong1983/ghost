@@ -198,7 +198,7 @@ class Spider():
                 smbspider.set_share(share)
                 try:
                     for res in smbspider.scanwalk(self.folder_to_spider, int(self.depth)):
-                        path = "%s/%s/%s" % (host, share, res)
+                        path = f"{host}/{share}/{res}"
                         path = path.replace('*/', '/').replace('//', '/')
                         yield path
                 except:
@@ -249,7 +249,7 @@ class Spider():
 #                 try:
 #                     for res in smbspider.scanwalk(self.folder_to_spider, int(self.depth)):
 #                         res = res.replace('*/', '/').replace('//', '/')
-#                         yield "%s/%s/%s" % (host, share, res)
+#                         yield f"{}/{}/{}" % (host, share, res)
 #                 except Exception, e:
 #                     if "STATUS_ACCESS_DENIED" in e.message:
 #                         pass

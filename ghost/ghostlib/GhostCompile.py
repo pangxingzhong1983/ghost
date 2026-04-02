@@ -24,7 +24,7 @@ except ValueError:
 
 if sys.version_info.major > 2:
 
-    xrange = range
+    range = range
     unicode = str
 
 
@@ -79,7 +79,7 @@ class Compiler(ast.NodeTransformer):
                 )
 
             if raw:
-                for i in xrange(8):
+                for i in range(8):
                     output[i] = 0
 
             return output
@@ -101,27 +101,27 @@ class Compiler(ast.NodeTransformer):
                         col_offset=node.col_offset
                     )
                 ]
-        if not self._main and type(node.test) == ast.Compare \
-            and type(node.test.left) == ast.Name \
-                and node.test.left.id == '__name__':
+        if not self._main and isinstance(node.test, ast.Compare) and \
+            isinstance(node.test.left, ast.Name) and \
+                node.test.left.id == '__name__':
             for comparator in node.test.comparators:
-                if type(comparator) == ast.Str and comparator.s == '__main__':
+                if isinstance(comparator, ast.Str) and comparator.s == '__main__':
                     return node.orelse
-        elif hasattr(node.test, 'operand') and type(node.test.op) == ast.Not \
-            and type(node.test.operand) == ast.Name and \
+        elif hasattr(node.test, 'operand') and isinstance(node.test.op, ast.Not) and \
+            isinstance(node.test.operand, ast.Name) and \
                 node.test.operand.id == '__debug__':
             return node.body
 
         return node
 
     def visit_Expr(self, node):
-        if type(node.value) == ast.Call and type(
-            node.value.func) == ast.Attribute and type(
-                node.value.func.value) == ast.Name and \
+        if isinstance(node.value, ast.Call) and isinstance(
+            node.value.func, ast.Attribute) and isinstance(
+                node.value.func.value, ast.Name) and \
                     node.value.func.value.id == 'logging' and \
                         node.value.func.attr == 'debug':
             return None
-        elif (type(node.value) == ast.Str):
+        elif isinstance(node.value, ast.Str):
             if not self._docstrings:
                 node.value.s = ""
 
@@ -131,10 +131,10 @@ class Compiler(ast.NodeTransformer):
         if self._docstrings:
             return node
 
-        if (type(node.value) == ast.Str) and all(
-                type(target) == ast.Name and target.id in (
+        if (isinstance(node.value, ast.Str) and all(
+                isinstance(target, ast.Name) and target.id in (
                     '__copyright__', '__doc__')
-                for target in node.targets):
+                for target in node.targets)):
             node.value.s = ''
 
         return node

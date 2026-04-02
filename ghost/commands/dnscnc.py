@@ -143,7 +143,7 @@ def do(server, handler, config, args):
             for node, commands in server.dnscnc.node_commands.items():
                 handler.display('\n' + '\n'.join([
                     '{:03d} {}: {}'.format(
-                        i, '{:012x}'.format(node) if type(node) == int else node, cmd
+                        i, '{:012x}'.format(node) if isinstance(node, int) else node, cmd
                     ) for i, cmd in enumerate(commands)
                 ]))
 

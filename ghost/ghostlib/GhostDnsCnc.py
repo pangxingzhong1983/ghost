@@ -454,7 +454,7 @@ class GhostDnsCnc(object):
                     raise ValueError('Listener for transport {} not found'.format(transport))
 
             else:
-                for candidate in listeners.itervalues():
+                for candidate in listeners.values():
                     if not candidate.local or (port and (
                             candidate.port == port or candidate.external_port == port)):
                         listener = candidate

@@ -1,0 +1,27 @@
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0;
+}
+
+.logo h1 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ant-layout-sider {
+  background: #001529;
+}
+
+.ant-layout-header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ant-layout-content {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+}

@@ -124,7 +124,7 @@ class AuthInfo(object):
         return value
 
     def __eq__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             return False
 
         return all(
@@ -140,7 +140,7 @@ class AuthInfo(object):
 
             value = getattr(self, key)
 
-            if type(value) == set:
+            if isinstance(value, set):
                 for item in value:
                     rethash <<= 1
                     rethash ^= hash(item)

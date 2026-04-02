@@ -211,7 +211,7 @@ class Connection(object):
 
     def __repr__(self):
         a, b = object.__repr__(self).split(" object ")
-        return "%s %r object %s" % (a, self._config["connid"], b)
+        return f"{a} %r object {self._config['connid']} {b}"
 
     #
     # IO
@@ -442,7 +442,7 @@ class Connection(object):
                     for (key, value) in value
                 }
 
-        raise ValueError("invalid label %r" % (label,))
+        raise ValueError(f"invalid label %r" % (label,))
 
     def _netref_factory(self, oid, clsname, modname):
         typeinfo = (clsname, modname)
@@ -528,7 +528,7 @@ class Connection(object):
         elif msg == consts.MSG_EXCEPTION:
             self._dispatch_exception(seq, args, version)
         else:
-            raise ValueError("invalid message type: %r" % (msg,))
+            raise ValueError(f"invalid message type: %r" % (msg,))
 
     def sync_recv_and_dispatch(self, timeout, wait_for_lock):
         # lock or wait for signal
@@ -566,7 +566,7 @@ class Connection(object):
         return self.sync_recv_and_dispatch(timeout, wait_for_lock=True)
 
     def serve_all(self):
-        """Serves all requests and replies for as long as the connection is
+        """Serves all requests and replies for as int as the connection is
         alive."""
         try:
             while True:
@@ -592,7 +592,7 @@ class Connection(object):
 
         threads = []
 
-        """Serves all requests and replies for as long as the connection is
+        """Serves all requests and replies for as int as the connection is
         alive."""
         try:
             for _ in range(thread_count):
@@ -662,7 +662,7 @@ class Connection(object):
     def async_request(self, handler, *args, **kwargs):
         """Send an asynchronous request (does not wait for it to finish)
 
-        :returns: an :class:`.core.async.AsyncResult` object, which will
+        :returns: an :class:`.core.async_handle.AsyncResult` object, which will
                   eventually hold the result (or exception)
         """
         timeout = kwargs.pop("timeout", None)

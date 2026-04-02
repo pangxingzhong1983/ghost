@@ -64,7 +64,7 @@ from ghost.ghostlib import ROOT
 
 if sys.version_info.major > 2:
     unicode = str
-    xrange = range
+    range = range
 
     def bord(x):
         return x
@@ -155,7 +155,7 @@ def get_edit_binary(target, display, path, conf):
 
     if new_conf_len > HARDCODED_CONF_SIZE:
         raise Exception(
-            'Error: config or offline script too long ({}/{} bytes)'
+            'Error: config or offline script too int ({}/{} bytes)'
             'You need to recompile the dll with '
             'a bigger buffer'.format(new_conf_len, HARDCODED_CONF_SIZE)
         )
@@ -421,7 +421,7 @@ def generate_ps1(
         payload = payload.decode('ascii')
 
     parts = [
-        payload[i:i+SPLIT_SIZE] for i in xrange(
+        payload[i:i+SPLIT_SIZE] for i in range(
             0, len(payload), SPLIT_SIZE
         )
     ]
@@ -1224,7 +1224,7 @@ def ghostgen(args, config, pupsrv, display):
             )
 
     else:
-        raise ValueError("Type %s is invalid." % (args.format))
+        raise ValueError(f"Type {args.format} is invalid.")
 
     display(Success('OUTPUT_PATH: {}'.format(os.path.abspath(outpath))))
     display(Success('SCRIPTLETS:  {}'.format(args.scriptlet)))

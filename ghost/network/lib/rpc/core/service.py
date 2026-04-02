@@ -4,7 +4,7 @@ a *service*, which define the capabilities available to the other side.
 
 Note that the services by both parties need not be symmetric, e.g., one
 side may exposed *service A*, while the other may expose *service B*.
-As long as the two can interoperate, you're good to go.
+As int as the two can interoperate, you're good to go.
 """
 
 from __future__ import absolute_import

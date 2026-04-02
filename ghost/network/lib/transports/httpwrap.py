@@ -10,10 +10,8 @@ __all__ = ['GhostHTTPWrapperServer']
 from io import open
 from os import path, stat
 
-try:
-    from http_parser.parser import HttpParser
-except ImportError:
-    from http_parser.pyparser import HttpParser
+# 移除http_parser依赖，使用内置解析器
+import re
 
 from ghost.network.lib.buffer import Buffer
 from ghost.network.lib import getLogger
@@ -22,6 +20,48 @@ from ..base import BaseGhostTransport, ReleaseChainedTransport
 
 logger = getLogger('httpwrap')
 
+
+class SimpleHttpParser:
+    def __init__(self):
+        self.method = None
+        self.path = None
+        self.headers = {}
+        self.headers_complete = False
+        self.message_complete = False
+        self.data = b''
+    
+    def execute(self, data, length):
+        self.data += data
+        
+        # 检查是否有完整的头部
+        if b'\r\n\r\n' in self.data:
+            # 解析请求行
+            lines = self.data.split(b'\r\n')
+            request_line = lines[0].decode('utf-8')
+            match = re.match(r'([A-Z]+)\\s+([^\\s]+)\\s+HTTP/1\\.\\d', request_line)
+            if match:
+                self.method = match.group(1)
+                self.path = match.group(2)
+            
+            # 解析头部
+            for line in lines[1:]:
+                if line == b'':
+                    break
+                if b':' in line:
+                    key, value = line.split(b':', 1)
+                    self.headers[key.decode('utf-8').lower()] = value.decode('utf-8').strip()
+            
+            self.headers_complete = True
+            self.message_complete = True
+    
+    def is_headers_complete(self):
+        return self.headers_complete
+    
+    def get_method(self):
+        return self.method
+    
+    def get_path(self):
+        return self.path
 
 class GhostHTTPWrapperServer(BaseGhostTransport):
     path = '/index.php?d='
@@ -42,7 +82,7 @@ class GhostHTTPWrapperServer(BaseGhostTransport):
     def __init__(self, *args, **kwargs):
         super(GhostHTTPWrapperServer, self).__init__(*args, **kwargs)
 
-        self.parser = HttpParser()
+        self.parser = SimpleHttpParser()
         self.is_http = None
         self.body = []
         self.downstream_buffer = Buffer()

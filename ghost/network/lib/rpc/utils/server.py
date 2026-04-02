@@ -100,7 +100,7 @@ class Server(object):
             self.host, self.port = sockname[0], sockname[1]
 
         if logger is None:
-            logger = logging.getLogger("%s/%s" % (self.service.get_service_name(), self.port))
+            logger = logging.getLogger(f"{self.service.get_service_name()}/{self.port}")
         self.logger = logger
         if "logger" not in self.protocol_config:
             self.protocol_config["logger"] = self.logger
@@ -481,7 +481,7 @@ class ThreadPoolServer(Server):
             credentials = None
         # build a connection
         h, p = sock.getpeername()
-        config = dict(self.protocol_config, credentials=credentials, connid="%s:%d"%(h, p),
+        config = dict(self.protocol_config, credentials=credentials, connid=f"{h}:{p}",
                       endpoints=(sock.getsockname(), (h, p)))
         return Connection(self.service, Channel(SocketStream(sock)), config=config)
 

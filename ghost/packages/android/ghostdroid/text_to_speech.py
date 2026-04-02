@@ -24,7 +24,7 @@ def speak(text, lang='US'):
                 error_codes={-1:'LANG_MISSING_DATA', -2:'LANG_NOT_SUPPORTED'}
                 ret=tts.setLanguage(getattr(Locale,lang))
                 if ret in error_codes:
-                    raise Exception("Error in setLanguage: %s for lang: %s"%(error_codes[ret],lang))
+                    raise Exception(f"Error in setLanguage: {error_codes[ret]} for lang: {lang}")
             else:
                 raise Exception("no such locale : %s"%lang)
         #ref. http://developer.android.com/reference/android/speech/tts/TextToSpeech.html

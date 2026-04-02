@@ -20,7 +20,7 @@ def iterate_strings(targets, regex=None, min_length=4, max_length=51, omit='isxr
     if not targets:
         return
 
-    if type(targets) == (str, int):
+    if isinstance(targets, (str, int)):
         targets = [targets]
 
     targets = set([try_int(x) for x in targets])

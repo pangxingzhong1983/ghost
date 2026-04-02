@@ -18,7 +18,7 @@ if version_info.major > 2:
     from urllib.error import URLError
 
     basestring = str
-    xrange = range
+    range = range
 else:
     from urlparse import urlparse
     from urllib2 import URLError
@@ -121,7 +121,7 @@ def propose_pac_domains():
         return
 
     parts = local_domain.split('.')
-    for i in xrange(len(parts)-1):
+    for i in range(len(parts)-1):
         yield '.'.join(parts[i:])
 
 

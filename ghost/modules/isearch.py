@@ -14,7 +14,7 @@ from argparse import REMAINDER
 from datetime import datetime
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 __class_name__='IndexSearchModule'
 
@@ -101,7 +101,7 @@ class IndexSearchModule(GhostModule):
                         str(idx):v for idx,v in enumerate(record)
                     })
                 header = [
-                    str(x) for x in xrange(cidx+1)
+                    str(x) for x in range(cidx+1)
                 ]
             else:
                 header = ['File', 'Size', 'Modified']

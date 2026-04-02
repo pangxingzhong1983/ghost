@@ -160,8 +160,7 @@ class Obfs3Transport(BaseTransport):
 
         if self.state == ST_OPEN: # Handshake is done. Just decrypt and read application data.
             if __debug__:
-                logger.debug("obfs3 receivedDownstream: Processing %d bytes of application data." %
-                             (len(data)))
+                logger.debug(f"obfs3 receivedDownstream: Processing %d bytes of application data." % (len(data)))
 
             if not data:
                 return

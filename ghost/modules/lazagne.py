@@ -227,7 +227,7 @@ class LaZagne(GhostModule):
 
         results = []
 
-        if type(creds) == str:
+        if isinstance(creds, str):
             raise Exception(creds)
 
         for cred in creds:

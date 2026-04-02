@@ -133,7 +133,7 @@ class SSH(GhostModule):
                 for alias, host in hosts.items():
                     if args.host == alias or args.host == host.get('hostname'):
                         self.log(Table([{
-                            'KEY':k, 'VALUE': ','.join(v) if type(v) == list else v
+                            'KEY':k, 'VALUE': ','.join(v) if isinstance(v, list) else v
                         } for k,v in host.items()],
                         ['KEY', 'VALUE'], Color('{}, user={}'.format(alias, user), 'yellow')))
 

@@ -27,16 +27,16 @@ import struct
 
 builtin_types = { \
     'int' : (4, 'i'), \
-    'long': (4, 'i'), \
-    'unsigned long' : (4, 'I'), \
+    'int': (4, 'i'), \
+    'unsigned int' : (4, 'I'), \
     'unsigned int' : (4, 'I'), \
     'address' : (4, 'I'), \
     'char' : (1, 'c'), \
     'unsigned char' : (1, 'B'), \
     'unsigned short' : (2, 'H'), \
     'short' : (2, 'h'), \
-    'long long' : (8, 'q'), \
-    'unsigned long long' : (8, 'Q'), \
+    'int int' : (8, 'q'), \
+    'unsigned int int' : (8, 'Q'), \
     'pointer' : (4, 'I'),\
     }
 

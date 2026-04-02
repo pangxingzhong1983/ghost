@@ -26,7 +26,7 @@ from pupwinutils.security import (
 from ghost.network.lib.convcompat import fix_exception_encoding
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
     unicode = str
 
 FILE_VER_GET_LOCALISED = 0x01
@@ -572,7 +572,7 @@ def getfilecert(filepath, throw=False):
 
         certificates = []
 
-        for idx in xrange(dwCertsCount.value):
+        for idx in range(dwCertsCount.value):
             dwArgSize = DWORD(-1)
             CryptMsgGetParam(
                 hMsg,

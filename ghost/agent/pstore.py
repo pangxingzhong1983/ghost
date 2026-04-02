@@ -113,7 +113,7 @@ class PStore(object):
             agent.remote_error('Pstore (load)')
             return
 
-        if type(data) == dict:
+        if isinstance(data, dict):
             self._pstore.update(data)
 
     def store(self):

@@ -12,12 +12,12 @@ tag_template = '%s - pyuv version %s\n\n%s\n'
 
 
 def get_version():
-    return re.search(r"""__version__\s+=\s+(?P<quote>['"])(?P<version>.+?)(?P=quote)""", open('pyuv/_version.py').read()).group('version')
+    return re.search(r"""__version__\\\\s+=\\\\s+(?P<quote>['"])(?P<version>.+?)(?P=quote)""", open('pyuv/_version.py').read()).group('version')
 
 def check_repo():
     r = invoke.run('git diff-files --quiet', hide=True, warn=True)
     if r.failed:
-        print 'The repository is not clean'
+        print('The repository is not clean')
         sys.exit(1)
 
 @invoke.task
@@ -27,15 +27,15 @@ def changelog():
     with open('ChangeLog', 'r+') as f:
         content = f.read()
         if content.startswith('Version %s' % version):
-            print 'ChangeLog was already generated'
+            print('ChangeLog was already generated')
             sys.exit(1)
         changelog = invoke.run(cmd, hide=True).stdout
         f.seek(0)
         f.write(changelog_template % (version, changelog))
         f.write(content)
     invoke.run('git commit -a -m "core: updated changelog"')
-    print changelog_template % (version, changelog)
-    print 'The above ChangeLog was written, please adjust and amend as necessary'
+    print(changelog_template % (version, changelog))
+    print('The above ChangeLog was written, please adjust and amend as necessary')
 
 @invoke.task
 def release():
@@ -60,4 +60,3 @@ def upload():
     version = get_version()
     invoke.run("python setup.py sdist")
     invoke.run("twine upload -r pypi dist/pyuv-{0}*".format(version))
-

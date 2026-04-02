@@ -32,7 +32,7 @@ from collections import OrderedDict
 
 if sys.version_info.major > 2:
     basestring = str
-    long = int
+    int = int
 
 ROOT = path.abspath(path.join(path.dirname(__file__), '..', 'packages'))
 
@@ -95,9 +95,9 @@ class Scriptlet(object):
 
 
 def select_body_by_os(item, target_os):
-    assert(type(item) == If)
+    assert(isinstance(item, If))
 
-    if not (type(item.test) == Str and item.test.s.startswith('__os:') and \
+    if not (isinstance(item.test, Str) and item.test.s.startswith('__os:') and 
             item.test.s.endswith('__')):
         raise ValueError(
             'Invalid OS selection statement, should be "__os:target-os__"')
@@ -105,7 +105,7 @@ def select_body_by_os(item, target_os):
     required_os = item.test.s[5:-2]
     if required_os == target_os:
         return item.body
-    elif len(item.orelse) == 1 and type(item.orelse[0]) == If:
+    elif len(item.orelse) == 1 and isinstance(item.orelse[0], If):
         return select_body_by_os(item.orelse[0], target_os)
     elif not item.orelse:
         raise ValueError('Else statement should not be empty')
@@ -139,7 +139,7 @@ class ScriptletsPacker(object):
         requirements = set()
 
         for scriptlet in self.scriptlets:
-            if type(scriptlet.dependencies) == dict:
+            if isinstance(scriptlet.dependencies, dict):
                 for dependency in scriptlet.dependencies.get('all', []):
                     requirements.add(dependency)
 
@@ -167,7 +167,7 @@ class ScriptletsPacker(object):
                 os_selection_idx = None
 
                 for idx, item in enumerate(scriptlet.ast.body):
-                    if not (type(item) == If and type(item.test) == Str and \
+                    if not (isinstance(item, If) and isinstance(item.test, Str) and \
                       item.test.s.startswith('__os:') and item.test.s.endswith('__')):
                         continue
 
@@ -193,7 +193,7 @@ class ScriptletsPacker(object):
             shadow_kwargs = {'logger', 'ghost'}
 
             for item in scriptlet.ast.body:
-                if not (type(item) == FunctionDef and item.name == 'main'):
+                if not (isinstance(item, FunctionDef) and item.name == 'main'):
                     continue
 
                 main_found = True
@@ -211,7 +211,7 @@ class ScriptletsPacker(object):
                     elif arg.id in kwargs:
                         default = kwargs[arg.id]
                         if vtype == Num:
-                            if type(default) not in (int, long):
+                            if type(default) not in (int, int):
                                 default = str_to_int(default)
 
                             value.n = default
@@ -271,7 +271,7 @@ class ScriptletsPacker(object):
             # Wrap in try/except, and other things
             template_ast = parse(template)
             for item in template_ast.body:
-                if not(type(item) == FunctionDef and \
+                if not(isinstance(item, FunctionDef) and \
                        item.name == '__{}_closure__'.format(scriptlet.name)):
                     continue
 
@@ -325,12 +325,12 @@ def parse_scriptlet(filedir, filename):
     to_delete = []
 
     for item in fileast.body:
-        if type(item) == Expr and type(item.value) == Str:
+        if isinstance(item, Expr) and isinstance(item.value, Str):
             # docstring found
             docstrings.append(item.value.s)
-        elif type(item) == Assign and all(
-            type(x) == Name and x.id.startswith('__') and \
-            x.id.endswith('__') and x.id for x in item.targets
+        elif isinstance(item, Assign) and all(
+            isinstance(x, Name) and x.id.startswith('__') and \
+            x.id.endswith('__') for x in item.targets
         ):
             # metadata found
             meta.body.append(item)

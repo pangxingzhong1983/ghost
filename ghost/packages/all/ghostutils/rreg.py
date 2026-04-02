@@ -27,7 +27,7 @@ from ghost.network.lib.convcompat import as_unicode_string
 if sys.version_info.major > 2:
     unicode = str
     basestring = str
-    long = int
+    int = int
 
 
 ERROR_SUCCESS = 0
@@ -423,7 +423,7 @@ def __search(
             if ignorecase:
                 value = value.lower()
             return u_term in value
-        elif isinstance(value, (int, long)):
+        elif isinstance(value, (int, int)):
             if i_term is None:
                 return False
             return i_term == value
@@ -445,7 +445,7 @@ def __search(
             if ignorecase:
                 value = value.lower()
             return u_term == value
-        elif isinstance(value, (int, long)):
+        elif isinstance(value, (int, int)):
             if i_term is None:
                 return False
             return i_term == value
@@ -630,7 +630,7 @@ def enum(
             regprov, _ = iWbemServices.GetObject('StdRegprov')
 
             for item in Key(regprov, path):
-                if type(item) == Key:
+                if isinstance(item, Key):
                     tupleized.append((True, unicode(item)))
                 else:
                     tupleized.append((
@@ -662,7 +662,7 @@ def set(
             try:
                 old_value = k[name]
                 if old_value.type in (REG_DWORD, REG_DWORD_LITTLE_ENDIAN):
-                    if not isinstance(value, (int, long)):
+                    if not isinstance(value, (int, int)):
                         value = int(value)
             except KeyError:
                 pass

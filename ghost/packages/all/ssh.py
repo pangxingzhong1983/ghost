@@ -418,7 +418,7 @@ class SSH(object):
 
         if private_keys:
             private_keys = [
-                (None, key_data) if not type(key_data) == tuple else key_data
+                (None, key_data) if not isinstance(key_data, tuple) else key_data
                     for key_data in private_keys
             ]
             self._iter_private_keys = iter(private_keys)

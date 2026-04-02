@@ -23,10 +23,8 @@ else:
     from urllib2 import HTTPError, Request, urlopen
     from urlparse import urlparse
 
-try:
-    from http_parser.parser import HttpParser
-except ImportError:
-    from http_parser.pyparser import HttpParser
+# 使用Python标准库替代http_parser模块
+import re
 
 from xml.etree.ElementTree import fromstring
 
@@ -72,13 +70,10 @@ def get_location_url(sock):
     except socket.error:
         return
 
-    response = HttpParser(kind=1)
-    response.execute(chunk, len(chunk))
-
-    if response.is_headers_complete():
-        headers = response.get_headers()
-
-        return headers.get('location')
+    # 使用正则表达式解析HTTP响应中的Location头
+    location_match = re.search(b'Location: (.*?)\r\n', chunk, re.IGNORECASE)
+    if location_match:
+        return location_match.group(1).decode('utf-8')
 
 
 # sendSOAP is based on part of source code from miranda-upnp.

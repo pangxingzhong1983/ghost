@@ -10,7 +10,7 @@ def to_utf8(data):
     if isinstance(data, wmi._wmi_object):
         return to_utf8(data.id.split('!', 1)[1])
 
-    elif type(data) != str:
+    elif not isinstance(data, str):
         return data
 
     for encoding in ('utf-8', 'mbcs', 'utf-16le', 'latin1'):

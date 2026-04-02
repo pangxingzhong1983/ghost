@@ -82,7 +82,7 @@ class Server(object):
         self.address = self.sock.getsockname()
         self.loop = pyuv.Loop.default_loop()
         self.poll_watcher = pyuv.Poll(self.loop, self.sock.fileno())
-        self.async = pyuv.Async(self.loop, self.async_cb)
+        self.async_handle = pyuv.Async(self.loop, self.async_cb)
         self.conns = weakref.WeakValueDictionary()
         self.signal_watchers = set()
 
@@ -91,7 +91,7 @@ class Server(object):
         self.stop()
 
     def signal_cb(self, handle, signum):
-        self.async.send()
+        self.async_handle.send()
 
     def async_cb(self, handle):
         handle.close()
@@ -137,4 +137,3 @@ class Server(object):
 if __name__ == "__main__":
     server = Server(("127.0.0.1", 9876))
     server.start()
-

@@ -89,5 +89,5 @@ if __name__ == '__main__':
 
     import sys
     for c in plaintext:
-        sys.stdout.write("%02X" % (ord(c) ^ next(keystream)))
+        sys.stdout.write(f"%02X" % (ord(c) ^ next(keystream)))
     print()

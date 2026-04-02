@@ -34,7 +34,7 @@ from ghost.network.lib.convcompat import (
 
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
     getcwd = os.getcwd
 
 else:
@@ -822,7 +822,7 @@ def tail(f, n, grep, filter_out=False, decoded=True):
                 lines = data.splitlines()
                 llines = len(lines)
                 to_process = llines if exit else lines - 1
-                for idx in xrange(to_process):
+                for idx in range(to_process):
                     line = lines[llines-idx-1]
 
                     matches = grep.search(line)

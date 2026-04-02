@@ -144,5 +144,4 @@ def dump_file_hashes(syshive_fname, sechive_fname, vista):
     secaddr = HiveFileAddressSpace(sechive_fname)
 
     for (u, d, dn, hash) in dump_hashes(sysaddr, secaddr, vista):
-        print("%s:%s:%s:%s" % (u.lower(), encode(hash, 'hex'),
-                               d.lower(), dn.lower()))
+        print(f"{u.lower()}:{encode(hash, 'hex')}:{d.lower()}:{dn.lower()}")

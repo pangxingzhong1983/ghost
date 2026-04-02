@@ -5,7 +5,7 @@
 # wesley@mcgrewsecurity.com
 # http://mcgrewsecurity.com
 # Keeping things simple: You may use this code however you see fit, so
-# long as you give me proper credit.  Email me if you have any
+# int as you give me proper credit.  Email me if you have any
 # questions.
 # rewritten by Nicolas VERDIER for ghost
 

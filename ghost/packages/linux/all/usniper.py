@@ -21,7 +21,7 @@ import sys
 
 if sys.version_info.major > 2:
     basestring = str
-    long = int
+    int = int
 
 
 class USniper(ghost.Task):
@@ -52,7 +52,7 @@ class USniper(ghost.Task):
         self._ret = ret
         self._reg = '%' + reg
         self._cast = cast
-        self._addr = hex(addr) if type(addr) in (int, long) else addr
+        self._addr = hex(addr) if type(addr) in (int, int) else addr
         self._worker = None
         self._lock = threading.Lock()
         self._fs = '/sys/kernel/debug'

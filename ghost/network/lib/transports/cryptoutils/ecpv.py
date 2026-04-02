@@ -8,7 +8,7 @@ import base64
 from collections import deque
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
     def _reversed_bytes(data):
         return bytes(reversed(data))
@@ -16,11 +16,49 @@ else:
     def _reversed_bytes(data):
         return b''.join(reversed(data))
 
+# Add missing functions that were removed from tinyec
+def to_bytes(n, length=None, byteorder='big'):
+    if length is None:
+        length = (n.bit_length() + 7) // 8
+    return n.to_bytes(length, byteorder)
+
+def from_bytes(b, byteorder='big', signed=False):
+    return int.from_bytes(b, byteorder, signed=signed)
+
+def ec2osp(point, curve):
+    """Convert elliptic curve point to octet string"""
+    # For compressed form
+    if point.y % 2 == 0:
+        return b'\x02' + to_bytes(point.x, length=(curve.field.p.bit_length() + 7) // 8)
+    else:
+        return b'\x03' + to_bytes(point.x, length=(curve.field.p.bit_length() + 7) // 8)
+
+def osp2ec(osp, curve):
+    """Convert octet string to elliptic curve point"""
+    if len(osp) < 1:
+        raise ValueError("Invalid octet string")
+    
+    prefix = osp[0]
+    x_bytes = osp[1:]
+    x = from_bytes(x_bytes)
+    
+    # Reconstruct y coordinate
+    # y^2 = x^3 + a*x + b mod p
+    a = curve.a
+    b = curve.b
+    p = curve.field.p
+    
+    y_sq = (x**3 + a * x + b) % p
+    y = pow(y_sq, (p + 1) // 4, p)
+    
+    if prefix == 0x03:
+        y = (-y) % p
+    elif prefix != 0x02:
+        raise ValueError("Invalid prefix")
+    
+    return curve.point(x, y)
+
 from tinyec.registry import get_curve
-from tinyec.ec import (
-    to_bytes, from_bytes,
-    ec2osp, osp2ec
-)
 
 from . import (
     NewAESCipher, get_random,
@@ -59,7 +97,8 @@ class ECPV(object):
         '_private_key', '_public_key', '_kex_shared_key',
         '_kex_public_key', '_kex_private_key',
         '_public_key_digest', '_cached_kex_request',
-        '_cached_kex_response', '_mgf_size'
+        '_cached_kex_response', '_mgf_size',
+        '_curve_bytes'
     )
 
     def __init__(self, curve='brainpoolP160r1', hash=None, private_key=None, public_key=None):
@@ -92,7 +131,10 @@ class ECPV(object):
         except AttributeError:
             self._mgf_size = self._hash.digest_size
 
-        if not self._mgf_size >= self._curve.bytes:
+        # Calculate curve bytes from field size
+        self._curve_bytes = (self._curve.field.p.bit_length() + 7) // 8
+
+        if not self._mgf_size >= self._curve_bytes:
             raise ValueError('Incompatible hash function')
 
         if private_key:
@@ -115,7 +157,7 @@ class ECPV(object):
             if record:
                 self._public_key, self._public_key_digest = _PUBKEY_CACHE.get(public_key)
             else:
-                self._public_key = osp2ec(self._curve, base64.b64decode(public_key))
+                self._public_key = osp2ec(base64.b64decode(public_key), self._curve)
                 if not self._public_key:
                     raise ValueError('Invalid public key')
 
@@ -166,7 +208,7 @@ class ECPV(object):
         value = 0
 
         while not (value > 1 and value < self._curve.field.n):
-            value = from_bytes(get_random(self._curve.bytes))
+            value = from_bytes(get_random(self._curve_bytes))
 
         return value
 
@@ -174,7 +216,7 @@ class ECPV(object):
         result = []
         hash = self._hash.new()
         k = length // self._mgf_size + 1
-        for i in xrange(1, k + 1):
+        for i in range(1, k + 1):
             hash.update(value + struct.pack('>I', i))
             result.append(hash.digest())
             hash = self._hash.new()
@@ -185,12 +227,12 @@ class ECPV(object):
         self._private_key = self._gen_random()
         self._public_key = self._curve.g * self._private_key
         self._public_key_digest = self._mgf2(
-            ec2osp(self._public_key), AES_BLOCK_SIZE
+            ec2osp(self._public_key, self._curve), AES_BLOCK_SIZE
         )
 
         return (
             base64.b64encode(to_bytes(self._private_key)),
-            base64.b64encode(ec2osp(self._public_key))
+            base64.b64encode(ec2osp(self._public_key, self._curve))
         )
 
     def pack(self, message, nonce=None):
@@ -203,7 +245,7 @@ class ECPV(object):
         while not (t and s):
             k = self._gen_random()
             R = self._curve.g * k
-            key = self._mgf2(ec2osp(R), 16)
+            key = self._mgf2(ec2osp(R, self._curve), 16)
 
             r = self.encrypt(message, nonce, key=key)
 
@@ -211,7 +253,7 @@ class ECPV(object):
             hash.update(r + (
                 struct.pack('>I', nonce) if nonce else b''
             ) + struct.pack('>I', len(r)))
-            u = hash.digest()[:self._curve.bytes]
+            u = hash.digest()[:self._curve_bytes]
             t = from_bytes(u)
             if not (t > 1 and t < self._curve.field.n):
                 continue
@@ -219,35 +261,35 @@ class ECPV(object):
             s = (k - self._private_key * t) % self._curve.field.n
 
         bytes = to_bytes(s)
-        if len(bytes) != self._curve.bytes:
-            bytes = bytes + '\x00' * (self._curve.bytes - len(bytes))
+        if len(bytes) != self._curve_bytes:
+            bytes = bytes + b'\x00' * (self._curve_bytes - len(bytes))
 
         return bytes + r
 
     def unpack(self, message, nonce=None):
         if not self._public_key:
             raise ValueError('No public key')
-        s = from_bytes(message[:self._curve.bytes])
-        r = message[self._curve.bytes:]
+        s = from_bytes(message[:self._curve_bytes])
+        r = message[self._curve_bytes:]
         hash = self._hash.new()
         hash.update(r + (
             struct.pack('>I', nonce) if nonce else b''
         ) + struct.pack('>I', len(r)))
-        u = hash.digest()[:self._curve.bytes]
+        u = hash.digest()[:self._curve_bytes]
         t = from_bytes(u)
         if not (t >= 0 and t < self._curve.field.n):
             return None
         R = self._curve.g * s + self._public_key * t
         if R.inf:
             return None
-        key = self._mgf2(ec2osp(R), 16)
+        key = self._mgf2(ec2osp(R, self._curve), 16)
 
         return self.decrypt(r, nonce, key=key)
 
     def generate_kex_request(self):
         self._kex_private_key = self._gen_random()
         self._kex_public_key = self._curve.g * self._kex_private_key
-        return ec2osp(self._kex_public_key)
+        return ec2osp(self._kex_public_key, self._curve)
 
     def process_kex_request(self, request, nonce=None, encrypt=False, key_size=AES_BLOCK_SIZE):
         if request == self._cached_kex_request and self._kex_shared_key:
@@ -265,11 +307,11 @@ class ECPV(object):
         if decrypt:
             response = self.unpack(response, nonce)
 
-        P1 = osp2ec(self._curve, response)
+        P1 = osp2ec(response, self._curve)
         if not P1:
             raise ValueError('Invalid ECDH PK response')
 
-        key = self._mgf2(ec2osp(P1 * self._kex_private_key), key_size)
+        key = self._mgf2(ec2osp(P1 * self._kex_private_key, self._curve), key_size)
         self._kex_shared_key = (key, _reversed_bytes(key))
         return self._kex_shared_key
 
@@ -368,7 +410,7 @@ class ECPV(object):
 
 
 if __name__ == '__main__':
-    for x in xrange(1, 10):
+    for x in range(1, 10):
         x = ECPV(curve='brainpoolP384r1')
 
         x._curve.g * (1 << 47)

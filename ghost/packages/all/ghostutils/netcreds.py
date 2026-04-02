@@ -119,7 +119,7 @@ class Netcreds(ghost.Task):
         interfaces = dnet.intf()
         print('[*] Found interfaces :')
         for interface in interfaces:
-            print("    %s : hw=%s ip=%s" % (interface["name"], interface.get("addr", None), interface.get("link_addr", None)))
+            print(f"    {interface['name']} : hw={interface.get('addr', None)} ip={interface.get('link_addr', None)}")
 
     def iface_finder(self):
         try:
@@ -635,7 +635,7 @@ class Netcreds(ghost.Task):
                 try:
                     http_user = user_passwd[0].decode('utf8')
                     http_pass = user_passwd[1].decode('utf8')
-                    # Set a limit on how long they can be prevent false+
+                    # Set a limit on how int they can be prevent false+
                     if len(http_user) > 75 or len(http_pass) > 75:
                         return
                     user_msg = 'HTTP username: %s' % http_user
@@ -760,7 +760,7 @@ class Netcreds(ghost.Task):
         '''
         Parse out the SNMP version and community string
         '''
-        if type(snmp_layer.community.val) == str:
+        if isinstance(snmp_layer.community.val, str):
             ver = snmp_layer.version.val
             msg = 'SNMPv%d community string: %s' % (ver, snmp_layer.community.val)
             self.printer(src_ip_port, dst_ip_port, msg)

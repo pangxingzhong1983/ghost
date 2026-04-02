@@ -27,15 +27,15 @@ class GhostCategories(object):
             if not mod.category:
                 mod.category="general"
             if mod.category not in self.get_categories():
-                logging.warning("Undefined category \"%s\" for module %s"%(mod.category, mod.get_name()))
+                logging.warning(f"Undefined category \"{mod.category}\" for module {mod.get_name()}")
                 self.categories["general"].append(mod)
             else:
                 self.categories[mod.category].append(mod)
             #fill shell_list for fast auto-completion:
-            self.shell_list.append("%s/%s"%(mod.category,mod.get_name()))
+            self.shell_list.append(f"{mod.category}/{mod.get_name()}")
             for system in self.os_shell_lists:
                 if self.is_os_compatible(mod, system):
-                    self.os_shell_lists[system].append("%s/%s/%s"%(system,mod.category,mod.get_name()))
+                    self.os_shell_lists[system].append(f"{system}/{mod.category}/{mod.get_name()}")
 
     def is_os_compatible(self, mod, system):
         if len(mod.compatible_systems)==0 or "all" in mod.compatible_systems:

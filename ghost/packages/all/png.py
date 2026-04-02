@@ -12,7 +12,7 @@ from io import BytesIO
 from zlib import compress, crc32
 
 if sys.version_info.major > 2:
-    xrange = range
+    range = range
 
 PNG_FILTER = struct.pack('>B', 0)
 MAGIC = struct.pack('>8B', 137, 80, 78, 71, 13, 10, 26, 10)
@@ -22,7 +22,7 @@ def bmp_to_png(data, width, height, compression=9, reverse=False):
     # From MSS
     line = width * 3
 
-    iterator = xrange(height)
+    iterator = range(height)
     if reverse:
         iterator = reversed(iterator)
 

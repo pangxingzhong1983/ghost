@@ -64,7 +64,7 @@ def get_streams(filename):
     if not NTFS_STREAMS_API_PRESENT:
         return []
 
-    if type(filename) == bytes:
+    if isinstance(filename, bytes):
         filename = filename.decode(
             getfilesystemencoding())
 

@@ -129,7 +129,7 @@ class Ext(object):
         """
         s = "Ext Object (Type: {:d}, Data: ".format(self.type)
         s += " ".join(["0x{:02}".format(ord(self.data[i:i + 1]))
-                       for i in xrange(min(len(self.data), 8))])
+                       for i in range(min(len(self.data), 8))])
         if len(self.data) > 8:
             s += " ..."
         s += ")"
@@ -453,7 +453,7 @@ def _pack_map(obj, fp, options):
 ########################################
 
 
-# Pack for Python 2, with 'unicode' type, 'str' type, and 'long' type
+# Pack for Python 2, with 'unicode' type, 'str' type, and 'int' type
 def _pack2(obj, fp, **options):
     """
     Serialize a Python object into MessagePack bytes.
@@ -498,7 +498,7 @@ def _pack2(obj, fp, **options):
             raise NotImplementedError("Ext serializable class {:s} is missing implementation of packb()".format(repr(obj.__class__)))
     elif isinstance(obj, bool):
         _pack_boolean(obj, fp, options)
-    elif isinstance(obj, (int, long)):
+    elif isinstance(obj, (int, int)):
         _pack_integer(obj, fp, options)
     elif isinstance(obj, float):
         _pack_float(obj, fp, options)
@@ -540,7 +540,7 @@ def _pack2(obj, fp, **options):
         raise UnsupportedTypeException("unsupported type: {:s}".format(str(type(obj))))
 
 
-# Pack for Python 3, with unicode 'str' type, 'bytes' type, and no 'long' type
+# Pack for Python 3, with unicode 'str' type, 'bytes' type, and no 'int' type
 def _pack3(obj, fp, **options):
     """
     Serialize a Python object into MessagePack bytes.
@@ -885,9 +885,9 @@ def _unpack_array(code, fp, options):
         raise Exception("logic error, not array: 0x{:02x}".format(ord(code)))
 
     if options.get('use_tuple'):
-        return tuple((_unpack(fp, options) for i in xrange(length)))
+        return tuple((_unpack(fp, options) for i in range(length)))
 
-    return [_unpack(fp, options) for i in xrange(length)]
+    return [_unpack(fp, options) for i in range(length)]
 
 
 def _deep_list_to_tuple(obj):
@@ -907,7 +907,7 @@ def _unpack_map(code, fp, options):
         raise Exception("logic error, not map: 0x{:02x}".format(ord(code)))
 
     d = {} if not options.get('use_ordered_dict') else collections.OrderedDict()
-    for _ in xrange(length):
+    for _ in range(length):
         # Unpack key
         k = _unpack(fp, options)
 
@@ -1149,7 +1149,7 @@ def __init():
     global _utc_tzinfo
     global _float_precision
     global _unpack_dispatch_table
-    global xrange
+    global range
 
     # Compatibility mode for handling strings/bytes with the old specification
     compatibility = False
@@ -1190,7 +1190,7 @@ def __init():
         unpackb = _unpackb3
         load = _unpack3
         loads = _unpackb3
-        xrange = range
+        range = range
     else:
         pack = _pack2
         packb = _packb2
