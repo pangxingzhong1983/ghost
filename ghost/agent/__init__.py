@@ -544,16 +544,14 @@ class GhostPackageLoader(object):
 
             mod = None
             if extension in EXTS_SOURCES:
-                dprint('Load {} from source file ({})'.format(
-                    fullname, self.extension))
+                dprint(f'Load {fullname} from source file ({self.extension})')
 
                 mod = self._make_module(fullname)
                 code = compile(self.contents, mod.__file__, 'exec')
                 exec (code, mod.__dict__)
 
             elif extension in EXTS_COMPILED:
-                dprint('Load {} from marshalled file ({})'.format(
-                    fullname, self.extension))
+                dprint(f'Load {fullname} from marshalled file ({self.extension})')
 
                 try:
                     mod = self._make_module(fullname)
@@ -563,8 +561,7 @@ class GhostPackageLoader(object):
                         self.extension == 'pye'
                     )
                 except Exception as e:
-                    remote_error('Load {} failed: Exception: {}'.format(
-                        fullname, e))
+                    remote_error(f'Load {fullname} failed: Exception: {e}')
                     raise
 
             elif extension in EXTS_NATIVE:
@@ -576,26 +573,21 @@ class GhostPackageLoader(object):
                 else:
                     initname = 'init' + fullname.rsplit('.', 1)[-1]
 
-                dprint('Load {} from native file {}'.format(
-                    fullname, self.path))
+                dprint(f'Load {fullname} from native file {self.path}')
                 mod = import_module(self.contents, initname, fullname, self.path)
-                dprint('mod to load : {}'.format(mod))
+                dprint(f'mod to load : {mod}')
                 self._make_module(fullname, mod)
 
             else:
-                raise ImportError('Unsupported extension {}'.format(
-                    self.extension))
+                raise ImportError(f'Unsupported extension {self.extension}')
 
         except Exception as e:
-            dprint('Error loading package {} ({} pkg={}): {}',fullname, self.path, self.is_pkg, e)
+            dprint(f'Error loading package {fullname} ({self.path} pkg={self.is_pkg}): {e}')
             if fullname in sys.modules:
                 dprint(f"Error ! {e} : deleting from modules : {fullname}")
                 del sys.modules[fullname]
 
-            remote_error(
-                'Error loading package {} ({} pkg={})',
-                fullname, self.path, self.is_pkg
-            )
+            remote_error(f'Error loading package {fullname} ({self.path} pkg={self.is_pkg})')
             raise
 
         finally:

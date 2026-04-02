@@ -26,7 +26,7 @@ So! DPAPI...
 In order to decrpyt a file/blob/data of any kind you must obtain a masterkey.
 Masterkey can be obtained either from the LSASS process, or by decrypting a masterkeyfile. LSASS is straightforward, succsessfully dumping it will give you all the plaintext masterkeys with the appropriate GUID.
  But if you can't use LSASS, you have to obtain the masterkey file, and decrypt it with an appropriate key. (too many keys, I know...)
- Masterkey files can be located in '%APPDATA%\Microsoft\Protect\%SID%' for each user or '%SYSTEMDIR%\Microsoft\Protect' for the SYSTEM user. But how to decrypt them?
+ Masterkey files can be located in '%APPDATA%\\Microsoft\\Protect\\%SID%' for each user or '%SYSTEMDIR%\\Microsoft\\Protect' for the SYSTEM user. But how to decrypt them?
  A masterkeyfile can contain multiple different keys, a masterkey is one of them. The masterkey is stored encrypted in the masterkeyfile, and is encrypted with a key that can be either a key stored in registry (LSA secrets) or not. In case the LSA DPAPI keys are not valid, you will need to use the NT hash of the user's password or the user's plaintext password itself. BUT! deriving the key from the password and the SID will yield 3 different keys, and so far noone could tell what key is the correct one to be used.
  Solution for decrypting a masterkey in the mastereky file: harvest as many key candidates as possible and try to decrypt the masterkey. Much to our luck, verifying the signature data after decryption can tell us if the decrpytion was sucsessfull, so we can tell if the masterkey decrypted correctly or not.
 
@@ -405,7 +405,7 @@ class DPAPI:
 	def decrypt_vcrd_file(self, file_path, key = None):
 		"""
 		Decrypts a VCRD file
-		Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vcrd
+		Location: %APPDATA%\\Local\\Microsoft\\Vault\\%GUID%\\<>.vcrd
 		
 		file_path: path to the vcrd file
 		returns: dictionary of attrbitues as key, and a list of possible decrypted data
@@ -487,7 +487,7 @@ class DPAPI:
 	def decrypt_vpol_file(self, file_path, key = None):
 		"""
 		Decrypts a VPOL file
-		Location: %APPDATA%\Local\Microsoft\Vault\%GUID%\<>.vpol
+		Location: %APPDATA%\\Local\\Microsoft\\Vault\\%GUID%\\<>.vpol
 		
 		file_path: path to the vcrd file
 		keys: Optional.

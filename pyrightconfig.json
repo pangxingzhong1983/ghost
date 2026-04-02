@@ -1,0 +1,22 @@
+{
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "off",
+  "exclude": [
+    "ghost/external/**",
+    "vendor/**",
+    ".pyi-venv/**",
+    "ghost-env/**",
+    "ghostvenv/**",
+    "build/**",
+    "dist/**",
+    "pylzma-0.5.0/**",
+    "**/__pycache__/**"
+  ],
+  "ignore": [
+    "ghost/external/**",
+    "vendor/**"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "reportUndefinedVariable": "none"
+}

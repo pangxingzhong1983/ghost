@@ -414,14 +414,14 @@ class GhostWebSocketServer(GhostWebSocketTransport):
 
                 wskey = None
 
-                key = re.search(b'\n[sS]ec-[wW]eb[sS]ocket-[kK]ey[\\\s]*:[\\\s]*(.*)\r\n', d)
+                key = re.search(rb'\n[sS]ec-[wW]eb[sS]ocket-[kK]ey[\\s]*:[\\s]*(.*)\r\n', d)
                 if key:
                     wskey = key.group(1)
                 else:
                     dprint('Unable to get WebSocketKey')
 
                 if self.user_agent:
-                    ua = re.search(b'\n[uU]ser-[aA]gent:[\\\s]*(.*)\r\n', d)
+                    ua = re.search(rb'\n[uU]ser-[aA]gent:[\\s]*(.*)\r\n', d)
                     if ua:
                         ua = ua.group(1)
                     else:
