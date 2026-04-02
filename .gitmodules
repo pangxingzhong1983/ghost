@@ -48,3 +48,12 @@
 [submodule "client/android_sources/python-for-android"]
 	path = client/android_sources/python-for-android
 	url = https://github.com/pangxingzhong1983/python-for-android.git
+[submodule "ghost/external/memorpy"]
+	path = ghost/external/memorpy
+	url = https://github.com/alxchk/memorpy
+[submodule "ghost/external/BeRoot"]
+	path = ghost/external/BeRoot
+	url = https://github.com/AlessandroZ/BeRoot
+[submodule "ghost/external/SharpCollection"]
+	path = ghost/external/SharpCollection
+	url = https://github.com/Flangvik/SharpCollection
