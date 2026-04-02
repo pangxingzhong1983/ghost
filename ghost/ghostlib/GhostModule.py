@@ -372,7 +372,7 @@ class GhostModuleMetaclass(type):
         self.init_argparse()
 
 
-class GhostModule(with_metaclass(GhostModuleMetaclass)):
+class GhostModule(metaclass=GhostModuleMetaclass):
     """
         This is the class all the ghost scripts must inherit from
         daemon_script -> script that will continue running in background once started

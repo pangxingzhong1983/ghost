@@ -755,7 +755,7 @@ class GhostServer(object):
         except Exception:
             pass
 
-        if not isinstance(search_criteria, basestring):
+        if not isinstance(search_criteria, str):
             return
 
         clients = set([])
@@ -793,8 +793,8 @@ class GhostServer(object):
                         take = True
                     else:
                         for k, v in c.desc.items():
-                            if isinstance(v, basestring):
-                                if tab[0].lower() in v.decode('utf8').lower():
+                            if isinstance(v, str):
+                                if tab[0].lower() in v.lower():
                                     take = True
                                     break
                             else:

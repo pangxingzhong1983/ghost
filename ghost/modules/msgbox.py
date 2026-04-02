@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
 from ghost.ghostlib.GhostModule import config, GhostModule, GhostArgumentParser
 
 __class_name__="MsgBoxPopup"
@@ -28,7 +25,7 @@ class MsgBoxPopup(GhostModule):
         elif self.client.is_linux():
             self.client.conn.modules['notify'].notification(args.text, args.title)
         elif self.client.is_darwin():
-            cmd = 'osascript -e \'tell app "Finder" to display dialog "%s"\'' % args.text
+            cmd = f'osascript -e \'tell app "Finder" to display dialog "{args.text}"\''
             self.client.conn.modules.os.popen(cmd)
 
         self.log("message box popped !")

@@ -1,9 +1,6 @@
 # -*- coding: utf-8-*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
 
 __all__ = [
     'Tags', 'GhostConfig', 'Error', 'NoSectionError'
@@ -32,13 +29,9 @@ import errno
 import shutil
 import os
 
-# from ghost.network.lib.convcompat import (
-#     as_unicode_string, as_native_string
-# )
-
-# 临时实现，后续需要从正确的位置导入
-as_unicode_string = str
-as_native_string = str
+from ghost.network.lib.convcompat import (
+    as_unicode_string, as_native_string
+)
 
 from .GhostLogger import getLogger
 from ghost.ghostlib import ROOT

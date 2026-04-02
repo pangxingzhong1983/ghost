@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
 
 __all__ = (
     'ghost_add_package', 'has_module', 'has_dll', 'new_modules',
@@ -19,10 +16,7 @@ import gc
 
 import umsgpack
 
-if sys.version_info.major > 2:
-    import pickle
-else:
-    import cPickle as pickle
+import pickle
 
 
 import ghost.agent
@@ -39,16 +33,14 @@ def ghost_add_package(pkdic, compressed=False, name=None):
     import ghost_modules
     import logging
     logger.setLevel(logging.DEBUG)
-    logger.debug(
-        'Add package (size=%d compressed=%s name=%s)',
-        len(pkdic), compressed, name)
+    logger.debug(f'Add package (size={len(pkdic)} compressed={compressed} name={name})')
 
     if compressed:
         pkdic = zlib.decompress(pkdic)
 
     module = pickle.loads(pkdic)
 
-    logger.debug('Add files: %s', tuple(module))
+    logger.debug(f'Add files: {tuple(module)}')
     ghost_modules.modules.update(module)
 
 
@@ -83,10 +75,7 @@ def has_module(name):
         return False
 
     except Exception as e:
-        ghost.agent.dprint(
-            'has_module Exception: {}/{}/{} (isinstance(name, {}))',
-            type(e), e, type(name)
-        )
+        ghost.agent.dprint(f'has_module Exception: {type(e)}/{e}/{type(name)} (isinstance(name, {type(name)}))')
 
 
 def has_dll(name):
@@ -94,7 +83,7 @@ def has_dll(name):
 
 
 def new_modules(names):
-    ghost.agent.dprint('new_modules call: {}/{}', names, len(names))
+    ghost.agent.dprint(f'new_modules call: {names}/{len(names)}')
 
     try:
         return [
@@ -102,10 +91,7 @@ def new_modules(names):
         ]
 
     except Exception as e:
-        ghost.agent.dprint(
-            'new_modules Exception: {}/{}/{} (isinstance(names, {}))',
-            type(e), e, type(names)
-        )
+        ghost.agent.dprint(f'new_modules Exception: {type(e)}/{e}/{type(names)} (isinstance(names, {type(names)}))')
 
         return names
 
@@ -120,7 +106,7 @@ def invalidate_module(name):
     import ghost_modules
     for item in list(ghost_modules.modules):
         if item.startswith((name+'/', name+'.')):
-            ghost.agent.dprint('Remove {} from ghostimporter.modules'.format(item))
+            ghost.agent.dprint(f'Remove {item} from ghostimporter.modules')
             del ghost_modules.modules[item]
 
     for item in list(sys.modules):
@@ -130,7 +116,7 @@ def invalidate_module(name):
         del sys.modules[item]
 
         if ghost.agent.namespace:
-            ghost.agent.dprint('Remove {} from rpyc namespace'.format(item))
+            ghost.agent.dprint(f'Remove {item} from rpyc namespace')
             ghost.agent.namespace.__invalidate__(item)
 
     gc.collect()

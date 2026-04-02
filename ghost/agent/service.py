@@ -30,11 +30,6 @@
 # POSSIBILITY OF SUCH DAMAGE
 # ---------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import sys
 
 import threading
@@ -51,17 +46,13 @@ from ghost.network.lib.streams.GhostSocketStream import GhostChannel
 from ghost.network.lib.buffer import Buffer
 from ghost.network.lib.msgtypes import MSG_TYPES_PACK
 from ghost.network.lib.rpc.core.service import Service, ModuleNamespace
-from ghost.network.lib.compat import execute, with_metaclass, as_native_string
+from ghost.network.lib.compat import execute, as_native_string
 
 import umsgpack
 
 import ghost.agent as agent
 
-if sys.version_info.major > 2:
-    range = range
-    builtin = 'builtins'
-else:
-    builtin = '__builtin__'
+builtin = 'builtins'
 
 REVERSE_SLAVE_CONF = dict(
     allow_all_attrs=True,
@@ -390,12 +381,10 @@ class GhostClient(object):
                 super(client_initializer, cls).__init__(*args, **kwargs)
                 cls.client = self
 
-        class WrappedBindSlaveService(
-                with_metaclass(client_initializer, BindSlaveService)):
+        class WrappedBindSlaveService(BindSlaveService, metaclass=client_initializer):
             pass
 
-        class WrappedReverseSlaveService(
-                with_metaclass(client_initializer, ReverseSlaveService)):
+        class WrappedReverseSlaveService(ReverseSlaveService, metaclass=client_initializer):
             pass
 
         self._bind_service = WrappedBindSlaveService
@@ -498,15 +487,17 @@ class GhostClient(object):
         except KeyError:
             pass
 
-    def iteritems(self):
+    def items(self):
+        result = []
         for key in GhostClient.__slots__:
             if key.startswith('_'):
                 continue
 
-            yield key, getattr(self, key)
+            result.append((key, getattr(self, key)))
 
         for key in self._custom_info:
-            yield key, self._custom_info[key]
+            result.append((key, self._custom_info[key]))
+        return result
 
     def _get_next_wait(self):
         for conf_attempt, delay_min, delay_max in self.delays:

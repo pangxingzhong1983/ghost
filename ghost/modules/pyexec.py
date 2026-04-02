@@ -2,10 +2,7 @@
 # Copyright (c) 2015, Nicolas VERDIER (contact@n1nj4.eu)
 # Ghost is under the BSD 3-Clause license. see the LICENSE file at the root of the project for the detailed licence terms
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
 
 from io import open
 
@@ -37,7 +34,7 @@ class PythonExec(GhostModule):
     def run(self, args):
         code=""
         if args.file:
-            self.info("loading code from %s ..."%args.file)
+            self.info(f"loading code from {args.file} ...")
             with open(args.file,'r') as f:
                 code = f.read()
         elif args.code:

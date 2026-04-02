@@ -354,7 +354,7 @@ def loadpy(src, dst, masked=False):
         except ImportError:
             pass
 
-        dprint("Failed call loadpy: " + message)
+        dprint(f"Failed call loadpy: {message}")
         raise
 
 
@@ -381,9 +381,9 @@ def load_dll(name, buf=None):
             cleanup_name = True
         else:
             return None
-    dprint("calling load_dll(name={}, buflen={}, buf0={}, buf1={})", name, len(buf), buf[0], buf[1]) 
+    dprint(f"calling load_dll(name={name}, buflen={len(buf)}, buf0={buf[0]}, buf1={buf[1]})" )
     handle = _load_dll(name, buf)
-    dprint("load_dll() handle={}",handle)
+    dprint(f"load_dll() handle={handle}")
     if handle:
         dlls[name] = handle
 
@@ -416,7 +416,7 @@ def _get_module_files(fullname, path=None):
     while '//' in path:
         path = path.replace('//', '/')
 
-    dprint("Search in modules: " + path)
+    dprint(f"Search in modules: {path}")
 
     files = [
         module for module in ghost_modules.modules
@@ -426,17 +426,13 @@ def _get_module_files(fullname, path=None):
             ) for ext in EXTS_ALL
         ])
     ]
-    dprint("Potential files found in memory: %s"%files)
+    dprint(f"Potential files found in memory: {files}")
 
     return files
 
 
 def get_module_files(fullname, paths=[None]):
-    dprint(
-        "get_module_files({}, {})".format(
-            repr(fullname), repr(paths)
-        )
-    )
+    dprint(f"get_module_files({repr(fullname)}, {repr(paths)})")
 
     for path in paths:
         files = _get_module_files(fullname, path)
@@ -521,8 +517,7 @@ class GhostPackageLoader(object):
 
             new_fullname = '.'.join(parts)
 
-            dprint('Rename: {} -> {}'.format(
-                fullname, new_fullname))
+            dprint(f'Rename: {fullname} -> {new_fullname}')
 
             return new_fullname
 
@@ -539,7 +534,7 @@ class GhostPackageLoader(object):
             if fullname in sys.modules:
                 return sys.modules[fullname]
 
-            dprint('loading module {} (ext: {})', fullname, self.extension)
+            dprint(f'loading module {fullname} (ext: {self.extension})')
             extension = '.' + self.extension
 
             mod = None
@@ -665,11 +660,11 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
                     GhostPackageFinder.search_set.add(fullname)
 
         try:
-            dprint('Remote load package {}'.format(fullname))
+            dprint(f'Remote load package {fullname}')
             packages, dlls = remote_load_package(fullname)
-            dprint('Remote load package {} - success'.format(fullname))
+            dprint(f'Remote load package {fullname} - success')
             if not packages and not dlls:
-                dprint('Remote load package {} - not found'.format(fullname))
+                dprint(f'Remote load package {fullname} - not found')
             else:
                 if dlls:
                     dlls = safe_obtain(dlls)
@@ -685,7 +680,7 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
                 return self.find_module(fullname, second_pass=True)
 
         except Exception as e:
-            dprint('Exception: {}'.format(e))
+            dprint(f'Exception: {e}')
 
         finally:
             if GhostPackageFinder.search_lock is not None:
@@ -717,10 +712,10 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
         if not second_pass:
             _imp.acquire_lock()
         if fullname in sys.modules:
-            dprint('found module in sys.modules: %s'%fullname)
+            dprint(f'found module in sys.modules: {fullname}')
             return DummyPackageLoader(fullname)
 
-        dprint('Find module: {}/{}'.format(fullname, second_pass))
+        dprint(f'Find module: {fullname}/{second_pass}')
 
         selected = None
 
@@ -742,11 +737,7 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
             if not files:
                 files = []
 
-                dprint(
-                    '{} not found in {}: not in {} files'.format(
-                        fullname, files, len(files)
-                    )
-                )
+                dprint(f'{fullname} not found in {files}: not in {len(files)} files')
 
                 return self._remote_load_packages(fullname, second_pass)
 
@@ -769,16 +760,13 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
                         break
 
             if not selected:
-                dprint('{} not selected from {}', fullname, files)
+                dprint(f'{fullname} not selected from {files}')
                 return None
 
             del files[:]
 
             content = ghost_modules.modules[selected]
-            dprint(
-                '{} found in "{}" / size = {}',
-                fullname, selected, len(content)
-            )
+            dprint(f'{fullname} found in "{selected}" / size = {len(content)}')
 
             extension = selected.rsplit(".", 1)[1].strip().lower()
             is_pkg = any([
@@ -787,15 +775,14 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
                 )
             ])
 
-            dprint('--> Loading {} ({}) package={}'.format(
-                fullname, selected, is_pkg))
+            dprint(f'--> Loading {fullname} ({selected}) package={is_pkg}')
 
             return GhostPackageLoader(
                 fullname, content, extension, is_pkg, selected
             )
 
         except Exception as e:
-            dprint('--> Loading {} failed: {}/{}'.format(fullname, e, type(e)))
+            dprint(f'--> Loading {fullname} failed: {e}/{type(e)}')
             if 'traceback' in sys.modules:
                 import traceback
                 traceback.print_exc(e)
@@ -804,8 +791,7 @@ class GhostPackageFinder(_bootstrap_external._LoaderBasics):
 
         finally:
             if selected and selected in ghost_modules.modules:
-                dprint('[L] {} remove {} from bundle / count = {}'.format(
-                    fullname, selected, len(ghost_modules.modules)))
+                dprint(f'[L] {fullname} remove {selected} from bundle / count = {len(ghost_modules.modules)}')
                 del ghost_modules.modules[selected]
 
             if not second_pass:
@@ -857,9 +843,9 @@ def load_ghostimporter(stdlib=None):
         sys.path = ["ghost://"]
         sys.path_hooks = [GhostPackageFinder]
 
-        dprint("meta_path: %s"%sys.meta_path)
-        dprint("path_hooks: %s"%sys.path_hooks)
-        dprint("path: %s"%sys.path)
+        dprint(f"meta_path: {sys.meta_path}")
+        dprint(f"path_hooks: {sys.path_hooks}")
+        dprint(f"path: {sys.path}")
 
     else:
         dprint('Install ghostimporter + local packages')
@@ -902,10 +888,7 @@ def init_ghost(argv, stdlib, debug=False):
     set_stdio(null=not debug)
     set_debug(debug)
 
-    dprint(
-        'init_ghost: argv={} sys.argv={}',
-        repr(argv), repr(sys.argv)
-    )
+    dprint(f'init_ghost: argv={repr(argv)} sys.argv={repr(sys.argv)}')
 
     if sys.argv != argv:
         setattr(sys, 'real_argv', list(sys.argv))

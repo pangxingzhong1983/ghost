@@ -1,8 +1,3 @@
-from __future__ import with_statement
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 import weakref
 from threading import Lock
 
@@ -18,7 +13,7 @@ class WeakValueDict(object):
         return repr(self._dict)
 
     def __iter__(self):
-        return self
+        return iter(self._dict.keys())
 
     def __len__(self):
         return len(self._dict)
@@ -51,25 +46,14 @@ class WeakValueDict(object):
     def __delitem__(self, key):
         del self._dict[key]
 
-    def iterkeys(self):
-        return self._dict.keys()
-
     def keys(self):
-        return self._dict.keys()
-
-    def itervalues(self):
-        for k in self:
-            yield self[k]
+        return list(self._dict.keys())
 
     def values(self):
-        return list(self.values())
-
-    def iteritems(self):
-        for k in self:
-            yield k, self[k]
+        return [self[k] for k in self._dict]
 
     def items(self):
-        return list(self.items())
+        return [(k, self[k]) for k in self._dict]
 
     def clear(self):
         self._dict.clear()
