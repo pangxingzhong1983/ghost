@@ -10,7 +10,8 @@ def make_os_arch(os_arch):
         'i386': 'x86',
         'i686': 'x86',
         'i486': 'x86',
-        'armv7l': 'armhf'
+        'armv7l': 'armhf',
+        'arm64': 'arm64'
     }
 
     return substitute.get(os_arch, os_arch)
@@ -23,7 +24,8 @@ def make_template_arch(os_arch):
         'i386': 'x86',
         'i686': 'x86',
         'i486': 'x86',
-        'armv7l': 'armhf'
+        'armv7l': 'armhf',
+        'arm64': 'arm64'
     }
 
     return substitute.get(os_arch, os_arch)
@@ -38,6 +40,7 @@ def make_proc_arch(os_arch, proc_arch):
         'i86pc': 'sun-intel',
         'armhf': 'armhf',
         'aarch64': 'arm',
+        'arm64': 'arm',
     }
 
     os_platform_to_arch = {

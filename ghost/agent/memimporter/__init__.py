@@ -7,12 +7,16 @@ from __future__ import print_function
 __all__ = ('import_module', 'load_dll')
 
 import sys
+import platform
 if "rustc" in sys.version:
     from .posix import load_content
 elif sys.platform.startswith('linux'):
     from .linux import load_content
 elif sys.platform == 'win32':
-    from .win32 import load_content
+    if platform.machine() == 'ARM64':
+        from .win32_arm64 import load_content
+    else:
+        from .win32 import load_content
 else:
     from .posix import load_content
 

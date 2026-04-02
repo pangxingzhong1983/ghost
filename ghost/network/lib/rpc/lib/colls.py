@@ -75,7 +75,8 @@ class RefCountingColl(object):
             key = id(obj)
             slot = self._dict.get(key, None)
             if slot is None:
-                slot = [obj, 0]
+                # first reference
+                slot = [obj, 1]
             else:
                 slot[1] += 1
             self._dict[key] = slot

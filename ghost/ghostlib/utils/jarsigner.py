@@ -4,13 +4,31 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-from M2Crypto import X509, EVP, RSA, BIO, m2
+
+try:
+    from M2Crypto import X509, EVP, RSA, BIO, m2
+    M2Crypto_available = True
+except ImportError:
+    M2Crypto_available = False
 
 from zipfile import ZipFile, ZIP_DEFLATED
 from hashlib import sha1
 from base64 import b64encode
+import logging
+
+logger = logging.getLogger(__name__)
 
 def jarsigner(pem_priv, pem_cert, apk_path, dest_fileobj):
+    if not M2Crypto_available:
+        logger.warning('M2Crypto not available, skipping JAR signing')
+        # Simply copy the APK without signing
+        with ZipFile(apk_path) as infile:
+            with ZipFile(dest_fileobj, "w", ZIP_DEFLATED) as outfile:
+                for name in infile.namelist():
+                    content = infile.read(name)
+                    outfile.writestr(name, content)
+        return
+    
     pk = EVP.PKey()
 
     if not isinstance(pem_priv, bytes):

@@ -45,6 +45,16 @@ ghost/data
 ghost/proxy/proxy
 
 build
+dist
 ghost.egg-info
 .ghost_history
+
+# Local environments
+.venv/
+.pyi-venv/
+ghost-env/
 ghostvenv
+
+# Local caches
+.pytest_cache/
+__pycache__/

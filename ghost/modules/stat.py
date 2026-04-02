@@ -15,7 +15,11 @@ from ghost.ghostlib.GhostOutput import Table, Line, List, MultiPart
 
 from magic import Magic
 
-from M2Crypto.X509 import load_cert_string, FORMAT_DER
+try:
+    from M2Crypto.X509 import load_cert_string, FORMAT_DER
+    M2Crypto_available = True
+except ImportError:
+    M2Crypto_available = False
 from argparse import REMAINDER
 
 from ghost.network.lib.convcompat import as_unicode_string
@@ -107,11 +111,15 @@ class FStat(GhostModule):
 
         for extra, values in extra.items():
             if extra == 'Certificates':
-                certificates = [
-                    load_cert_string(
-                        cert, FORMAT_DER
-                    ).as_text() for cert in values
-                ]
+                if M2Crypto_available:
+                    certificates = [
+                        load_cert_string(
+                            cert, FORMAT_DER
+                        ).as_text() for cert in values
+                    ]
+                else:
+                    self.warning('M2Crypto not available, skipping certificate parsing')
+                    certificates = ['[M2Crypto not available]' for _ in values]
             elif isinstance(values, dict):
                 records = [{
                     'KEY': as_unicode_string(k),

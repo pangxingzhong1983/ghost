@@ -5,7 +5,12 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 from ghost.ghostlib.GhostModule import config, GhostModule, GhostArgumentParser
-from M2Crypto.X509 import load_cert_string, X509Error
+
+try:
+    from M2Crypto.X509 import load_cert_string, X509Error
+    M2Crypto_available = True
+except ImportError:
+    M2Crypto_available = False
 
 __class_name__='x509'
 
@@ -35,16 +40,19 @@ class x509(GhostModule):
             cert = get_server_certificate((args.host, args.port))
 
         if not args.raw:
-            parsed = None
-            try:
-                parsed = load_cert_string(cert).as_text()
-            except (X509Error, TypeError):
+            if M2Crypto_available:
+                parsed = None
                 try:
-                    parsed = load_cert_string(cert, 0).as_text()
-                except X509Error:
-                    pass
+                    parsed = load_cert_string(cert).as_text()
+                except (X509Error, TypeError):
+                    try:
+                        parsed = load_cert_string(cert, 0).as_text()
+                    except X509Error:
+                        pass
 
-            cert = parsed
+                cert = parsed
+            else:
+                self.warning('M2Crypto not available, showing raw certificate')
 
         if cert:
             self.log(cert)

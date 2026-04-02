@@ -1,38 +1,30 @@
 pycryptodome
-pefile 
+pefile
 pyyaml
 rsa
 netaddr
-ecdsa==0.13
-paramiko==2.0.2
-tinyec @ file:///app/vendor/tinyec
-urllib3==1.26.20
-psutil
-netifaces
-pylzma
+ecdsa
+paramiko
 colorama
-mss==4.0.3
+mss
 pyOpenSSL
 scapy
 impacket
 dnslib
-http-parser @ file:///app/vendor/http-parser
 cerberus
 logutils
-secretstorage==2.3.1
-pypykatz @ file:///app/vendor/pypykatz
-ed25519==1.5
+secretstorage
 pygments
 requests
 tornado
 win_inet_pton
 scandir
-msgpack==0.6.2
+msgpack
+u-msgpack-python
 hexdump
-M2Crypto>=0.30.1
 fusepy
 defusedxml
-keyboard==0.13.4
+keyboard
 dateparser
 puttykeys
 pyelftools
@@ -41,11 +33,7 @@ xattr
 dukpy
 pyaes
 chardet
-urllib-auth @ file:///app/vendor/urllib-auth
 http_request
-kcp @ file:///app/vendor/pykcp
 flake8
 flake8-per-file-ignores
-ushlex; python_version<'3'
-pyuv @ file:///app/vendor/pyuv
 tqdm

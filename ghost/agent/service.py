@@ -155,7 +155,9 @@ class ReverseSlaveService(Service):
         self._conn._config.update(REVERSE_SLAVE_CONF)
 
         ghostimporter = __import__('ghostimporter')
-        is_purepy = sys.purepy
+        # Some runtimes don't expose sys.purepy (e.g. CPython 3.x).
+        # Keep backward-compatible semantics by defaulting to False.
+        is_purepy = getattr(sys, 'purepy', False)
         self._conn.root.initialize_v2(
             1, (
                 sys.version_info.major,

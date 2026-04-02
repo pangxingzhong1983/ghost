@@ -256,6 +256,13 @@ def _generate_ecpv_keypair(curve='brainpoolP160r1'):
 
 
 def _generate_rsa_keypair(bits=2048):
+    if not M2Crypto:
+        logger.warning('M2Crypto not available, using rsa library instead')
+        import rsa
+        (pubkey, privkey) = rsa.newkeys(bits)
+        private_key = privkey.save_pkcs1()
+        public_key = pubkey.save_pkcs1()
+        return private_key, public_key, None
     key = RSA.gen_key(bits, 65537)
     private_key = key.as_pem(cipher=None)
     rsa_privkey = rsa.key.PrivateKey.load_pkcs1(
@@ -268,6 +275,11 @@ def _generate_rsa_keypair(bits=2048):
 
 
 def _generate_ssl_ca():
+    if not M2Crypto:
+        logger.warning('M2Crypto not available, skipping SSL CA generation')
+        # Generate dummy values
+        ca_key_pem, ca_cert_pem, _ = _generate_rsa_keypair()
+        return ca_key_pem, ca_cert_pem, None, None
     ca_key_pem, ca_cert_pem, ca_key = _generate_rsa_keypair()
 
     t = int(time.time())
@@ -305,6 +317,12 @@ def _generate_ssl_keypair(
     rsa_key, ca_key, ca_cert, role='CONTROL',
         client=False, serial=2):
 
+    if not M2Crypto:
+        logger.warning('M2Crypto not available, skipping SSL keypair generation')
+        # Generate dummy values
+        if isinstance(rsa_key, bytes):
+            return rsa_key, rsa_key
+        return b'dummy_key', b'dummy_cert'
     t = int(time.time())
     now = ASN1.ASN1_UTCTIME()
     now.set_time(t)
@@ -432,6 +450,9 @@ def _generate_simple_rsa_keys():
     }
 
 def gen_identifier(cert, dig='sha256'):
+    if not M2Crypto or not cert:
+        logger.warning('M2Crypto not available, using dummy identifier')
+        return '00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00'
     instr = cert.get_pubkey().get_rsa().as_pem()
     h = hashlib.new(dig)
     h.update(instr)
@@ -440,6 +461,14 @@ def gen_identifier(cert, dig='sha256'):
     return ":".join(digest[pos: pos + 2] for pos in range(0, 40, 2))
 
 def _generate_apk_keypair():
+    if not M2Crypto:
+        logger.warning('M2Crypto not available, skipping APK keypair generation')
+        # Generate dummy values
+        priv, pub, _ = _generate_rsa_keypair(2048)
+        return {
+            'CONTROL_APK_PRIV_KEY': priv,
+            'CONTROL_APK_PUB_KEY': pub,
+        }
     priv, pub, key = _generate_rsa_keypair(2048)
 
     t = int(time.time())
@@ -468,6 +497,22 @@ def _generate_apk_keypair():
     }
 
 def _generate_pki_ssl_keys():
+    if not M2Crypto:
+        logger.warning('M2Crypto not available, skipping PKI SSL keys generation')
+        # Generate dummy values
+        priv, pub, _ = _generate_rsa_keypair()
+        return {
+            'SSL_CA_CERT': pub,
+            'SSL_CA_KEY': priv,
+            'CONTROL_SSL_BIND_KEY': priv,
+            'CLIENT_SSL_BIND_KEY': priv,
+            'CONTROL_SSL_BIND_CERT': pub,
+            'CLIENT_SSL_BIND_CERT': pub,
+            'CONTROL_SSL_CLIENT_CERT': pub,
+            'CLIENT_SSL_CLIENT_CERT': pub,
+            'CONTROL_SSL_CLIENT_KEY': priv,
+            'CLIENT_SSL_CLIENT_KEY': priv,
+        }
     SSL_CA_PRIVATE_KEY, SSL_CA_CERTIFICATE, CAKEY, CACERT = \
         _generate_ssl_ca()
 

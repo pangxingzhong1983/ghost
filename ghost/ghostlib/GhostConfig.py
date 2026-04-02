@@ -102,8 +102,25 @@ class GhostConfig(RawConfigParser):
     def __init__(self, config='ghost.conf'):
         self.root = path.abspath(ROOT)
         self.user_root = path.expanduser(path.join('~', '.ghost'))
-        self.default_file = path.join(self.root, "conf", config+'.default')
-        self.user_path = path.join(self.user_root, config)
+        config_name = path.basename(config)
+        if path.dirname(config):
+            self.project_path = path.abspath(config)
+        else:
+            self.project_path = path.join(self.user_root, config_name)
+
+        # Prefer a sidecar default file for explicit config paths first.
+        if path.dirname(config):
+            self.default_file = self.project_path + '.default'
+        else:
+            self.default_file = path.join(self.root, "conf", config + '.default')
+
+        # Fallbacks for custom config names/paths without dedicated defaults.
+        if not path.exists(self.default_file):
+            self.default_file = path.join(self.root, "conf", config_name + '.default')
+        if not path.exists(self.default_file):
+            self.default_file = path.join(self.root, "conf", 'ghost.conf.default')
+
+        self.user_path = path.join(self.user_root, config_name)
 
         prefer_workdir = self.getboolean(PATHS_SECTION, 'prefer_workdir')
         if not prefer_workdir:
@@ -115,7 +132,8 @@ class GhostConfig(RawConfigParser):
 
         self.files = [
             self.default_file,
-            self.user_path
+            self.user_path,
+            self.project_path
         ]
         self.randoms = {}
         self.command_line = {}
