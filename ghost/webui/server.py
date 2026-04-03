@@ -227,8 +227,8 @@ async def handle_client(websocket):
         print("Client disconnected")
 
 async def main():
-    async with websockets.serve(handle_client, "localhost", 8766):
-        print("WebSocket server started on ws://localhost:8766")
+    async with websockets.serve(handle_client, "0.0.0.0", 8766):
+        print("WebSocket server started on ws://0.0.0.0:8766")
         await asyncio.Future()  # 保持服务器运行
 
 if __name__ == "__main__":

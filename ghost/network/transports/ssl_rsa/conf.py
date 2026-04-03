@@ -21,7 +21,8 @@ class DummySSLAuthenticator(object):
         self.certstr = certstr.strip()
         self.castr = castr.strip()
         self.cert_reqs = ssl.CERT_NONE
-        self.ssl_version = ssl.PROTOCOL_SSLv23
+        # 使用 TLS 1.2+，禁用旧版 SSL 协议
+        self.ssl_version = ssl.PROTOCOL_TLS_SERVER
         self.ROLE = role
         self.server_side=server_side
 

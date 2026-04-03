@@ -1,12 +1,15 @@
-# -*- coding: utf-8-*-
+# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import sys
+from typing import Any, Callable, Dict, Optional, Set, Tuple, TypeVar, cast
 
 if __name__ == '__main__':
     sys.path.append('..')
 
 from .GhostConfig import GhostConfig
 
-from io import open
+from io import open, BytesIO
 from os import path, urandom, chmod, makedirs
 
 import string
@@ -27,20 +30,18 @@ try:
     from M2Crypto import X509, EVP, RSA, ASN1
 except Exception as e:
     logger.warning(e)
-    M2Crypto=None
-    
+    M2Crypto = None
+
 import rsa
 
-from hashlib import md5
+from hashlib import pbkdf2_hmac
 try:
     from Crypto.Cipher import AES
     from Crypto import Random
 except Exception as e:
     logger.warning(e)
-    AES=None
-    Random=None
-
-from io import BytesIO
+    AES = None
+    Random = None
 
 try:
     import secretstorage
@@ -68,25 +69,29 @@ class EncryptionError(Exception):
     pass
 
 
-class GnomeKeyring(object):
-    def __init__(self):
+class GnomeKeyring:
+    """Gnome Keyring 密码存储管理器"""
+
+    def __init__(self) -> None:
         if secretstorage:
             try:
-                self.bus = secretstorage.dbus_init()
+                self.bus: Any = secretstorage.dbus_init()
             except Exception as e:
                 logger.exception(
                     f'secretstorage dbus intialization failed: {e}'
                 )
-
                 self.bus = None
+        else:
+            self.bus = None
 
-        self.collection = {
+        self.collection: Dict[str, str] = {
             'application': 'ghost'
         }
 
-    def get_pass(self):
+    def get_pass(self) -> Optional[bytes]:
+        """从 Gnome Keyring 获取存储的密码"""
         if not self.bus:
-            return
+            return None
 
         try:
             collection = secretstorage.get_default_collection(self.bus)
@@ -97,12 +102,14 @@ class GnomeKeyring(object):
             return x.get_secret()
 
         except StopIteration:
-            pass
+            return None
 
         except Exception as e:
             logger.warning(f"Error with GnomeKeyring get_pass: {e}")
+            return None
 
-    def store_pass(self, password):
+    def store_pass(self, password: bytes) -> None:
+        """将密码存储到 Gnome Keyring"""
         if not self.bus:
             return
 
@@ -118,32 +125,56 @@ class GnomeKeyring(object):
         except Exception as e:
             logger.warning(f"Error with GnomeKeyring store_pass: {e}")
 
-    def del_pass(self):
+    def del_pass(self) -> None:
+        """从 Gnome Keyring 删除密码"""
         if not self.bus:
             return
 
-        collection = secretstorage.get_default_collection(self.bus)
-        if collection.is_locked():
-            collection.unlock()
+        try:
+            collection = secretstorage.get_default_collection(self.bus)
+            if collection.is_locked():
+                collection.unlock()
 
-        x = next(collection.search_items(self.collection))
-        x.delete()
+            x = next(collection.search_items(self.collection))
+            x.delete()
+        except StopIteration:
+            pass
+        except Exception as e:
+            logger.warning(f"Error with GnomeKeyring del_pass: {e}")
 
 
-class Encryptor(object):
-    _instance = None
+class Encryptor:
+    """加密器，提供基于密码的 AES 加密"""
+
+    _instance: Optional[Encryptor] = None
     _getpass = getpass
 
-    def __init__(self, password):
+    def __init__(self, password: str) -> None:
         self.password = password
 
     @staticmethod
-    def initialized():
-        return not (Encryptor._instance is None)
+    def initialized() -> bool:
+        """检查加密器是否已初始化"""
+        return Encryptor._instance is not None
 
     @staticmethod
-    def instance(password=None, getpass_hook=None, config=None):
+    def instance(
+        password: Optional[str] = None,
+        getpass_hook: Optional[Callable[[str], str]] = None,
+        config: Optional[GhostConfig] = None
+    ) -> Encryptor:
+        """获取单例加密器实例
+
+        Args:
+            password: 可选密码，如果未提供则从配置或 Gnome Keyring 获取
+            getpass_hook: 自定义密码输入函数
+            config: GhostConfig 实例
+
+        Returns:
+            Encryptor 单例实例
+        """
         if secretstorage and not Encryptor._instance:
+            use_gnome_keyring = False
             if not password:
                 config = config or GhostConfig()
                 use_gnome_keyring = config.getboolean(
@@ -152,7 +183,8 @@ class Encryptor(object):
 
                 if use_gnome_keyring:
                     gkr = GnomeKeyring()
-                    password = gkr.get_pass()
+                    password_bytes = gkr.get_pass()
+                    password = password_bytes.decode('utf-8') if password_bytes else None
 
             if not password:
                 getpass_hook = getpass_hook or getpass
@@ -163,21 +195,44 @@ class Encryptor(object):
                     )
 
                 password = getpass_hook('[I] Credentials password: ')
-                if use_gnome_keyring:
-                    gkr.store_pass(password)
+                if use_gnome_keyring and password:
+                    gkr = GnomeKeyring()
+                    gkr.store_pass(password.encode('utf-8'))
 
-            Encryptor._instance = Encryptor(password)
+            if password:
+                Encryptor._instance = Encryptor(password)
 
+        assert Encryptor._instance is not None, "Encryptor not initialized"
         return Encryptor._instance
 
-    def derive_key_and_iv(self, salt, key_length, iv_length):
-        d = d_i = ''
-        while len(d) < key_length + iv_length:
-            d_i = md5(d_i + self.password + salt).digest()
-            d += d_i
-        return d[:key_length], d[key_length:key_length+iv_length]
+    def derive_key_and_iv(
+        self,
+        salt: bytes,
+        key_length: int,
+        iv_length: int,
+        iterations: int = 100000
+    ) -> Tuple[bytes, bytes]:
+        """使用 PBKDF2-HMAC-SHA256 派生密钥
 
-    def encrypt(self, in_file, out_file, key_length=32):
+        Args:
+            salt: 随机盐值
+            key_length: 密钥长度（字节）
+            iv_length: IV 长度（字节）
+            iterations: PBKDF2 迭代次数
+
+        Returns:
+            (key, iv): 派生的密钥和初始化向量
+        """
+        dk = pbkdf2_hmac(
+            'sha256',
+            self.password.encode('utf-8'),
+            salt,
+            iterations,
+            dklen=key_length + iv_length
+        )
+        return dk[:key_length], dk[key_length:key_length + iv_length]
+
+    def encrypt(self, in_file: BytesIO, out_file: BytesIO, key_length: int = 32) -> None:
         bs = AES.block_size
         salt = Random.new().read(bs - len('Salted__'))
         key, iv = self.derive_key_and_iv(salt, key_length, bs)
@@ -194,7 +249,7 @@ class Encryptor(object):
 
             out_file.write(cipher.encrypt(chunk))
 
-    def decrypt(self, in_file, out_file, key_length=32):
+    def decrypt(self, in_file: BytesIO, out_file: BytesIO, key_length: int = 32) -> None:
         bs = AES.block_size
         salt = in_file.read(bs)[len('Salted__'):]
         key, iv = self.derive_key_and_iv(salt, key_length, bs)
@@ -237,25 +292,36 @@ HELP_RESET_MSG = 'FYI you can reset your credentials by removing ' \
     'crypto/credentials.py but you will have to re-generate your payloads.'
 
 
-def _generate_password(length):
+def _generate_password(length: int) -> str:
+    """生成指定长度的随机密码"""
     alphabet = string.punctuation + string.ascii_letters + string.digits
     return ''.join(
         alphabet[bord(c) % len(alphabet)] for c in urandom(length)
     )
 
 
-def _generate_id(length):
+def _generate_id(length: int) -> str:
+    """生成指定长度的随机字母ID"""
     alphabet = string.ascii_letters
     return ''.join(
         alphabet[bord(c) % len(alphabet)] for c in urandom(length)
     )
 
 
-def _generate_ecpv_keypair(curve='brainpoolP160r1'):
+def _generate_ecpv_keypair(curve: str = 'brainpoolP160r1') -> Tuple[bytes, bytes]:
+    """生成 ECPV 密钥对"""
     return ECPV(curve=curve).generate_key()
 
 
-def _generate_rsa_keypair(bits=2048):
+def _generate_rsa_keypair(bits: int = 2048) -> Tuple[bytes, bytes, Optional[Any]]:
+    """生成 RSA 密钥对
+
+    Args:
+        bits: 密钥位数
+
+    Returns:
+        (private_key, public_key, m2crypto_key) 元组
+    """
     if not M2Crypto:
         logger.warning('M2Crypto not available, using rsa library instead')
         import rsa
@@ -274,7 +340,7 @@ def _generate_rsa_keypair(bits=2048):
     return private_key, public_key, key
 
 
-def _generate_ssl_ca():
+def _generate_ssl_ca() -> Tuple[bytes, bytes, Optional[Any], Optional[Any]]:
     if not M2Crypto:
         logger.warning('M2Crypto not available, skipping SSL CA generation')
         # Generate dummy values
@@ -314,8 +380,13 @@ def _generate_ssl_ca():
 
 
 def _generate_ssl_keypair(
-    rsa_key, ca_key, ca_cert, role='CONTROL',
-        client=False, serial=2):
+    rsa_key: Any,
+    ca_key: Any,
+    ca_cert: Any,
+    role: str = 'CONTROL',
+    client: bool = False,
+    serial: int = 2
+) -> Tuple[bytes, bytes]:
 
     if not M2Crypto:
         logger.warning('M2Crypto not available, skipping SSL keypair generation')
@@ -370,21 +441,21 @@ def _generate_ssl_keypair(
     return pk.as_pem(cipher=None), cert.as_pem()
 
 
-def _generate_ecpv_keypair_bp384():
+def _generate_ecpv_keypair_bp384() -> Tuple[bytes, bytes]:
     return _generate_ecpv_keypair(curve='brainpoolP384r1')
 
 
-def _generate_rsa_keypair_4096():
+def _generate_rsa_keypair_4096() -> Tuple[bytes, bytes]:
     priv, pub, _ = _generate_rsa_keypair(bits=4096)
     return priv, pub
 
 
-def _generate_path_secret():
+def _generate_path_secret() -> Dict[str, str]:
     return {
         'PATH_GEN_SECRET': _generate_password(20)
     }
 
-def _generate_bind_payloads_password():
+def _generate_bind_payloads_password() -> Dict[str, str]:
     return {
         'BIND_PAYLOADS_PASSWORD': _generate_password(20)
     }
@@ -551,8 +622,10 @@ def _generate_pki_ssl_keys():
     }
 
 
-class Credentials(object):
-    GENERATORS = {
+class Credentials:
+    """凭据管理器，负责生成、存储和加载加密凭据"""
+
+    GENERATORS: Dict[str, Callable[[], Dict[str, bytes]]] = {
         # path secret used to generate random path that do not change between each ghostsh run
         'PATH_GEN_SECRET': _generate_path_secret,
         'BIND_PAYLOADS_PASSWORD': _generate_bind_payloads_password,
@@ -572,8 +645,6 @@ class Credentials(object):
         'CLIENT_SIMPLE_RSA_PUB_KEY': _generate_simple_rsa_keys,
         'CLIENT_SIMPLE_RSA_PRIV_KEY': _generate_simple_rsa_keys,
         'CONTROL_SIMPLE_RSA_PUB_KEY': _generate_simple_rsa_keys,
-        #'CONTROL_APK_PRIV_KEY': _generate_apk_keypair,
-        #'CONTROL_APK_PUB_KEY': _generate_apk_keypair,
         'SSL_CA_CERT': _generate_pki_ssl_keys,
         'SSL_CA_KEY': _generate_pki_ssl_keys,
         'CONTROL_SSL_BIND_KEY': _generate_pki_ssl_keys,
@@ -586,13 +657,19 @@ class Credentials(object):
         'CLIENT_SSL_CLIENT_KEY': _generate_pki_ssl_keys,
     }
 
-    def __init__(self, role=None, password=None, config=None, validate=False):
+    def __init__(
+        self,
+        role: Optional[str] = None,
+        password: Optional[str] = None,
+        config: Optional[GhostConfig] = None,
+        validate: bool = False
+    ) -> None:
         config = config or GhostConfig()
 
         self._configfile = path.join(
             config.get_folder('crypto'), 'credentials.py'
         )
-        self._credentials = {}
+        self._credentials: Dict[str, bytes] = {}
         self._config = config
         self._encrypted = True
 
@@ -606,8 +683,16 @@ class Credentials(object):
         if validate:
             self._generate(password)
 
-    def _generate(self, password):
-        required_generators = set()
+    def _generate(self, password: Optional[str] = None) -> bool:
+        """生成缺失或过期的凭据
+
+        Args:
+            password: 加密密码（如果凭据文件已加密）
+
+        Returns:
+            bool: 是否生成了新凭据
+        """
+        required_generators: Set[Callable[[], Dict[str, bytes]]] = set()
 
         for cred in Credentials.GENERATORS:
             generator = Credentials.GENERATORS[cred]
@@ -628,7 +713,6 @@ class Credentials(object):
                         'All related credentials will be regenerated',
                         cred
                     )
-
                     required_generators.add(generator)
                 elif diff < 7:
                     logger.error(f'{cred} will expire in {diff} days')
@@ -654,7 +738,7 @@ class Credentials(object):
 
         return updated
 
-    def save(self, password=None):
+    def save(self, password: Optional[str] = None) -> None:
         logger.warning(f'Saving credentials to {self._configfile}')
 
         try:
@@ -698,7 +782,7 @@ class Credentials(object):
 
             raise
 
-    def _load(self, password):
+    def _load(self, password: Optional[str] = None) -> None:
         if path.exists(self._configfile):
             with open(self._configfile, 'rb') as creds:
                 logger.info(f'Reading credentials from {self._configfile}')
@@ -748,7 +832,7 @@ class Credentials(object):
 
                     self.save(password)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Optional[bytes]:
         env = globals()
 
         if key in self._credentials:
@@ -756,14 +840,14 @@ class Credentials(object):
         elif f'{self.role}_{key}' in self._credentials:
             return self._credentials[f'{self.role}_{key}']
         elif key in env:
-            return env[key]
+            return env[key]  # type: ignore
         elif f'DEFAULT_{key}' in env:
             logger.warning(f"Using default credentials for {key}")
-            return env[f'DEFAULT_{key}']
+            return env[f'DEFAULT_{key}']  # type: ignore
         else:
             return None
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: bytes) -> None:
         self._credentials[key] = value
 
     def __iter__(self):

@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # 复制必要的文件
-COPY ghost-webui/server.py /app/
+COPY server.py /app/
 
 # 安装Python依赖
 RUN pip install --no-cache-dir -U pip setuptools wheel \

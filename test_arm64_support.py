@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
@@ -13,12 +14,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 def test_arch_support():
     """Test architecture support"""
-    print("=== System Information ===")
+    print(f"=== System Information ===")
     print(f"OS: {platform.system()}")
     print(f"Architecture: {platform.machine()}")
     print(f"Python version: {platform.python_version()}")
     
-    print("\n=== Testing ARM64 Support ===")
+    print("
+=== Testing ARM64 Support ===")
     
     # Test arch module
     try:
@@ -41,7 +43,9 @@ def test_arch_support():
     except Exception as e:
         print(f"❌ Memory importer test failed: {e}")
     
-    print("\n=== Testing Platform-Specific Modules ===")
+    # Test platform-specific modules
+    print("
+=== Testing Platform-Specific Modules ===")
     
     # Test Linux ARM64
     if platform.system() == 'Linux' and platform.machine() in ['aarch64', 'arm64']:
@@ -61,7 +65,8 @@ def test_arch_support():
         except Exception as e:
             print(f"❌ Windows ARM64 test failed: {e}")
     
-    print("\n=== Test Complete ===")
+    print("
+=== Test Complete ===")
 
 if __name__ == "__main__":
     test_arch_support()

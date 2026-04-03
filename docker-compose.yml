@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Ghost C2 Server
+  ghost:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    image: ghost-c2:latest
+    container_name: ghost-c2
+    restart: unless-stopped
+    ports:
+      # Ghost C2 ports
+      - "443:443"    # HTTPS (main C2)
+      - "80:80"      # HTTP (optional redirect/transport)
+      - "8080:8080"  # WebSocket transport
+    volumes:
+      # Persist configuration and credentials
+      - ghost-config:/root/.ghost
+      # Mount webui data (for WebSocket communication)
+      - ./ghost/webui/data:/ghost/webui/data
+    environment:
+      - TZ=UTC
+      - PYTHONUNBUFFERED=1
+    networks:
+      - ghost-network
+    # Run as root for capabilities (needed for some modules)
+    user: "0:0"
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE  # Bind to port < 1024
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Ghost WebUI (static files served by nginx)
+  ghost-webui:
+    image: nginx:alpine
+    container_name: ghost-webui
+    restart: unless-stopped
+    ports:
+      - "8081:80"  # WebUI accessible on port 8081
+    volumes:
+      - ./ghost/webui/dist:/usr/share/nginx/html:ro
+      - ./ghost/webui/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ghost/webui/data:/app/data:rw
+    networks:
+      - ghost-network
+    depends_on:
+      - ghost-websocket
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Ghost WebSocket Server (for real-time communication)
+  ghost-websocket:
+    build:
+      context: ./ghost/webui
+      dockerfile: Dockerfile.websocket
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    image: ghost-websocket:latest
+    container_name: ghost-websocket
+    restart: unless-stopped
+    ports:
+      - "8766:8766"
+    volumes:
+      - ./ghost/webui/data:/app/data
+    networks:
+      - ghost-network
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "node", "server.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  ghost-config:
+    driver: local
+
+networks:
+  ghost-network:
+    driver: bridge
+

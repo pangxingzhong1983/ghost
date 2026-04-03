@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Ghost C2 主服务器
+  ghost-c2:
+    platform: linux/arm64
+    image: ghost-c2:fnos
+    container_name: ghost-c2
+    restart: always
+    ports:
+      - "9443:443"     # HTTPS C2
+      - "9001:80"      # HTTP C2
+      - "9010:8766"    # WebSocket transport
+    volumes:
+      - ghost-config:/root/.ghost
+      - ./data:/ghost/data
+    environment:
+      - TZ=Asia/Shanghai
+      - PYTHONUNBUFFERED=1
+    networks:
+      - ghost-network
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Ghost WebSocket 服务器
+  ghost-websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile.websocket
+    image: ghost-websocket:fnos
+    container_name: ghost-websocket
+    restart: always
+    ports:
+      - "8766:8766"
+    volumes:
+      - ./data:/app/data
+    networks:
+      - ghost-network
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "python", "-c", "import websockets; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Ghost WebUI (通过 nginx 服务)
+  ghost-webui:
+    image: nginx:alpine
+    container_name: ghost-webui
+    restart: always
+    ports:
+      - "9444:80"  # WebUI
+    volumes:
+      - ./ghost/webui/dist:/usr/share/nginx/html:ro
+      - ./ghost/webui/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./data:/app/data
+    networks:
+      - ghost-network
+    depends_on:
+      - ghost-websocket
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  ghost-config:
+    driver: local
+  data:
+    driver: local
+
+networks:
+  ghost-network:
+    driver: bridge

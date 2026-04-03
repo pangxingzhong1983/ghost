@@ -1,14 +1,71 @@
+# Version control
 .git
+.gitignore
+.gitmodules
+
+# Python cache
 __pycache__
-*.pyc
-build
-dist
-ghostvenv
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ghostvenv/
+.venv/
+.pytest_cache
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+wheels/
+
+# Project specific
 pylzma-0.5.0
 pylzma-0.5.0.tar.gz
+ghost.egg-info/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs and temporary files
+*.log
+*.tmp
+temp/
+tmp/
+.cache/
+
+# Test and coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# Node/WebUI (if not needed in container)
+# If you want webui inside container, comment out these lines
+# ghost/webui/node_modules/
+# ghost/webui/build/
+# ghost/webui/dist/
+
+# Client build outputs
 client/android_sources/.buildozer
 client/android_sources/.gradle
 client/android_sources/build
 client/android_sources/dist
 client/android_sources/venv
 client/android_sources/.tox
+
+# Documentation build
+docs/_build/
+site/
+
+# Data files (if not needed)
+*.db
+*.sqlite
+crypto/

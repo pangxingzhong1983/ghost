@@ -29,12 +29,17 @@ import errno
 import shutil
 import os
 
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 from ghost.network.lib.convcompat import (
     as_unicode_string, as_native_string
 )
-
 from .GhostLogger import getLogger
 from ghost.ghostlib import ROOT
+try:
+    from .ghost_config_schema import validate_config_dict, config_to_dict
+    PYDANTIC_AVAILABLE = True
+except ImportError:
+    PYDANTIC_AVAILABLE = False
 logger = getLogger('config')
 
 if sys.version_info.major > 2:
@@ -151,13 +156,26 @@ class GhostConfig(RawConfigParser):
                 if e.errno == errno.EEXIST:
                     pass
 
-    def tags(self, node):
-        if type(node) in (int, int):
+        # 配置加载完成后进行验证（如果 pydantic 可用）
+        if PYDANTIC_AVAILABLE:
+            self._validate_config()
+
+    def _validate_config(self) -> None:
+        """使用 pydantic 验证配置，记录警告但不中断"""
+        try:
+            config_dict = config_to_dict(self)
+            validated = validate_config_dict(config_dict)
+            logger.debug(f'Config validation passed: {validated.dict()}')
+        except Exception as e:
+            logger.warning(f'Config validation failed: {e}. Please check your configuration.')
+
+    def tags(self, node: Union[int, str]) -> Tags:
+        """获取节点的标签集合"""
+        if isinstance(node, int):
             node = f'{node:012x}'
+        return Tags(self, as_native_string(node))
 
-        return Tags(self, node)
-
-    def by_tags(self, tags):
+    def by_tags(self, tags: str) -> List[str]:
         available_tags = {
             as_unicode_string(k): tuple([
                 as_unicode_string(tag)

@@ -16,6 +16,10 @@ elif sys.platform == 'win32':
     if platform.machine() == 'ARM64':
         from .win32_arm64 import load_content
     else:
+
+    if platform.machine() == 'ARM64':
+        from .win32_arm64 import load_content
+    else:
         from .win32 import load_content
 else:
     from .posix import load_content

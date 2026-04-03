@@ -218,10 +218,16 @@ def getUACLevel():
     if sys.platform != 'win32':
         return 'N/A'
 
-    from _winreg import (
-        ConnectRegistry, HKEY_LOCAL_MACHINE, OpenKey,
-        EnumValue, CloseKey
-    )
+    try:
+        import winreg
+    except ImportError:
+        import _winreg as winreg  # Python 2 fallback
+
+    ConnectRegistry = winreg.ConnectRegistry
+    HKEY_LOCAL_MACHINE = winreg.HKEY_LOCAL_MACHINE
+    OpenKey = winreg.OpenKey
+    EnumValue = winreg.EnumValue
+    CloseKey = winreg.CloseKey
 
     consentPromptBehaviorAdmin = None
     enableLUA = None
@@ -248,7 +254,7 @@ def getUACLevel():
 
                 i += 1
 
-            except WindowsError:
+            except OSError:
                 break
 
     except Exception:

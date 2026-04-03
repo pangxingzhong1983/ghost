@@ -173,7 +173,8 @@ class GhostSSLClient(GhostTCPClient):
             self.cert_reqs = ssl.CERT_NONE
 
         self.ciphers = 'HIGH:!aNULL:!MD5:!RC4:!3DES:!DES'
-        self.ssl_version = ssl.PROTOCOL_SSLv23
+        # 使用 TLS 1.2+，禁用旧版 SSL 协议
+        self.ssl_version = ssl.PROTOCOL_TLS_CLIENT
 
         super(GhostSSLClient, self).__init__(*args, **kwargs)
 

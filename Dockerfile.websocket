@@ -1,0 +1,24 @@
+# Ghost WebSocket Server Dockerfile
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# 复制 WebSocket 服务器代码
+COPY ghost/webui/server.py /app/server.py
+
+# 安装 Python 依赖
+RUN pip install --no-cache-dir -U pip setuptools wheel && \
+    pip install --no-cache-dir websockets==16.0
+
+EXPOSE 8766
+
+CMD ["python", "server.py"]

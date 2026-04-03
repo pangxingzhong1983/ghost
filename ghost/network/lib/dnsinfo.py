@@ -12,6 +12,12 @@ __all__ = ('dnsinfo',)
 import sys
 from io import open
 
+# 统一的 Windows 注册表模块导入 (Python 2/3 兼容)
+try:
+    import winreg as _winreg
+except ImportError:
+    import _winreg as _winreg  # Python 2 fallback
+
 
 def _parse_resolv_conf(path='/etc/resolv.conf'):
     nameservers = []
@@ -101,7 +107,7 @@ def _config_win32_fromkey(_winreg, key):
 
     try:
         win_servers, rtype = _winreg.QueryValueEx(key, 'NameServer')
-    except WindowsError:  # pylint: disable=undefined-variable
+    except OSError:  # pylint: disable=undefined-variable
         win_servers = None
 
     if win_servers:
@@ -111,12 +117,12 @@ def _config_win32_fromkey(_winreg, key):
         win_domain, rtype = _winreg.QueryValueEx(key, 'Domain')
         if win_domain:
             domains.append(win_domain)
-    except WindowsError:  # pylint: disable=undefined-variable
+    except OSError:  # pylint: disable=undefined-variable
         pass
 
     try:
         win_servers, rtype = _winreg.QueryValueEx(key, 'DhcpNameServer')
-    except WindowsError:  # pylint: disable=undefined-variable
+    except OSError:  # pylint: disable=undefined-variable
         win_servers = None
 
     if win_servers:
@@ -128,12 +134,12 @@ def _config_win32_fromkey(_winreg, key):
         win_domain, rtype = _winreg.QueryValueEx(key, 'DhcpDomain')
         if win_domain and win_domain not in domains:
             domains.append(win_domain)
-    except WindowsError:  # pylint: disable=undefined-variable
+    except OSError:  # pylint: disable=undefined-variable
         pass
 
     try:
         win_search, rtype = _winreg.QueryValueEx(key, 'SearchList')
-    except WindowsError:  # pylint: disable=undefined-variable
+    except OSError:  # pylint: disable=undefined-variable
         win_search = None
 
     if win_search:
@@ -196,14 +202,12 @@ def _win32_is_nic_enabled(_winreg, lm, guid, interface_key):
             (nte, ttype) = _winreg.QueryValueEx(interface_key,
                                                 'NTEContextList')
             return nte is not None
-        except WindowsError:  # pylint: disable=undefined-variable
+        except OSError:  # pylint: disable=undefined-variable
             return False
 
 
 def _parse_registry():
     """Extract resolver configuration from the Windows registry."""
-    _winreg = __import__('_winreg')
-
     lm = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
     want_scan = False
 
