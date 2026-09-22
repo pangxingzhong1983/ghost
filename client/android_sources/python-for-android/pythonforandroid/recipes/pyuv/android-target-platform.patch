@@ -1,0 +1,119 @@
+--- a/setup_libuv.py
++++ b/setup_libuv.py
+@@ -5,6 +5,9 @@
+ from distutils.command.build_ext import build_ext
+ 
+ 
++TARGET_PLATFORM = os.environ.get('PYUV_TARGET_PLATFORM', sys.platform)
++
++
+ SOURCES = [
+     'deps/libuv/src/fs-poll.c',
+     'deps/libuv/src/inet.c',
+@@ -13,7 +16,7 @@
+     'deps/libuv/src/version.c',
+ ]
+ 
+-if sys.platform == 'win32':
++if TARGET_PLATFORM == 'win32':
+     SOURCES += [
+         'deps/libuv/src/win/async.c',
+         'deps/libuv/src/win/core.c',
+@@ -66,7 +69,7 @@
+     ]
+ 
+ 
+-if sys.platform.startswith('linux'):
++if TARGET_PLATFORM.startswith('linux') or TARGET_PLATFORM == 'android':
+     SOURCES += [
+         'deps/libuv/src/unix/linux-core.c',
+         'deps/libuv/src/unix/linux-inotify.c',
+@@ -76,7 +79,7 @@
+         'deps/libuv/src/unix/sysinfo-loadavg.c',
+         'deps/libuv/src/unix/sysinfo-memory.c',
+     ]
+-elif sys.platform == 'darwin':
++elif TARGET_PLATFORM == 'darwin':
+     SOURCES += [
+         'deps/libuv/src/unix/bsd-ifaddrs.c',
+         'deps/libuv/src/unix/darwin.c',
+@@ -86,21 +89,21 @@
+         'deps/libuv/src/unix/proctitle.c',
+         'deps/libuv/src/unix/pthread-barrier.c',
+     ]
+-elif sys.platform.startswith(('freebsd', 'dragonfly')):
++elif TARGET_PLATFORM.startswith(('freebsd', 'dragonfly')):
+     SOURCES += [
+         'deps/libuv/src/unix/bsd-ifaddrs.c',
+         'deps/libuv/src/unix/freebsd.c',
+         'deps/libuv/src/unix/kqueue.c',
+         'deps/libuv/src/unix/posix-hrtime.c',
+     ]
+-elif sys.platform.startswith('openbsd'):
++elif TARGET_PLATFORM.startswith('openbsd'):
+     SOURCES += [
+         'deps/libuv/src/unix/bsd-ifaddrs.c',
+         'deps/libuv/src/unix/kqueue.c',
+         'deps/libuv/src/unix/openbsd.c',
+         'deps/libuv/src/unix/posix-hrtime.c',
+     ]
+-elif sys.platform.startswith('netbsd'):
++elif TARGET_PLATFORM.startswith('netbsd'):
+     SOURCES += [
+         'deps/libuv/src/unix/bsd-ifaddrs.c',
+         'deps/libuv/src/unix/kqueue.c',
+@@ -108,13 +111,18 @@
+         'deps/libuv/src/unix/posix-hrtime.c',
+     ]
+ 
+-elif sys.platform.startswith('sunos'):
++elif TARGET_PLATFORM.startswith('sunos'):
+     SOURCES += [
+         'deps/libuv/src/unix/no-proctitle.c',
+         'deps/libuv/src/unix/sunos.c',
+     ]
+ 
++if TARGET_PLATFORM == 'android':
++    SOURCES += [
++        'deps/libuv/src/unix/android-ifaddrs.c',
++    ]
+ 
++
+ class libuv_build_ext(build_ext):
+     libuv_dir = os.path.join('deps', 'libuv')
+ 
+@@ -137,26 +145,28 @@
+             self.compiler.add_include_dir(os.path.join(self.libuv_dir, 'src'))
+             self.extensions[0].sources += SOURCES
+ 
+-        if sys.platform != 'win32':
++        if TARGET_PLATFORM != 'win32':
+             self.compiler.define_macro('_LARGEFILE_SOURCE', 1)
+             self.compiler.define_macro('_FILE_OFFSET_BITS', 64)
+ 
+-        if sys.platform.startswith('linux'):
++        if TARGET_PLATFORM.startswith('linux'):
+             self.compiler.add_library('dl')
+             self.compiler.add_library('rt')
+-        elif sys.platform == 'darwin':
++        elif TARGET_PLATFORM == 'android':
++            self.compiler.add_library('dl')
++        elif TARGET_PLATFORM == 'darwin':
+             self.compiler.define_macro('_DARWIN_USE_64_BIT_INODE', 1)
+             self.compiler.define_macro('_DARWIN_UNLIMITED_SELECT', 1)
+-        elif sys.platform.startswith('netbsd'):
++        elif TARGET_PLATFORM.startswith('netbsd'):
+             self.compiler.add_library('kvm')
+-        elif sys.platform.startswith('sunos'):
++        elif TARGET_PLATFORM.startswith('sunos'):
+             self.compiler.define_macro('__EXTENSIONS__', 1)
+             self.compiler.define_macro('_XOPEN_SOURCE', 500)
+             self.compiler.add_library('kstat')
+             self.compiler.add_library('nsl')
+             self.compiler.add_library('sendfile')
+             self.compiler.add_library('socket')
+-        elif sys.platform == 'win32':
++        elif TARGET_PLATFORM == 'win32':
+             self.compiler.define_macro('_GNU_SOURCE', 1)
+             self.compiler.define_macro('WIN32', 1)
+             self.compiler.define_macro('_CRT_SECURE_NO_DEPRECATE', 1)

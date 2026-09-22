@@ -1,0 +1,47 @@
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -39,6 +39,14 @@
+ #  include "posixmodule.h"
+ #else
+ #  include "winreparse.h"
++#endif
++
++#ifdef __ANDROID__
++#  undef HAVE_GETGRENT
++#  undef HAVE_ENDGRENT
++#  undef HAVE_SETGRENT
++#  undef HAVE_GETGROUPLIST
++#  undef HAVE_INITGROUPS
+ #endif
+ 
+ #if !defined(EX_OK) && defined(EXIT_SUCCESS)
+--- a/Modules/grpmodule.c
++++ b/Modules/grpmodule.c
+@@ -5,7 +5,21 @@
+ #include "posixmodule.h"
+ 
+ #include <grp.h>
++
++#ifdef __ANDROID__
++#  undef HAVE_GETGRENT
++#  undef HAVE_ENDGRENT
++#  undef HAVE_SETGRENT
++
++PyMODINIT_FUNC
++PyInit_grp(void)
++{
++    PyErr_SetString(PyExc_NotImplementedError, "grp module not supported on Android");
++    return NULL;
++}
+ 
++#else
++
+ #include "clinic/grpmodule.c.h"
+ /*[clinic input]
+ module grp
+@@ -367,3 +381,5 @@
+ {
+    return PyModuleDef_Init(&grpmodule);
+ }
++
++#endif /* __ANDROID__ */

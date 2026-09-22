@@ -1,0 +1,14 @@
+diff --git a/jnius/jnius_utils.pxi b/jnius/jnius_utils.pxi
+index 9c1d6b4..fb53a0a 100644
+--- a/jnius/jnius_utils.pxi
++++ b/jnius/jnius_utils.pxi
+@@ -1,5 +1,12 @@
+ cdef str_for_c(s):
+     return s.encode('utf-8')
+ 
++try:
++    long
++except NameError:
++    long = int
++
+ cdef parse_definition(definition):

@@ -45,9 +45,6 @@
 [submodule "ghost/external/pykcp"]
 	path = ghost/external/pykcp
 	url = https://github.com/n1nj4sec/pykcp
-[submodule "client/android_sources/python-for-android"]
-	path = client/android_sources/python-for-android
-	url = https://github.com/pangxingzhong1983/python-for-android.git
 [submodule "ghost/external/memorpy"]
 	path = ghost/external/memorpy
 	url = https://github.com/alxchk/memorpy

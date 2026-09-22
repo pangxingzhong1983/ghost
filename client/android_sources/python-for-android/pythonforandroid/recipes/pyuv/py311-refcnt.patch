@@ -1,0 +1,23 @@
+--- a/src/handle.c
++++ b/src/handle.c
+@@ -5,6 +5,11 @@
+  * object.  It adjusts the total reference count and adds a new
+  * reference to the type.
+  */
++
++#ifndef Py_SET_REFCNT
++#define Py_SET_REFCNT(op, value) (Py_REFCNT(op) = (value))
++#endif
++
+ static void
+ resurrect_object(PyObject *self)
+ {
+@@ -14,7 +19,7 @@
+     Py_ssize_t refcnt = Py_REFCNT(self);
+     ASSERT(Py_REFCNT(self) != 0);
+     _Py_NewReference(self);
+-    Py_REFCNT(self) = refcnt;
++    Py_SET_REFCNT(self, refcnt);
+     /* If Py_REF_DEBUG, _Py_NewReference bumped _Py_RefTotal, so
+      * we need to undo that. */
+ #ifdef _Py_DEC_REFTOTAL
