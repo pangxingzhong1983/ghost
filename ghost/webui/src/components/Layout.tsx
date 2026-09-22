@@ -171,7 +171,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} width={240}>
         <div className="logo" style={{ padding: '16px', textAlign: 'center' }}>
           <Title level={3} style={{ color: 'white', margin: 0 }}>
-            {collapsed ? 'G' : 'Ghost C2'}
+            {collapsed ? 'G' : 'Ghost'}
           </Title>
           <div style={{ color: '#888', fontSize: '12px', marginTop: '8px' }}>
             {collapsed ? '' : '跨平台C2工具'}
