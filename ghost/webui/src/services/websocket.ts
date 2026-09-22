@@ -11,9 +11,9 @@ class WebSocketService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
-  private url: string = 'ws://ghost.zhuquejiasu.uk/ws';
+  private url: string = '/ws';
 
-  connect(url: string = 'ws://ghost.zhuquejiasu.uk/ws'): Promise<void> {
+  connect(url: string = '/ws'): Promise<void> {
     return new Promise((resolve, reject) => {
       // 如果已经有连接并且是打开状态，直接返回
       if (this.socket && this.socket.readyState === WebSocket.OPEN) {

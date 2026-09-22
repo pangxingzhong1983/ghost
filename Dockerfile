@@ -1,10 +1,9 @@
-# Multi-stage build for Ghost C2 Framework
-# Stage 1: Builder - install build dependencies and compile native extensions
-FROM python:3.10-slim AS builder
+# Single-stage build for Ghost C2 Framework
+FROM python:3.10-slim
 
-WORKDIR /build
+WORKDIR /ghost
 
-# Install build dependencies
+# Install system dependencies and build tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
@@ -16,42 +15,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpcap-dev \
     libffi-dev \
     python3-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first for better caching
-COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
-
-# Stage 2: Runtime - minimal image with only runtime dependencies
-FROM python:3.10-slim
-
-WORKDIR /ghost
-
-# Create non-root user for security
-RUN groupadd -r ghost && useradd -r -g ghost ghost
-
-# Install runtime dependencies (only what's needed at runtime)
-RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl3 \
-    libmagic1 \
     libpcap0.8 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Copy installed Python packages from builder
-COPY --from=builder /root/.local /root/.local
+# Copy requirements and install Python dependencies into system site-packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    && pip cache purge
 
 # Copy Ghost source code
 COPY . /ghost
 
-# Ensure Python can find user-installed packages
-ENV PATH=/root/.local/bin:$PATH
-ENV PYTHONPATH=/ghost
+# Environment
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/ghost
+ENV HOME=/home/ghost
 
-# Set ownership to non-root user
-RUN chown -R ghost:ghost /ghost
+# Create non-root user and set ownership (optional security)
+RUN groupadd -r ghost && useradd -r -g ghost ghost || true \
+    && mkdir -p /home/ghost \
+    && chown -R ghost:ghost /ghost /home/ghost
+
+# Default command (run as ghost if possible)
 USER ghost
-
-# Default command
 CMD ["python3", "ghost/cli/ghostsh.py"]

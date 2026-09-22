@@ -27,6 +27,7 @@ from . import getLogger
 logger = getLogger('credentials')
 
 try:
+    import M2Crypto
     from M2Crypto import X509, EVP, RSA, ASN1
 except Exception as e:
     logger.warning(e)
@@ -324,8 +325,8 @@ def _generate_rsa_keypair(bits: int = 2048) -> Tuple[bytes, bytes, Optional[Any]
     """
     if not M2Crypto:
         logger.warning('M2Crypto not available, using rsa library instead')
-        import rsa
-        (pubkey, privkey) = rsa.newkeys(bits)
+        import rsa as _rsa
+        (pubkey, privkey) = _rsa.newkeys(bits)
         private_key = privkey.save_pkcs1()
         public_key = pubkey.save_pkcs1()
         return private_key, public_key, None

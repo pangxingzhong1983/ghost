@@ -1,4 +1,5 @@
 # Core dependencies
+netifaces>=0.11.0
 pycryptodome>=3.21.0
 pefile>=2024.8.26
 pyyaml>=6.0.2
@@ -27,8 +28,13 @@ chardet>=5.2.0
 tqdm>=4.66.0
 secretstorage>=3.5.0
 
+tinyec==0.4.0
+
 # Optional: Modern crypto library, can complement pycryptodome
 cryptography>=41.0.0
+
+# Additional runtime dependencies for FNOS deployment
+M2Crypto>=0.40.0
 
 # Development dependencies
 flake8>=7.0.0

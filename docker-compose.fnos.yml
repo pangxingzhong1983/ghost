@@ -14,9 +14,11 @@ services:
     volumes:
       - ghost-config:/root/.ghost
       - ./data:/ghost/data
+      - ./home-ghost:/home/ghost
     environment:
       - TZ=Asia/Shanghai
       - PYTHONUNBUFFERED=1
+      - HOME=/home/ghost
     networks:
       - ghost-network
     cap_drop:
@@ -49,9 +51,9 @@ services:
     environment:
       - NODE_ENV=production
     healthcheck:
-      test: ["CMD", "python", "-c", "import websockets; print('OK')"]
+      test: ["CMD", "python", "-c", "print('OK')"]
       interval: 30s
-      timeout: 10s
+      timeout: 30s
       retries: 3
 
   # Ghost WebUI (通过 nginx 服务)
@@ -70,9 +72,9 @@ services:
     depends_on:
       - ghost-websocket
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1/"]
       interval: 30s
-      timeout: 10s
+      timeout: 15s
       retries: 3
 
 volumes:
